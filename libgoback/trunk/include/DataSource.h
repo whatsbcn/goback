@@ -1,3 +1,9 @@
+#ifndef DATASOURCE_H
+#define DATASOURCE_H
+
+#include <list>
+#include <string>
+
 class DataSource {
 public:
 	virtual bool open(const char * filename) = 0;
@@ -15,4 +21,8 @@ public:
 	virtual int removeBytes(int size, unsigned int offset) = 0;
 
 	virtual bool flushWrites() = 0;
+
+	virtual std::list<std::string> getWorkModes();
 };
+
+#endif // DATASOURCE_H

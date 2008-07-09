@@ -1,5 +1,8 @@
 #include "WorkModeHex.h"
 
+WorkModeHex::WorkModeHex(DataSource *ds) : WorkMode(ds) {
+}
+
 int WorkModeHex::getNumberLines() {
 	return 1;
 }

@@ -1,3 +1,6 @@
+#ifndef FILEDATASOURCE_H
+#define FILEDATASOURCE_H
+
 #include "DataSource.h"
 
 class FileDataSource : public DataSource {
@@ -25,3 +28,5 @@ private:
 	bool _writable;
 	char * _filename;
 };
+
+#endif // FILEDATASOURCE_H
