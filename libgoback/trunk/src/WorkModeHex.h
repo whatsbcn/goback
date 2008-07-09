@@ -9,6 +9,9 @@ public:
 
 	int getNumberLines();
 	ViewLine getLine(int line);
+
+protected:
+	int _lineBytes;
 };
 
 #endif // WORKMODEHEX_H
