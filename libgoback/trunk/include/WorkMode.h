@@ -15,7 +15,8 @@ typedef std::list<ViewBlock> ViewLine;
 
 class WorkMode {
 public:
-	virtual bool setDataSource(DataSource *ds);
+	WorkMode(DataSource *ds) : _dataSource(ds) {}
+
 	virtual int getNumberLines() = 0;
 	virtual ViewLine getLine(int line) = 0;
 
