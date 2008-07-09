@@ -1,12 +1,14 @@
-#include "FileDataSource.h"
+#include "DataSource.h"
 
 int main(int argc, char **argv) {
-	FileDataSource fds;
+	DataSource *fds = DataSource::create("file");
 
 	// Try to open the specified file
-	if (fds.open(argv[1])) {
+	if (fds->open(argv[1])) {
+		delete fds;
 		return 0;
 	}
 
+	delete fds;
 	return 1;
 }

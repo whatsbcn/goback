@@ -6,6 +6,8 @@
 
 class DataSource {
 public:
+	static DataSource *create(std::string name);
+
 	virtual bool open(const char * filename) = 0;
 	virtual bool close() = 0;
 

@@ -8,7 +8,7 @@ class DataSource;
 
 class ViewBlock {
 public:
-	ViewBlock(std::string std, bool editable);
+	ViewBlock(std::string str, bool editable) : _str(str), _editable(editable) {}
 
 	std::string _str;
 	bool _editable;
