@@ -190,3 +190,18 @@ int FileDataSource::removeBytes(int size, unsigned int offset) {
 
 	return size;
 }
+
+/*
+ * Get size in bytes.
+ */
+int FileDataSource::size() {
+	int result;
+	// Check file opened
+	if (_fd == -1) return 0;
+
+	int seek = lseek(_fd, 0, SEEK_CUR);
+	result = lseek(_fd, 0, SEEK_END);
+	lseek(_fd, seek, SEEK_SET);
+
+	return result;
+}
