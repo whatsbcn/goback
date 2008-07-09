@@ -1,3 +1,3 @@
 libgobackdir = $(includedir)
 libgoback_HEADERS = \
-    libgoback.h
+	FileDataSource.h
