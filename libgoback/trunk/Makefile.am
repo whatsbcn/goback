@@ -1,4 +1,4 @@
-SUBDIRS = include src
+SUBDIRS = include src tests
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libgoback.pc

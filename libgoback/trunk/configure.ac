@@ -18,4 +18,5 @@ AC_PROG_LIBTOOL
 AC_OUTPUT([Makefile
     include/Makefile
     src/Makefile
+    tests/Makefile
     libgoback.pc])

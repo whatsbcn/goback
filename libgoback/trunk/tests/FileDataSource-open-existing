@@ -1,0 +1,3 @@
+touch FileDataSource-open-data-exists
+./FileDataSource-open FileDataSource-open-data-exists
+rm -f FileDataSource-open-data-exists
