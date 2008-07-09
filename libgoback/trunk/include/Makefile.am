@@ -1,3 +1,4 @@
 include_HEADERS = \
 	DataSource.h \
-	FileDataSource.h
+	FileDataSource.h \
+	WorkMode.h
