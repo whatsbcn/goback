@@ -1,6 +1,7 @@
 bin_PROGRAMS = goback-ncurses
 
-goback_ncurses_CPPFLAGS = $(LIBGOBACK_CFLAGS) $(NCURSES_CFLAGS) #-I$(top_srcdir)/common/
-goback_ncurses_LDADD = $(LIBGOBACK_LIBS) $(NCURSES_LIBS) #../libl10n/libl10n.la
+AM_CPPFLAGS = $(libGoBack_CFLAGS) $(NCURSES_CFLAGS)
+LDADD = $(libGoBack_LIBS) $(NCURSES_LIBS)
+
 goback_ncurses_SOURCES = \
     goback-ncurses.cpp

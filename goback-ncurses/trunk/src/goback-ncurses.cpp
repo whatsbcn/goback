@@ -1,11 +1,7 @@
-#include <libgoback.h>
-#include <gtkmm.h>
+//#include <libgoback.h>
+//#include <curses.h>
 
 int main(int argc, char *argv[])
 {
-	Gtk::Main kit(argc, argv);
-	Gtk::Window window;
-	Gtk::Main::run(window);
-
 	return 0;
 }
