@@ -1,4 +1,6 @@
-class FileDataSource {
+#include "DataSource.h"
+
+class FileDataSource : public DataSource {
 public:
 	FileDataSource();
 	bool requestWrite();

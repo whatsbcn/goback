@@ -1,3 +1,3 @@
-libgobackdir = $(includedir)
-libgoback_HEADERS = \
+include_HEADERS = \
+	DataSource.h \
 	FileDataSource.h
