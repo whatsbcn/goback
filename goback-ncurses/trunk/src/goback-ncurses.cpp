@@ -126,10 +126,10 @@ int main(int argc, char *argv[]) {
 			(startline == 0) ? 0 : startline--;
 			break;
 		case KEY_NPAGE:
-			(startline + LINES*2 > numlines) ? startline=numlines-LINES : startline += LINES;
+			(startline + LINES*2 > numlines) ? startline = numlines - LINES : startline += LINES;
 			break;
 		case KEY_PPAGE:
-			(startline - LINES < 0) ? startline=0 : startline -= LINES;
+			(startline - LINES < 0) ? startline = 0 : startline -= LINES;
 			break;
 		case ':':
 			cmdmode=true;

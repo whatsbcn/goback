@@ -23,6 +23,7 @@ public:
 	WorkMode(DataSource *ds);
 
 	virtual int getNumberLines() = 0;
+	virtual int getLineBytes() = 0;
 	virtual ViewLine getLine(int line) = 0;
 
 protected:

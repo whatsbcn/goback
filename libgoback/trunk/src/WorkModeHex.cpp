@@ -9,6 +9,10 @@ int WorkModeHex::getNumberLines() {
 	return _dataSource->size() / _lineBytes;
 }
 
+int  WorkModeHex::getLineBytes() {
+	return _lineBytes;
+}
+
 ViewLine WorkModeHex::getLine(int line) {
 	ViewLine viewline;
 	char c[_lineBytes];
