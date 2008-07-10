@@ -14,9 +14,6 @@ public:
 protected:
 	int _lineBytes;
 
-private:
-	char charPrintable(char c);
-
 };
 
 #endif // WORKMODEHEX_H

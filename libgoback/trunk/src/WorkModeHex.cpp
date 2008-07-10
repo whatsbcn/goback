@@ -40,7 +40,7 @@ ViewLine WorkModeHex::getLine(int line) {
 
 	// ASCII representation
 	for (int i = 0; i < bytes; i++) {
-		sprintf(buff, "%c", charPrintable(c[i]));
+		sprintf(buff, "%c", isprint(c[i]) ? c[i] : '.');
 		buff[1]='\0';
 		viewline.push_back(ViewBlock(buff, true));
 	}
@@ -50,11 +50,4 @@ ViewLine WorkModeHex::getLine(int line) {
 	}
 
 	return viewline;
-}
-
-char WorkModeHex::charPrintable(char c){
-	if (c >= 0x21 && c <= 0x7e) {
-		return c;
-	}
-	return '.';
 }
