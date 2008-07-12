@@ -17,7 +17,7 @@ ViewLine WorkModeHex::getLine(int line) {
 	//read the line
 	int bytes=_dataSource->readBytes(c, _lineBytes, line*_lineBytes);
 
-	sprintf(buff, "%08x", line);
+	sprintf(buff, "%08x:", line);
 	viewline.push_back(ViewBlock(buff, true));
 	viewline.push_back(ViewBlock(" ", false));
 

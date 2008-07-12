@@ -13,7 +13,9 @@ public:
 
 protected:
 	//int disnone(FILE *, const char *, ...);
+	int disasmOp(int, int, struct ASM_INSN *);
 	std::vector<int> _linies;
+	char * _data;
 
 };
 
