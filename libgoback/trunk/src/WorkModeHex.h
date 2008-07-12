@@ -8,7 +8,6 @@ public:
 	WorkModeHex(DataSource *ds);
 
 	int getNumberLines();
-	int getLineBytes();
 	ViewLine getLine(int line);
 
 protected:

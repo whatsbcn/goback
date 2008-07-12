@@ -9,17 +9,17 @@ int WorkModeHex::getNumberLines() {
 	return _dataSource->size() / _lineBytes;
 }
 
-int  WorkModeHex::getLineBytes() {
-	return _lineBytes;
-}
-
 ViewLine WorkModeHex::getLine(int line) {
 	ViewLine viewline;
 	char c[_lineBytes];
-	char buff[3];
+	char buff[9];
 
 	//read the line
 	int bytes=_dataSource->readBytes(c, _lineBytes, line*_lineBytes);
+
+	sprintf(buff, "%08x", line);
+	viewline.push_back(ViewBlock(buff, true));
+	viewline.push_back(ViewBlock(" ", false));
 
 	// Show the hexadecimal values
 	for (int i = 0; i < bytes; i++) {

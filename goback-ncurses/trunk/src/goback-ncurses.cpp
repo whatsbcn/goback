@@ -46,12 +46,11 @@ void close_ncurses() {
  * Print a line.
  */
 void print_line(ViewLine line, int numline) {
-	// Print the line number
-	printw("%08x  ", numline);
 	// Print the blocks
 	ViewLine::iterator j = line.begin();
 	while (j != line.end()) {
 		printw("%s", j->_str.c_str());
+		clrtoeol();
 		j++;
 	}
 }
@@ -110,7 +109,8 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	WorkMode *wm = WorkMode::create("hex", ds);
+	WorkMode *wm = WorkMode::create("disasm", ds);
+	//WorkMode *wm = WorkMode::create("hex", ds);
 	int numlines = wm->getNumberLines();
 
 	init_ncurses();
