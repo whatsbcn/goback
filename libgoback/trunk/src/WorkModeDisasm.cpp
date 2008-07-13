@@ -153,7 +153,7 @@ ViewLine WorkModeDisasm::getLine(int line) {
 		if (i < size) {
 			// Read the next byte
 			_dataSource->readBytes(hexbyte, 1, _linies.at(line) + i);
-			sprintf(hexbyte, "%02x",(unsigned char )*hexbyte);
+			sprintf(hexbyte, "%02hhx",*hexbyte);
 
 			// Put the file position of this opcode
 			viewline.push_back(ViewBlock(hexbyte, true));
