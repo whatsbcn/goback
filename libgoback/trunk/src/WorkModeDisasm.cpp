@@ -12,17 +12,39 @@ struct ASM_INSN {
 	char arg3[32];
 } curr_insn;
 
+// Application data to embedd into the disassemble_info structure
+struct DisasmAppData {
+	DataSource *ds;
+	WorkModeDisasm *wm;
+	//TODO: move curr_insn here?
+};
+
+/*
+ * Disasm memory reader callback
+ */
+static int disReadMemory(bfd_vma memaddr, bfd_byte *myaddr, unsigned int len,
+	struct disassemble_info *info) {
+
+	DataSource *ds = ((DisasmAppData *)info->application_data)->ds;
+	if (memaddr + len <= ds->size()) {
+		ds->readBytes((char *)myaddr, len, memaddr);
+		return 0;
+	} else {
+		return -1;
+	}
+}
+
 /*
  * fprintf wrapper for do nothing.
  */
-int disNone(FILE *stream, const char *format, ...){
+int disNone(FILE *stream, const char *format, ...) {
 	return 0;
 }
 
 /* 
  * fprintf wrapper for opcodes.
  */
-int disPrintfWrapper(FILE *stream, const char *format, ...){
+int disPrintfWrapper(FILE *stream, const char *format, ...) {
 	// per accedir a tots els parametres
 	va_list args;
 	char *str;
@@ -47,7 +69,7 @@ int disPrintfWrapper(FILE *stream, const char *format, ...){
 		snprintf(curr_insn.arg3, 31, format, str);
 	}
 	va_end(args);
-	return(0);
+	return 0;
 }
 
 int WorkModeDisasm::disasmOp(int offset, int size, struct ASM_INSN *op) {
@@ -60,9 +82,13 @@ int WorkModeDisasm::disasmOp(int offset, int size, struct ASM_INSN *op) {
 	info.mach = bfd_mach_i386_i386;
 	info.endian = BFD_ENDIAN_LITTLE;
 	disassemble_fn = print_insn_i386_att;
-	info.buffer = (unsigned char *)_data;
-	info.buffer_length = size;
-	info.buffer_vma = 0;
+	info.read_memory_func = disReadMemory;
+
+	// Prepare the application data for the disasm
+	DisasmAppData appData;
+	appData.ds = _dataSource;
+	appData.wm = this;
+	info.application_data = &appData;
 
 	size = 0;
 	if (op != NULL) {
@@ -76,13 +102,6 @@ int WorkModeDisasm::disasmOp(int offset, int size, struct ASM_INSN *op) {
 }
 
 WorkModeDisasm::WorkModeDisasm(DataSource *ds) : WorkMode(ds) {
-	// Get file size
-	int size = _dataSource->size();
-	// Load the entire file in memory. Is it a problem ?¿
-	_data = (char *)malloc(size);
-	_dataSource->readBytes(_data, size, 0);
-
-	int bytes;
 	disassembler_ftype disassemble_fn;
 	disassemble_info info;
 
@@ -93,12 +112,16 @@ WorkModeDisasm::WorkModeDisasm(DataSource *ds) : WorkMode(ds) {
 	info.mach = bfd_mach_i386_i386;
 	info.endian = BFD_ENDIAN_LITTLE;
 	disassemble_fn = print_insn_i386;
+	info.read_memory_func = disReadMemory;
 
-	info.buffer = (unsigned char *)_data;
-	info.buffer_length = size;
-	info.buffer_vma = 0;
+	// Prepare the application data for the disasm
+	DisasmAppData appData;
+	appData.ds = _dataSource;
+	appData.wm = this;
+	info.application_data = &appData;
 
-	bytes = 0;
+	int bytes = 0;
+	int size = _dataSource->size();
 	// index opcodes
 	while (bytes < size) {
 		_linies.push_back(bytes);
@@ -123,18 +146,19 @@ ViewLine WorkModeDisasm::getLine(int line) {
 	viewline.push_back(ViewBlock("    ", false));
 
 	// Disasm
-	int size = disasmOp(_linies.at(line), _dataSource->size(), &op); 
+	int size = disasmOp(_linies.at(line), _dataSource->size(), &op);
 
 	// Put hex representation
 	for (int i = 0; i < 8; i++) {
 		if (i < size) {
-			sprintf(hexbyte, "%02x ", _data[_linies.at(line) + i]);
-			hexbyte[2] = '\0';
+			// Read the next byte
+			_dataSource->readBytes(hexbyte, 1, _linies.at(line) + i);
+			sprintf(hexbyte, "%02x", *hexbyte);
+
 			// Put the file position of this opcode
 			viewline.push_back(ViewBlock(hexbyte, true));
 			viewline.push_back(ViewBlock(" ", false));
-		}
-		else
+		} else
 			viewline.push_back(ViewBlock("   ", false));
 	}
 
