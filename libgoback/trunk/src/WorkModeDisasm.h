@@ -12,8 +12,7 @@ public:
 	ViewLine getLine(int line);
 
 protected:
-	//int disnone(FILE *, const char *, ...);
-	int disasmOp(int, int, struct ASM_INSN *);
+	int disasmOp(int, struct ASM_INSN *);
 	std::vector<int> _linies;
 };
 

@@ -72,7 +72,7 @@ int disPrintfWrapper(FILE *stream, const char *format, ...) {
 	return 0;
 }
 
-int WorkModeDisasm::disasmOp(int offset, int size, struct ASM_INSN *op) {
+int WorkModeDisasm::disasmOp(int offset, struct ASM_INSN *op) {
 	// TODO: do the info initalization, for multi arch
 	disassembler_ftype disassemble_fn;
 	disassemble_info info;
@@ -90,7 +90,7 @@ int WorkModeDisasm::disasmOp(int offset, int size, struct ASM_INSN *op) {
 	appData.wm = this;
 	info.application_data = &appData;
 
-	size = 0;
+	int size = 0;
 	if (op != NULL) {
 	// TODO: here will be a mutual exclusion
 		memset(&curr_insn, 0, sizeof(struct ASM_INSN));
@@ -146,7 +146,7 @@ ViewLine WorkModeDisasm::getLine(int line) {
 	viewline.push_back(ViewBlock("    ", false));
 
 	// Disasm
-	int size = disasmOp(_linies.at(line), _dataSource->size(), &op);
+	int size = disasmOp(_linies.at(line), &op);
 
 	// Put hex representation
 	for (int i = 0; i < 8; i++) {

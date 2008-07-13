@@ -66,7 +66,7 @@ int disPrintfWrapper2(FILE *stream, const char *format, ...){
 }
 
 // This fucntion is the same as disasm...
-int WorkModeElf::disasmOp(int offset, int size, struct ASM_INSN *op) {
+int WorkModeElf::disasmOp(int offset, struct ASM_INSN *op) {
 	// TODO: do the info initalization, for multi arch
 	disassembler_ftype disassemble_fn;
 	disassemble_info info;
@@ -84,7 +84,7 @@ int WorkModeElf::disasmOp(int offset, int size, struct ASM_INSN *op) {
 	appData.wm = this;
 	info.application_data = &appData;
 
-	size = 0;
+	int size = 0;
 	if (op != NULL) {
 		// TODO: here will be a mutual exclusion
 		memset(&curr_insn2, 0, sizeof(struct ASM_INSN));
@@ -98,17 +98,14 @@ int WorkModeElf::disasmOp(int offset, int size, struct ASM_INSN *op) {
 void WorkModeElf::indexSection(int offset, int size) {
 	int bytes = 0;
 	// TODO: differentiating among code and data sections
-	//if (!strcmp(type, ".text")) {
 		disassembler_ftype disassemble_fn;
 		disassemble_info info;
-
 		INIT_DISASSEMBLE_INFO(info, stdout, disNone);
-
 		info.flavour = bfd_target_unknown_flavour;
 		info.arch = bfd_arch_i386;
 		info.mach = bfd_mach_i386_i386;
 		info.endian = BFD_ENDIAN_LITTLE;
-		disassemble_fn = print_insn_i386;
+		disassemble_fn = print_insn_i386_att;
 		info.read_memory_func = disReadMemory;
 
 		// Prepare the application data for the disasm
@@ -116,12 +113,11 @@ void WorkModeElf::indexSection(int offset, int size) {
 		appData.ds = _dataSource;
 		appData.wm = this;
 		info.application_data = &appData;
-		
+		struct ASM_INSN none;
 		while (bytes < size) {
 	        _linies.push_back(bytes+offset);
-	        bytes += (*disassemble_fn) (0 + bytes, &info);
+			bytes += (*disassemble_fn) (bytes + offset, &info);
 	    }
-	//}
 }
 
 WorkModeElf::WorkModeElf(DataSource *ds) : WorkMode(ds) {
@@ -153,9 +149,11 @@ WorkModeElf::WorkModeElf(DataSource *ds) : WorkMode(ds) {
 			section.addr = sectionHeaders[i].sh_addr;
 			_sections.push_back(section);
 
+			if (section.name == ".text") {
 			// printf("name %s offset %d addr %x, type: %d flags: %d\n",section.name.c_str(),section.offset,section.addr, sectionHeaders[i].sh_type, sectionHeaders[i].sh_flags);
 			// index section
 			indexSection(sectionHeaders[i].sh_offset, sectionHeaders[i].sh_size);
+			}
     }
 }
 
@@ -183,14 +181,14 @@ ViewLine WorkModeElf::getLine(int line) {
 
 	struct  WorkModeElf::intString * section = findSection(_linies.at(line));
 
-    snprintf(pos, sizeof(pos), "%s:%08x:", section->name.c_str(), section->addr + _linies.at(line) - section->offset);
+    snprintf(pos, sizeof(pos), "%s:%08x:%d", section->name.c_str(), section->addr + _linies.at(line) - section->offset, _linies.at(line));
 
 	// put the file position of this opcode
 	viewline.push_back(ViewBlock(pos, false));
 	viewline.push_back(ViewBlock("    ", false));
 	
  	// disasm
-	int size = disasmOp(_linies.at(line), _dataSource->size(), &op);
+	int size = disasmOp(_linies.at(line), &op);
 
 	// put hex representation
 	for (int i = 0; i < 8; i++ ) {

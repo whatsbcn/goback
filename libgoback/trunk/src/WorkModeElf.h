@@ -18,7 +18,7 @@ protected:
 		int addr;
 	};
 	void indexSection(int, int);
-	int disasmOp(int, int, struct ASM_INSN *);
+	int disasmOp(int, struct ASM_INSN *);
 	struct intString *findSection(int);
 	std::vector<int> _linies;
 	std::vector<intString> _sections;
