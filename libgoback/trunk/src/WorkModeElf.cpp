@@ -179,7 +179,7 @@ ViewLine WorkModeElf::getLine(int line) {
 
 	struct  WorkModeElf::intString * section = findSection(_linies.at(line));
 
-    snprintf(pos, sizeof(pos), "%s:%08x:%d", section->name.c_str(), section->addr + _linies.at(line) - section->offset, _linies.at(line));
+    snprintf(pos, sizeof(pos), "%s:%08x:", section->name.c_str(), section->addr + _linies.at(line) - section->offset);
 
 	// put the file position of this opcode
 	viewline.push_back(ViewBlock(pos, false));
