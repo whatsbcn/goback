@@ -12,7 +12,6 @@ public:
 
 protected:
 	int _lineBytes;
-
 };
 
 #endif // WORKMODEHEX_H

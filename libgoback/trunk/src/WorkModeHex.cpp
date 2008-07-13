@@ -14,8 +14,8 @@ ViewLine WorkModeHex::getLine(int line) {
 	char c[_lineBytes];
 	char buff[9];
 
-	//read the line
-	int bytes=_dataSource->readBytes(c, _lineBytes, line*_lineBytes);
+	// Read the line
+	int bytes = _dataSource->readBytes(c, _lineBytes, line * _lineBytes);
 
 	sprintf(buff, "%08x:", line);
 	viewline.push_back(ViewBlock(buff, true));
@@ -24,12 +24,12 @@ ViewLine WorkModeHex::getLine(int line) {
 	// Show the hexadecimal values
 	for (int i = 0; i < bytes; i++) {
 		sprintf(buff, "%02x", c[i]);
-		buff[2]='\0';
+		buff[2] = '\0';
 		viewline.push_back(ViewBlock(buff, true));
 		viewline.push_back(ViewBlock(" ", false));
 	}
 	// Fill the gaps with spaces
-	int gaps=_lineBytes-bytes;
+	int gaps = _lineBytes - bytes;
 	for (int i = 0; i < gaps; i++) {
 		viewline.push_back(ViewBlock("  ", false));
 		viewline.push_back(ViewBlock(" ", false));
@@ -41,9 +41,10 @@ ViewLine WorkModeHex::getLine(int line) {
 	// ASCII representation
 	for (int i = 0; i < bytes; i++) {
 		sprintf(buff, "%c", isprint(c[i]) ? c[i] : '.');
-		buff[1]='\0';
+		buff[1] = '\0';
 		viewline.push_back(ViewBlock(buff, true));
 	}
+
 	// Fill the gaps with spaces
 	for (int i = 0; i < gaps; i++) {
 		viewline.push_back(ViewBlock(" ", false));
