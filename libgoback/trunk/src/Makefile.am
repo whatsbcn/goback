@@ -9,9 +9,9 @@ libgoback_la_SOURCES = \
 	FileDataSource.cpp \
 	FileDataSource.h \
 	WorkMode.cpp \
-	WorkModeHex.cpp \
-	WorkModeHex.h \
+	WorkModeDisasm.cpp \
+	WorkModeDisasm.h \
 	WorkModeElf.cpp \
 	WorkModeElf.h \
-	WorkModeDisasm.cpp \
-	WorkModeDisasm.h
+	WorkModeHex.cpp \
+	WorkModeHex.h
