@@ -11,5 +11,7 @@ libgoback_la_SOURCES = \
 	WorkMode.cpp \
 	WorkModeHex.cpp \
 	WorkModeHex.h \
+	WorkModeElf.cpp \
+	WorkModeElf.h \
 	WorkModeDisasm.cpp \
 	WorkModeDisasm.h
