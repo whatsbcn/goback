@@ -149,11 +149,9 @@ WorkModeElf::WorkModeElf(DataSource *ds) : WorkMode(ds) {
 			section.addr = sectionHeaders[i].sh_addr;
 			_sections.push_back(section);
 
-			if (section.name == ".text") {
 			// printf("name %s offset %d addr %x, type: %d flags: %d\n",section.name.c_str(),section.offset,section.addr, sectionHeaders[i].sh_type, sectionHeaders[i].sh_flags);
 			// index section
 			indexSection(sectionHeaders[i].sh_offset, sectionHeaders[i].sh_size);
-			}
     }
 }
 
