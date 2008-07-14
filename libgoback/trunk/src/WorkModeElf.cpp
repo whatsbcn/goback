@@ -20,6 +20,8 @@ struct ASM_INSN {
 struct DisasmAppData2 {
 	DataSource *ds;
 	WorkModeElf *wm;
+	int secvma;
+	int secoff;
 	//TODO: move curr_insn here?
 };
 
@@ -37,6 +39,15 @@ static int disReadMemory(bfd_vma memaddr, bfd_byte *myaddr, unsigned int len,
         return -1;
     }
 }
+
+/*
+ * Address calculator callback
+ */
+void print_address_func(bfd_vma addr, struct disassemble_info *info) {
+	int res = ((DisasmAppData2 *)info->application_data)->secvma - ((DisasmAppData2 *)info->application_data)->secoff + addr;
+	sprintf(curr_insn2.src,"%x", res);
+}
+
 
 // TODO: this fucntion is the same as disasm...
 int disPrintfWrapper2(FILE *stream, const char *format, ...){
@@ -66,7 +77,7 @@ int disPrintfWrapper2(FILE *stream, const char *format, ...){
 }
 
 // This fucntion is the same as disasm...
-int WorkModeElf::disasmOp(int offset, struct ASM_INSN *op) {
+int WorkModeElf::disasmOp(int inst_offset, struct ASM_INSN *op, int sect_vma, int sect_offset) {
 	// TODO: do the info initalization, for multi arch
 	disassembler_ftype disassemble_fn;
 	disassemble_info info;
@@ -81,14 +92,17 @@ int WorkModeElf::disasmOp(int offset, struct ASM_INSN *op) {
 	// Prepare the application data for the disasm
 	DisasmAppData2 appData;
 	appData.ds = _dataSource;
+	appData.secvma = sect_vma;
+	appData.secoff = sect_offset;
 	appData.wm = this;
 	info.application_data = &appData;
+	info.print_address_func = print_address_func;
 
 	int size = 0;
 	if (op != NULL) {
 		// TODO: here will be a mutual exclusion
 		memset(&curr_insn2, 0, sizeof(struct ASM_INSN));
-		size = (*disassemble_fn)(offset, &info);
+		size = (*disassemble_fn)(inst_offset, &info);
 		memcpy(op, &curr_insn2, sizeof(struct ASM_INSN));
 	}
 	// TODO: here will finish the mutual exclusion
@@ -113,9 +127,10 @@ void WorkModeElf::indexSection(int offset, int size) {
 		appData.ds = _dataSource;
 		appData.wm = this;
 		info.application_data = &appData;
+
 		struct ASM_INSN none;
 		while (bytes < size) {
-	        _linies.push_back(bytes+offset);
+	        _linies.push_back(bytes + offset);
 			bytes += (*disassemble_fn) (bytes + offset, &info);
 	    }
 }
@@ -186,7 +201,7 @@ ViewLine WorkModeElf::getLine(int line) {
 	viewline.push_back(ViewBlock("    ", false));
 	
  	// disasm
-	int size = disasmOp(_linies.at(line), &op);
+	int size = disasmOp(_linies.at(line), &op, section->addr, section->offset);
 
 	// put hex representation
 	for (int i = 0; i < 8; i++ ) {
