@@ -138,25 +138,25 @@ WorkModeElf::WorkModeElf(DataSource *ds) : WorkMode(ds) {
 	// TODO: get elf arch
 
 	// Load elf headers.
-	Elf32_Ehdr *elfHeader = (Elf32_Ehdr *) malloc(sizeof(Elf32_Ehdr));
-	_dataSource->readBytes((char *)elfHeader, sizeof(Elf32_Ehdr), 0);
+	Elf32_Ehdr elfHeader;
+	_dataSource->readBytes((char *)&elfHeader, sizeof(Elf32_Ehdr), 0);
 
 	// Check if it is a elf file.
-	if (memcmp(elfHeader->e_ident, "\x7f\x45\x4c\x46", 4)) {
+	if (memcmp(elfHeader.e_ident, "\x7f\x45\x4c\x46", 4)) {
 		// TODO: It should be an exception.
 		exit(0);
 	}
 
 	// Load section headers
-	Elf32_Shdr *sectionHeaders = (Elf32_Shdr *) malloc(sizeof(Elf32_Shdr) * elfHeader->e_shnum);
-	_dataSource->readBytes((char *)sectionHeaders, sizeof(Elf32_Shdr) * elfHeader->e_shnum, elfHeader->e_shoff);
+	Elf32_Shdr *sectionHeaders = (Elf32_Shdr *) malloc(sizeof(Elf32_Shdr) * elfHeader.e_shnum);
+	_dataSource->readBytes((char *)sectionHeaders, sizeof(Elf32_Shdr) * elfHeader.e_shnum, elfHeader.e_shoff);
 
-	char *stringTable = (char *)malloc(sectionHeaders[elfHeader->e_shstrndx].sh_size);
-	_dataSource->readBytes(stringTable, sectionHeaders[elfHeader->e_shstrndx].sh_size, sectionHeaders[elfHeader->e_shstrndx].sh_offset);
+	char *stringTable = (char *)malloc(sectionHeaders[elfHeader.e_shstrndx].sh_size);
+	_dataSource->readBytes(stringTable, sectionHeaders[elfHeader.e_shstrndx].sh_size, sectionHeaders[elfHeader.e_shstrndx].sh_offset);
 
 	struct intString section;
 	// Index all sections
-	for (int i = 0; i < elfHeader->e_shnum; i++) {
+	for (int i = 0; i < elfHeader.e_shnum; i++) {
 		// Save this section
 		section.name = std::string(&stringTable[sectionHeaders[i].sh_name]);
 		section.offset = sectionHeaders[i].sh_offset;
@@ -167,6 +167,10 @@ WorkModeElf::WorkModeElf(DataSource *ds) : WorkMode(ds) {
 		// Index section
 		indexSection(sectionHeaders[i].sh_offset, sectionHeaders[i].sh_size);
 	}
+
+	// Free the temporary arrays
+	free(sectionHeaders);
+	free(stringTable);
 }
 
 int WorkModeElf::getNumberLines() {
