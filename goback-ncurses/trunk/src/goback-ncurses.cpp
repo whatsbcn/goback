@@ -1,4 +1,4 @@
-#include "BufferWindow.h"
+#include "StatusBar.h"
 
 #include <DataSource.h>
 #include <WorkMode.h>
@@ -6,11 +6,7 @@
 #include <curses.h>
 #include <iostream>
 
-// Command mode like vim
-bool cmdmode = false;
-// Insert mode like vim
-bool insertmode = false;
-
+StatusBar statusBar;
 
 /*
  * Initialize ncurses environtment.
@@ -47,46 +43,8 @@ void close_ncurses() {
 /*
  * Exec a command.
  */
-bool exec_command(char *str) {
+bool exec_command(std::string cmd) {
 	return true;
-}
-
-/*
- * Print the file position percentage.
- */
-void print_footer(BufferWindow *win) {
-	//move(LINES-1, 0);
-	//clrtoeol();
-	char str[256];
-
-	// Print cmdline if enabled
-	if (cmdmode) {
-		move(LINES - 1, 0);
-		printw(":");
-		clrtoeol();
-		echo();
-		refresh();
-		getstr(str);
-		exec_command(str);
-		noecho();
-		cmdmode = false;
-		move(LINES - 1, 0);
-		clrtoeol();
-	} else {
-		//move(LINES-1, 0);
-		//clrtoeol();
-	}
-
-	// Show the cursor position
-	//move(LINES-1, COLS - 18);
-	mvprintw(LINES - 1, COLS - 18, "%d,0", win->getCursorLine() + 1, win->getCursorCol() + 1);
-	clrtoeol();
-
-	// Show the file position percentage
-	//move(LINES-1, COLS - 4);
-	mvprintw(LINES - 1, COLS - 4, "%d%%", win->getViewPercentage());
-	clrtoeol();
-	move(LINES - 1, 0);
 }
 
 /*
@@ -97,7 +55,7 @@ void print_view(BufferWindow *win) {
 	win->updateWindow();
 
 	// Print file position percentage
-	print_footer(win);
+	statusBar.update(win);
 
 	// Show th cursor
 	win->showCursor();
@@ -153,7 +111,7 @@ int main(int argc, char *argv[]) {
 			win.cursorPageUp();
 			break;
 		case ':':
-			cmdmode = true;
+			exec_command(statusBar.getCommand());
 			break;
 		case 'q':
 			goto exit;

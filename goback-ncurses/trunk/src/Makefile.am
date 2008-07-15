@@ -6,4 +6,6 @@ LDADD = $(libGoBack_LIBS) $(NCURSES_LIBS)
 goback_ncurses_SOURCES = \
 	BufferWindow.cpp \
 	BufferWindow.h \
-	goback-ncurses.cpp
+	goback-ncurses.cpp \
+	StatusBar.cpp \
+	StatusBar.h
