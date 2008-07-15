@@ -6,7 +6,12 @@ WorkModeHex::WorkModeHex(DataSource *ds) : WorkMode(ds) {
 }
 
 int WorkModeHex::getNumberLines() {
-	return _dataSource->size() / _lineBytes;
+	int bytes = _dataSource->size();
+	int numLines = bytes / _lineBytes;
+	if (bytes % _lineBytes) {
+		numLines++;
+	}
+	return numLines;
 }
 
 ViewLine WorkModeHex::getLine(int line) {
