@@ -93,7 +93,7 @@ void print_footer(int numlines, int startline) {
 	mvprintw(LINES - 1, COLS - 18, "%d,0", startline + LINES - 1);
 	clrtoeol();
 	//move(LINES-1, COLS - 4);
-	mvprintw(LINES - 1, COLS - 4, "%d%%", ((startline + LINES) * 100) / numlines);
+	mvprintw(LINES - 1, COLS - 4, "%d%%", (startline + LINES - 1 >= numlines) ? 100 : ((startline + LINES - 1) * 100) / numlines);
 	clrtoeol();
 	move(LINES - 1, 0);
 }
@@ -145,7 +145,7 @@ int main(int argc, char *argv[]) {
 		key = getch();
 		switch (key) {
 		case KEY_DOWN:
-			if (startline != numlines - LINES) {
+			if (startline + LINES <= numlines) {
 				startline++;
 			}
 			// I don't understand why I have to invalidate this line when I go down...
@@ -158,7 +158,10 @@ int main(int argc, char *argv[]) {
 			break;
 		case KEY_NPAGE:
 			if (startline + LINES * 2 > numlines) {
-				startline = numlines - LINES;
+				startline = numlines - (LINES - 1);
+				if (startline < 0) {
+					startline = 0;
+				}
 			} else {
 				startline += LINES;
 			}
