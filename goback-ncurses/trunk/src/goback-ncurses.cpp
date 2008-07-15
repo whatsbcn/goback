@@ -5,10 +5,10 @@
 
 #include <curses.h>
 
-// command mode like vim
-bool cmdmode=false;
-// insert mode like vim
-bool insertmode=false;
+// Command mode like vim
+bool cmdmode = false;
+// Insert mode like vim
+bool insertmode = false;
 
 
 /*
@@ -73,7 +73,7 @@ void print_footer(int numlines, int startline) {
 
 	// Print cmdline if enabled
 	if (cmdmode) {
-		move(LINES-1, 0);
+		move(LINES - 1, 0);
 		printw(":");
 		clrtoeol();
 		echo();
@@ -81,8 +81,8 @@ void print_footer(int numlines, int startline) {
 		getstr(str);
 		exec_command(str);
 		noecho();
-		cmdmode=false;
-		move(LINES-1, 0);
+		cmdmode = false;
+		move(LINES - 1, 0);
 		clrtoeol();
 	} else {
 		//move(LINES-1, 0);
@@ -90,12 +90,12 @@ void print_footer(int numlines, int startline) {
 	}
 
 	//move(LINES-1, COLS - 18);
-    mvprintw(LINES-1, COLS - 18, "%d,0", startline + LINES - 1);
+	mvprintw(LINES - 1, COLS - 18, "%d,0", startline + LINES - 1);
 	clrtoeol();
 	//move(LINES-1, COLS - 4);
-    mvprintw(LINES-1, COLS - 4, "%d%%", ((startline + LINES) * 100) / numlines);
+	mvprintw(LINES - 1, COLS - 4, "%d%%", ((startline + LINES) * 100) / numlines);
 	clrtoeol();
-    move(LINES-1, 0);
+	move(LINES - 1, 0);
 }
 
 /*
@@ -110,10 +110,10 @@ void print_view(WorkMode *wm, int numlines, int startline) {
 		move(i, 0);
 		print_line(line);
 	}
-	
+
 	// Print file position percentage
 	print_footer(numlines, startline);
-		
+
 	refresh();
 }
 
@@ -145,21 +145,33 @@ int main(int argc, char *argv[]) {
 		key = getch();
 		switch (key) {
 		case KEY_DOWN:
-			(startline == numlines-LINES) ? 0 : startline++;
+			if (startline != numlines - LINES) {
+				startline++;
+			}
 			// I don't understand why I have to invalidate this line when I go down...
 			wredrawln(stdscr, LINES - 1, 1);
 			break;
 		case KEY_UP:
-			(startline == 0) ? 0 : startline--;
+			if (startline != 0) {
+				startline--;
+			}
 			break;
 		case KEY_NPAGE:
-			(startline + LINES*2 > numlines) ? startline = numlines - LINES : startline += LINES;
+			if (startline + LINES * 2 > numlines) {
+				startline = numlines - LINES;
+			} else {
+				startline += LINES;
+			}
 			break;
 		case KEY_PPAGE:
-			(startline - LINES < 0) ? startline = 0 : startline -= LINES;
+			if (startline - LINES < 0) {
+				startline = 0;
+			} else {
+				startline -= LINES;
+			}
 			break;
 		case ':':
-			cmdmode=true;
+			cmdmode = true;
 			break;
 		case 'q':
 			goto exit;
