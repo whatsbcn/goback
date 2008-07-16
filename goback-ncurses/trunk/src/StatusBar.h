@@ -1,3 +1,6 @@
+#ifndef STATUSBAR_H
+#define STATUSBAR_H
+
 #include "BufferWindow.h"
 
 #include <string>
@@ -14,3 +17,5 @@ public:
 private:
 	std::string _message;
 };
+
+#endif // STATUSBAR_H

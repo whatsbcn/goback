@@ -1,3 +1,6 @@
+#ifndef BUFFERWINDOW_H
+#define BUFFERWINDOW_H
+
 class WorkMode;
 
 class BufferWindow {
@@ -46,3 +49,5 @@ private:
 	 * - Cursor Position changed
 	 */
 };
+
+#endif // BUFFERWINDOW_H
