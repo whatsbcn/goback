@@ -1,0 +1,11 @@
+- Configuració ~/.gobackrc
+- Debugger
+- Permetre escriure
+- Millorar mode ELF
+- 	* Printar els flags i permisos de les seccions
+	* Permetre obrir llibreries
+	* Symbols
+	* Xrefs
+
+- Arreglar cache de size, canviar el readByte pq no faci lseek cada cop.
+- Que els commits s'enviin a la llista
