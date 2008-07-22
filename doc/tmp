@@ -1,0 +1,14 @@
+_opcodes
+	- byte offset (this already exists) //aquest pot ser l'identificador utilitzat per les xrefs, ja que 
+	- size in bytes ?
+	- xrefs //byte on fa referencia
+	- comment //comentari d'usuari, o al canviar nom de funció, comentari = addr de la funcio
+	- mnemonic_name //cada instrucció com a molt tindra un nom.
+
+PROPOSTA: a la interficie grafica cal enviarli una estructura com aquesta i que ella sigui capaç de representar els comentaris d'una manera, les xrefs d'una altre, etc.
+
+* Pensar en:
+	- què cal fer quan s'afegeixi una instrucció per el mitg: avisar q els jumps/calls relatius poden estar malament, cal afegir la posicio on toqui al vector de l'estructura
+	- què cal fer quan es modifiqui una instrucció (la mateixa quantitat de bytesde la instruccio: cal recalcular els opcodes i afegir les posicions q toquin al vector de l'estructura
+	- els canvis es poden fer sobre l'estructura. L'estructura es pot guardar a part, caldria guardar l'md5 del fitxer a què fa referencia
+	- 
