@@ -7,8 +7,57 @@ _opcodes
 
 PROPOSTA: a la interficie grafica cal enviarli una estructura com aquesta i que ella sigui capaç de representar els comentaris d'una manera, les xrefs d'una altre, etc.
 
+* Taula d'identificadors
+	- address //posició que identifica
+	- name
+	- refs list
+
+* block types
+	- static
+	- enum (llista de valors)
+	- ident
+	- editable...?
+
+* data source types
+	- raw
+		- code
+			- x86
+			- ppc
+			- ...
+		- header
+			- elf
+			- exe
+		- ...
+
+* Generic header workmode
+	- pos
+	- size
+	- register name
+
+* DataFormat
+	- ELF
+
+* Comandes pel workmode
+	- Definides pel propi WorkMode
+
+* Comandes pel client
+	- Actualitzar una línia
+	- Actualitzar a partir d'una línia
+	- Mostrar missatge d'estat
+	- ...
+
+* Cache pel DataSource
+	- Guardar les modificacions a fer (i llegir-les transparentment) fins que s'ordeni desar
+
+* funcionament
+	- obrir fitxer dóna DataSource
+	- libmagic (o no) detecta format del DataSource, i automàticament o seleccionat per l'usuari es tria un DataFormat
+	- DataFormat llegeix el fitxer i el secciona (crea diversos DataSources amb tipus predefinit per les seccions)
+	- DataFormat selecciona vista per defecte
+	- tenir un arbre amb les seccions (o tenir workmode agrupador)
+
 * Pensar en:
 	- què cal fer quan s'afegeixi una instrucció per el mitg: avisar q els jumps/calls relatius poden estar malament, cal afegir la posicio on toqui al vector de l'estructura
 	- què cal fer quan es modifiqui una instrucció (la mateixa quantitat de bytesde la instruccio: cal recalcular els opcodes i afegir les posicions q toquin al vector de l'estructura
 	- els canvis es poden fer sobre l'estructura. L'estructura es pot guardar a part, caldria guardar l'md5 del fitxer a què fa referencia
-	- 
+	- el WorkModeDisasm serà sobre el que es faci l'anàlisis
