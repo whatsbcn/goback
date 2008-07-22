@@ -1,0 +1,10 @@
+#!/bin/sh
+echo -n "aaaaaaaaa" > WorkModeHex-numberlines-jumpline-data
+./WorkModeHex-numberlines WorkModeHex-numberlines-jumpline-data
+num=$?
+rm -f WorkModeHex-numberlines-jumpline-data
+if [ $num -eq 2 ]; then
+	true
+else
+	false
+fi

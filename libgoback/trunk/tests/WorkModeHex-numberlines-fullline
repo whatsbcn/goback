@@ -1,0 +1,10 @@
+#!/bin/sh
+echo -n "aaaaaaaa" > WorkModeHex-numberlines-fullline-data
+./WorkModeHex-numberlines WorkModeHex-numberlines-fullline-data
+num=$?
+rm -f WorkModeHex-numberlines-fullline-data
+if [ $num -eq 1 ]; then
+	true
+else
+	false
+fi

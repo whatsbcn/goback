@@ -1,0 +1,10 @@
+#!/bin/sh
+echo -n "aaaa" > WorkModeHex-numberlines-halfline-data
+./WorkModeHex-numberlines WorkModeHex-numberlines-halfline-data
+num=$?
+rm -f WorkModeHex-numberlines-halfline-data
+if [ $num -eq 1 ]; then
+	true
+else
+	false
+fi
