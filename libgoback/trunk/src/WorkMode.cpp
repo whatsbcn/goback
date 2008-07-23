@@ -7,13 +7,17 @@ WorkMode::WorkMode(DataSource *ds) : _dataSource(ds) {
 }
 
 WorkMode *WorkMode::create(std::string name, DataSource *ds) {
+	WorkMode *wm = NULL;
+
+	// Create the requested WorkMode
+	//TODO: use a list
 	if (!name.compare("hex")) {
-		return new WorkModeHex(ds);
+		wm = new WorkModeHex(ds);
 	} else if (!name.compare("disasm")) {
-		return new WorkModeDisasm(ds);
+		wm = new WorkModeDisasm(ds);
 	} else if (!name.compare("elf")) {
-		return new WorkModeElf(ds);
+		wm = new WorkModeElf(ds);
 	}
 
-	return NULL;
+	return wm;
 }

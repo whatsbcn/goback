@@ -6,7 +6,7 @@
 
 class DataSource {
 public:
-	static DataSource *create(std::string name);
+	static DataSource *create(std::string name, std::string format = "");
 
 	virtual bool open(const char * filename) = 0;
 	virtual bool close() = 0;
@@ -25,6 +25,11 @@ public:
 	virtual bool flushWrites() = 0;
 
 	virtual std::list<std::string> getWorkModes();
+
+private:
+	// Data format
+	std::string _dataFormat;
+	void setDataFormat(std::string);
 };
 
 #endif // DATASOURCE_H
