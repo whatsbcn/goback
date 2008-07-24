@@ -34,3 +34,7 @@ std::list<std::string> DataSource::getWorkModes() {
 
 	return modeslist;
 }
+
+void DataSource::setDataFormat(std::string format) {
+	_dataFormat = format;
+}

@@ -31,7 +31,7 @@ public:
 private:
 	// Data format
 	std::string _dataFormat;
-	void setDataFormat(std::string);
+	void setDataFormat(std::string format);
 };
 
 #endif // DATASOURCE_H
