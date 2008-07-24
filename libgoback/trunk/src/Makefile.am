@@ -14,4 +14,6 @@ libgoback_la_SOURCES = \
 	WorkModeElf.cpp \
 	WorkModeElf.h \
 	WorkModeHex.cpp \
-	WorkModeHex.h
+	WorkModeHex.h \
+	DataSourceRange.cpp \
+	DataSourceRange.h

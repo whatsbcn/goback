@@ -26,6 +26,8 @@ public:
 
 	virtual std::list<std::string> getWorkModes();
 
+	DataSource *createRange(int offset, int size, std::string format);
+
 private:
 	// Data format
 	std::string _dataFormat;

@@ -1,4 +1,4 @@
-#include "DataSource.h"
+#include "DataSourceRange.h"
 #include "FileDataSource.h"
 
 DataSource *DataSource::create(std::string name, std::string format) {
@@ -16,6 +16,14 @@ DataSource *DataSource::create(std::string name, std::string format) {
 	}
 
 	return ds;
+}
+
+// Return a datasoruce with a limited range
+DataSource *DataSource::createRange(int offset, int size, std::string format) {
+	DataSourceRange *dsr = new DataSourceRange();
+	dsr->setDataFormat(format);
+	dsr->setRange(this, offset, size);
+	return dsr;
 }
 
 std::list<std::string> DataSource::getWorkModes() {
