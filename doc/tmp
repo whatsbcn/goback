@@ -12,21 +12,22 @@ PROPOSTA: a la interficie grafica cal enviarli una estructura com aquesta i que 
 	- name
 	- refs list
 
-* block types
+* block types (comunicació llibreria amb la capa de presentació)
 	- static
 	- enum (llista de valors)
 	- ident
 	- editable...?
 
-* data source types
-	- raw
-		- code
-			- x86
-			- ppc
-			- ...
-		- header
-			- elf
-			- exe
+* data source types (realment hi han aquests tipus de datasource?)
+	- raw <-- ?
+	- hex
+	- code
+		- x86
+		- ppc
+		- ...
+	- header
+		- elf
+		- exe
 		- ...
 
 * Generic header workmode
@@ -49,7 +50,7 @@ PROPOSTA: a la interficie grafica cal enviarli una estructura com aquesta i que 
 * Cache pel DataSource
 	- Guardar les modificacions a fer (i llegir-les transparentment) fins que s'ordeni desar
 
-* funcionament
+* Funcionament
 	- obrir fitxer dóna DataSource
 	- libmagic (o no) detecta format del DataSource, i automàticament o seleccionat per l'usuari es tria un DataFormat
 	- DataFormat llegeix el fitxer i el secciona (crea diversos DataSources amb tipus predefinit per les seccions)

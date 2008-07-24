@@ -7,7 +7,7 @@ StatusBar::StatusBar() {
 
 void StatusBar::update(BufferWindow *win) {
 	// Show the cursor position
-	mvprintw(LINES - 1, COLS - 18, "%d,0", win->getCursorLine() + 1, win->getCursorCol() + 1);
+	mvprintw(LINES - 1, COLS - 18, "%d,%d", win->getCursorLine() + 1, win->getCursorCol() + 1);
 	clrtoeol();
 
 	// Show the file position percentage

@@ -28,7 +28,6 @@ unsigned int BufferWindow::getViewPercentage() {
 /*
  * Cursor
  */
-
 unsigned int BufferWindow::getCursorLine() {
 	return _viewLine + _cursorViewLine;
 }
@@ -63,6 +62,31 @@ void BufferWindow::cursorMoveDown() {
 	}
 }
 
+void BufferWindow::cursorMoveRight() {
+	if (_cursorViewCol + 1 < _w) {
+		// Move the cursor one col right on the screen
+		_cursorViewCol++;
+	} 
+}
+
+void BufferWindow::cursorMoveLeft() {
+	if (_cursorViewCol > 0) {
+		// Move the cursor one col right on the screen
+		_cursorViewCol--;
+	} 
+}
+
+void BufferWindow::cursorMoveEnd() {
+	// Move the cursor at the last col on the screen
+	_cursorViewCol = _w - 1;
+}
+
+void BufferWindow::cursorMoveBeginning() {
+	// Move the cursor at first column of the screen
+	_cursorViewCol = 0;
+}
+
+
 void BufferWindow::cursorPageUp() {
 	if (_viewLine < _h) {
 		_viewLine = 0;
@@ -83,7 +107,7 @@ void BufferWindow::cursorPageDown() {
 }
 
 void BufferWindow::showCursor() {
-	move(_cursorViewLine, 0);
+	move(_cursorViewLine, _cursorViewCol);
 }
 
 void BufferWindow::updateWindow() {

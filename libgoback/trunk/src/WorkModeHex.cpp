@@ -36,7 +36,7 @@ ViewLine WorkModeHex::getLine(int line) {
 		}
 
 		// Prepare the hexadecimal representation
-		sprintf(buff, "%02x", c[i]);
+		sprintf(buff, "%02hhx", c[i]);
 		viewline.push_back(ViewBlock(buff, true));
 	}
 

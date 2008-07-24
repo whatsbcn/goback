@@ -136,24 +136,24 @@ if(phdr != 0)
 
                         printf("Strtab section found at %08x\n", strtab_section.sh_offset);
 
-        	    break;
+        			break;
 
-		    case DT_HASH:
+		    		case DT_HASH:
 
-                        if(ehdr->e_type == ET_EXEC)
-                        {
-                                hash_section.sh_offset = (dyn->d_un.d_val - BASEADDR);
-                        }
-                        if(ehdr->e_type == ET_DYN)
-                        {
-                                hash_section.sh_offset = dyn->d_un.d_val;
-                        }
-			
-                        printf("Hash table section found at %08x\n", hash_section.sh_offset);
+            		            if(ehdr->e_type == ET_EXEC)
+            		            {
+            		                    hash_section.sh_offset = (dyn->d_un.d_val - BASEADDR);
+            		            }
+            		            if(ehdr->e_type == ET_DYN)
+            		            {
+            		                    hash_section.sh_offset = dyn->d_un.d_val;
+            		            }
+					
+            		            printf("Hash table section found at %08x\n", hash_section.sh_offset);
 	
-		    break;
+		    		break;
 
-   		    /* Symbol Table */
+   		    		/* Symbol Table */
                     case DT_SYMTAB:
 
                         if(ehdr->e_type == ET_EXEC)

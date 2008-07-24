@@ -78,9 +78,9 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	WorkMode *wm = WorkMode::create("elf", ds);
+	//WorkMode *wm = WorkMode::create("elf", ds);
 	//WorkMode *wm = WorkMode::create("disasm", ds);
-	//WorkMode *wm = WorkMode::create("hex", ds);
+	WorkMode *wm = WorkMode::create("hex", ds);
 
 	init_ncurses();
 
@@ -99,16 +99,22 @@ int main(int argc, char *argv[]) {
 			win.cursorMoveUp();
 			break;
 		case KEY_LEFT:
-			//win.cursorMoveLeft();
+			win.cursorMoveLeft();
 			break;
 		case KEY_RIGHT:
-			//win.cursorMoveRight();
+			win.cursorMoveRight();
 			break;
 		case KEY_NPAGE:
 			win.cursorPageDown();
 			break;
 		case KEY_PPAGE:
 			win.cursorPageUp();
+			break;
+		case KEY_HOME:
+			win.cursorMoveBeginning();
+			break;
+		case KEY_END:
+			win.cursorMoveEnd();
 			break;
 		case ':':
 			exec_command(statusBar.getCommand());

@@ -15,10 +15,10 @@ public:
 	unsigned int getCursorCol();
 	void cursorMoveUp();
 	void cursorMoveDown();
-	//void cursorMoveLeft();
-	//void cursorMoveRight();
-	//void cursorMoveBeginning();
-	//void cursorMoveEnd();
+	void cursorMoveLeft();
+	void cursorMoveRight();
+	void cursorMoveBeginning();
+	void cursorMoveEnd();
 	void cursorPageUp();
 	void cursorPageDown();
 	//void cursorSetPosition();
