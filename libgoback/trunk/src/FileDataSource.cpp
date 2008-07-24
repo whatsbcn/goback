@@ -71,8 +71,6 @@ bool FileDataSource::close() {
 
 /*
  * Put at buff, size bytes, from offset.
- * This function doesn't modify the current seek.
- * If offset is null, read from current seek, and modify it.
  */
 int FileDataSource::readBytes(char * buff, int size, unsigned int offset) {
 	int result = 0;
@@ -80,13 +78,9 @@ int FileDataSource::readBytes(char * buff, int size, unsigned int offset) {
 	// Check file opened
 	if (_fd == -1) return 0;
 
-	if (offset != -1) {
-		int seek = lseek(_fd, 0, SEEK_CUR);
-		// Seek the offset
-		if (lseek(_fd, offset, SEEK_SET) == offset)
-			result = read(_fd, buff, size);
-		// Restore seek
-		lseek(_fd, seek, SEEK_SET);
+	// Seek the offset
+	if (lseek(_fd, offset, SEEK_SET) == offset) {
+		result = read(_fd, buff, size);
 	} else {
 		result = read(_fd, buff, size);
 	}
@@ -95,8 +89,6 @@ int FileDataSource::readBytes(char * buff, int size, unsigned int offset) {
 
 /*
  * Replace at offset, size bytes, with buff.
- * This fucntion doesn't modify the current seek.
- * If offset is null, replace at current seek and modify it.
  */
 int FileDataSource::replaceBytes(const char * buff, int size, unsigned int offset) {
 	int result = 0;
@@ -104,10 +96,9 @@ int FileDataSource::replaceBytes(const char * buff, int size, unsigned int offse
 	// Check file opened and writable
 	if (_fd == -1 || !_writable) return 0;
 
-	if (offset != -1) {
-		// Seek the offset
-		if (lseek(_fd, offset, SEEK_SET) == offset)
-			result = write(_fd, buff, size);
+	// Seek the offset
+	if (lseek(_fd, offset, SEEK_SET) == offset) {
+		result = write(_fd, buff, size);
 	} else {
 		result = write(_fd, buff, size);
 	}

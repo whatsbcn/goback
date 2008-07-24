@@ -18,7 +18,7 @@ public:
 	virtual bool requestInsert() = 0;
 	virtual bool requestRemove() = 0;
 
-	virtual int replaceBytes(const char * buff, int size, unsigned int offset = -1) = 0;
+	virtual int replaceBytes(const char * buff, int size, unsigned int offset) = 0;
 	virtual int insertBytes(const char * buff, int size, unsigned int offset) = 0;
 	virtual int removeBytes(int size, unsigned int offset) = 0;
 
