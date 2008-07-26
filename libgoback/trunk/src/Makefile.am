@@ -6,14 +6,14 @@ libgoback_la_LDFLAGS = -no-undefined -version-info 0:0:0
 libgoback_la_LIBADD = $(OPCODES_LIBS)
 libgoback_la_SOURCES = \
 	DataSource.cpp \
-	FileDataSource.cpp \
-	FileDataSource.h \
+	DataSourceFile.cpp \
+	DataSourceFile.h \
+	DataSourceRange.cpp \
+	DataSourceRange.h \
 	WorkMode.cpp \
 	WorkModeDisasm.cpp \
 	WorkModeDisasm.h \
 	WorkModeElf.cpp \
 	WorkModeElf.h \
 	WorkModeHex.cpp \
-	WorkModeHex.h \
-	DataSourceRange.cpp \
-	DataSourceRange.h
+	WorkModeHex.h

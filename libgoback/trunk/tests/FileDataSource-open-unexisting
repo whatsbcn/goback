@@ -1,6 +1,0 @@
-rm -f FileDataSource-open-data-doesnt-exist
-if ./FileDataSource-open FileDataSource-open-data-doesnt-exist; then
-	false
-else
-	true
-fi

@@ -3,9 +3,9 @@
 
 #include "DataSource.h"
 
-class FileDataSource : public DataSource {
+class DataSourceFile : public DataSource {
 public:
-	FileDataSource();
+	DataSourceFile();
 
 	bool open(const char * filename);
 	bool close();

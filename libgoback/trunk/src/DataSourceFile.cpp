@@ -1,4 +1,4 @@
-#include "FileDataSource.h"
+#include "DataSourceFile.h"
 
 #include <iostream>
 #include <sys/types.h>
@@ -6,7 +6,7 @@
 #include <fcntl.h>
 
 // Constructor
-FileDataSource::FileDataSource() {
+DataSourceFile::DataSourceFile() {
 	_fd = -1;
 	_writable = false;
 }
@@ -14,7 +14,7 @@ FileDataSource::FileDataSource() {
 /*
  * Open the file in read-write.
  */
-bool FileDataSource::requestWrite() {
+bool DataSourceFile::requestWrite() {
 	if (_writable) return true;
 
 	int fdw = ::open(_filename, O_RDWR);
@@ -29,18 +29,18 @@ bool FileDataSource::requestWrite() {
 /*
  * Open the file in read-write, and let insert.
  */
-bool FileDataSource::requestInsert() {
+bool DataSourceFile::requestInsert() {
 	return requestWrite();
 }
 
-bool FileDataSource::requestRemove() {
+bool DataSourceFile::requestRemove() {
 	return requestWrite();
 }
 
 /*
  * Flush the writes.
  */
-bool FileDataSource::flushWrites() {
+bool DataSourceFile::flushWrites() {
 	if (fsync(_fd) == 0) return true;
 	return false;
 }
@@ -48,7 +48,7 @@ bool FileDataSource::flushWrites() {
 /*
  * Open file in read-only
  */
-bool FileDataSource::open(const char * filename) {
+bool DataSourceFile::open(const char * filename) {
 	// Open file
 	_fd = ::open(filename, O_RDONLY);
 
@@ -63,7 +63,7 @@ bool FileDataSource::open(const char * filename) {
 /*
  * Close the file.
  */
-bool FileDataSource::close() {
+bool DataSourceFile::close() {
 	if (::close(_fd) == 0) return true;
 	_fd = -1;
 	return false;
@@ -72,7 +72,7 @@ bool FileDataSource::close() {
 /*
  * Put at buff, size bytes, from offset.
  */
-int FileDataSource::readBytes(char * buff, int size, unsigned int offset) {
+int DataSourceFile::readBytes(char * buff, int size, unsigned int offset) {
 	int result = 0;
 
 	// Check file opened
@@ -90,7 +90,7 @@ int FileDataSource::readBytes(char * buff, int size, unsigned int offset) {
 /*
  * Replace at offset, size bytes, with buff.
  */
-int FileDataSource::replaceBytes(const char * buff, int size, unsigned int offset) {
+int DataSourceFile::replaceBytes(const char * buff, int size, unsigned int offset) {
 	int result = 0;
 
 	// Check file opened and writable
@@ -109,7 +109,7 @@ int FileDataSource::replaceBytes(const char * buff, int size, unsigned int offse
  * Insert size bytes from buff to the offset.
  * This is for small sizes. ~mbytes.
  */
-int FileDataSource::insertBytes(const char * buff, int size, unsigned int offset) {
+int DataSourceFile::insertBytes(const char * buff, int size, unsigned int offset) {
 	// Check file opened and writable
 	if (_fd == -1 || !_writable) return 0;
 
@@ -158,7 +158,7 @@ int FileDataSource::insertBytes(const char * buff, int size, unsigned int offset
  * Remove size bytes at offset.
  * This is for small sizes. ~mbytes.
  */
-int FileDataSource::removeBytes(int size, unsigned int offset) {
+int DataSourceFile::removeBytes(int size, unsigned int offset) {
 	// Check file opened and writable
 	if (_fd == -1 || !_writable) return 0;
 
@@ -185,7 +185,7 @@ int FileDataSource::removeBytes(int size, unsigned int offset) {
 /*
  * Get size in bytes.
  */
-int FileDataSource::size() {
+int DataSourceFile::size() {
 	int result;
 	// Check file opened
 	if (_fd == -1) return 0;

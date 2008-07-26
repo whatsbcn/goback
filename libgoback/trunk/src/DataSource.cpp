@@ -1,5 +1,5 @@
 #include "DataSourceRange.h"
-#include "FileDataSource.h"
+#include "DataSourceFile.h"
 
 DataSource *DataSource::create(std::string name, std::string format) {
 	DataSource *ds = NULL;
@@ -7,7 +7,7 @@ DataSource *DataSource::create(std::string name, std::string format) {
 	// Create the requested DataSource
 	// TODO: use a list
 	if (!name.compare("file")) {
-		ds = new FileDataSource();
+		ds = new DataSourceFile();
 	}
 
 	if (ds) {

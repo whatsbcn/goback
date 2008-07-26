@@ -1,0 +1,6 @@
+rm -f DataSourceFile-open-data-doesnt-exist
+if ./DataSourceFile-open DataSourceFile-open-data-doesnt-exist; then
+	false
+else
+	true
+fi
