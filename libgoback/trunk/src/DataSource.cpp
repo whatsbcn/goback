@@ -1,5 +1,6 @@
 #include "DataSourceRange.h"
 #include "DataSourceFile.h"
+#include "ModuleManager.h"
 
 DataSource *DataSource::create(std::string name, std::string format) {
 	DataSource *ds = NULL;
@@ -18,7 +19,7 @@ DataSource *DataSource::create(std::string name, std::string format) {
 	return ds;
 }
 
-// Return a datasoruce with a limited range
+// Return a DataSource with a limited range
 DataSource *DataSource::createRange(int offset, int size, std::string format) {
 	DataSourceRange *dsr = new DataSourceRange();
 	dsr->setDataFormat(format);
@@ -27,10 +28,23 @@ DataSource *DataSource::createRange(int offset, int size, std::string format) {
 }
 
 std::list<std::string> DataSource::getWorkModes() {
-	// TODO: Make it depend on the _dataFormat string
 	std::list<std::string> modeslist;
-	modeslist.push_back("hex");
-	modeslist.push_back("disasm");
+
+	// Get the list of available WorkMode modules
+	WorkModeModules workModes;
+	workModes = ModuleManager::getInstance()->getWorkModes();
+
+	// Find the WorkModes applicable to the current format
+	WorkModeModules::const_iterator wmm = workModes.begin();
+	while (wmm != workModes.end()) {
+		// Test whether it's a valid format for this module
+		// TODO: Test with complete words
+		if (_dataFormat == (*wmm)->getApplicableFormat().substr(0, _dataFormat.length())) {
+			// Add the WorkMode id to the list
+			modeslist.push_back((*wmm)->id());
+		}
+		wmm++;
+	}
 
 	return modeslist;
 }
