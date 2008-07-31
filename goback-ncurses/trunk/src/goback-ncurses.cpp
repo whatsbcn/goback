@@ -2,6 +2,7 @@
 
 #include <DataSource.h>
 #include <WorkMode.h>
+#include <DataFormat.h>
 
 #include <curses.h>
 #include <iostream>
@@ -78,15 +79,16 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
+	DataFormat *df = DataFormat::create("elf", ds);
 	//WorkMode *wm = WorkMode::create("elf", ds);
 	//WorkMode *wm = WorkMode::create("disasm", ds);
-	WorkMode *wm = WorkMode::create("hex", ds);
+	//WorkMode *wm = WorkMode::create("hex", ds);
 
 	init_ncurses();
 
 	// Initialize the buffer window
 	BufferWindow win(0, 0, COLS, LINES - 1);
-	win.setWorkMode(wm);
+	//win.setWorkMode(wm);
 
 	print_view(&win);
 	for (;;) {

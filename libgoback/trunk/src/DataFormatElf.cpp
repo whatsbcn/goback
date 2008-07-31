@@ -1,9 +1,11 @@
 #include "DataFormatElf.h"
 #include "DataSource.h"
+#include "DataSourceRange.h"
 
 #include <elf.h>
 
 // DataFormatElfModule
+
 
 std::string DataFormatElfModule::id() const {
 	return "elf";
@@ -12,6 +14,24 @@ std::string DataFormatElfModule::id() const {
 std::string DataFormatElfModule::name() const {
 	return "ELF file";
 }
+
+// Return the default format for a section
+std::string DataFormatElf::getSectionType(int type) const {
+	switch(type) {
+	case SHT_PROGBITS:
+		return "disasm";
+	break;
+	case SHT_NOTE:
+		return "disasm";
+	break;
+	case SHT_REL:
+		return "disasm";
+	break;
+	default:
+		return "hex";
+	}
+}
+
 
 bool DataFormatElfModule::detect(DataSource *ds) const {
 	// Load elf headers.
@@ -65,6 +85,8 @@ bool DataFormatElf::load() {
 		section.name = std::string(&stringTable[sectionHeaders[i].sh_name]);
 		section.offset = sectionHeaders[i].sh_offset;
 		section.address = sectionHeaders[i].sh_addr;
+		section.size = sectionHeaders[i].sh_size;
+		section.type = sectionHeaders[i].sh_type;
 
 		// Save this section
 		_sections.push_back(section);
@@ -79,8 +101,10 @@ bool DataFormatElf::load() {
 	free(stringTable);
 
 	// Create the section DataSources
-	for (unsigned int i = 0; i < _sections.size(); i++) {
-		//TODO: create datasources with types
-		//_formatSections.push_back();
-	}
+	std::list<ElfSection>::iterator section = _sections.begin();
+    while (section != _sections.end()) {
+		DataSource *ds = _dataSource->createRange(section->offset, section->size, getSectionType(section->type));
+		_formatSections.push_back(ds);
+		section++;
+    }
 }

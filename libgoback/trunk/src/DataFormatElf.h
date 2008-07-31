@@ -18,6 +18,7 @@ public:
 
 class DataFormatElf : public DataFormat {
 public:
+	std::string getSectionType(int type) const;
 	DataFormatElf(DataSource *ds);
 	~DataFormatElf();
 
@@ -29,6 +30,7 @@ protected:
 		unsigned int offset;
 		unsigned int size;
 		unsigned int address;
+		unsigned int type;
 	};
 
 	std::list<ElfSection> _sections;
