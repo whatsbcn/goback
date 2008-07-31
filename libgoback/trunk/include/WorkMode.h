@@ -1,7 +1,8 @@
 #ifndef WORKMODE_H
 #define WORKMODE_H
 
-#include <string>
+#include <Module.h>
+
 #include <list>
 
 class DataSource;
@@ -18,7 +19,7 @@ typedef std::list<ViewBlock> ViewLine;
 
 class WorkMode {
 public:
-	static WorkMode *create(std::string name, DataSource *ds);
+	static WorkMode *create(std::string id, DataSource *ds);
 
 	WorkMode(DataSource *ds);
 
@@ -27,6 +28,16 @@ public:
 
 protected:
 	DataSource *_dataSource;
+};
+
+// WorkMode module
+class WorkModeModule : public Module {
+public:
+	// Get the applicable format
+	virtual std::string getApplicableFormat() const = 0;
+
+	// WorkMode instantiation
+	virtual WorkMode *create(DataSource *ds) const = 0;
 };
 
 #endif // WORKMODE_H

@@ -2,6 +2,8 @@
 
 // TODO: Find a better way to link the modules without including them here
 #include "DataFormatElf.h"
+#include "WorkModeDisasm.h"
+#include "WorkModeHex.h"
 
 ModuleManager *ModuleManager::_instance = NULL;
 
@@ -17,16 +19,30 @@ ModuleManager::ModuleManager() {
 	// Populate the lists of modules
 	// TODO: This could be used to load plugins
 	_dataFormats.push_back((DataFormatModule *)new DataFormatElfModule());
+	_workModes.push_back((WorkModeModule *)new WorkModeDisasmModule());
+	_workModes.push_back((WorkModeModule *)new WorkModeHexModule());
 }
 
 ModuleManager::~ModuleManager() {
-	std::list<DataFormatModule *>::iterator df = _dataFormats.begin();
+	// Delete the DataFormatModules
+	DataFormatModules::iterator df = _dataFormats.begin();
 	while (df != _dataFormats.end()) {
 		// Delete it
 		delete *df;
+	}
+
+	// Delete the WorkModeModules
+	WorkModeModules::iterator wm = _workModes.begin();
+	while (wm != _workModes.end()) {
+		// Delete it
+		delete *wm;
 	}
 }
 
 DataFormatModules ModuleManager::getDataFormats() const {
 	return _dataFormats;
+}
+
+WorkModeModules ModuleManager::getWorkModes() const {
+	return _workModes;
 }

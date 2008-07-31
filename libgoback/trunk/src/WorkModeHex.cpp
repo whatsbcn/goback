@@ -1,6 +1,26 @@
 #include "WorkModeHex.h"
 #include "DataSource.h"
 
+// WorkModeHexModule
+
+std::string WorkModeHexModule::id() const {
+	return "hex";
+}
+
+std::string WorkModeHexModule::name() const {
+	return "Hexadecimal view";
+}
+
+std::string WorkModeHexModule::getApplicableFormat() const {
+	return "";
+}
+
+WorkMode *WorkModeHexModule::create(DataSource *ds) const {
+	return new WorkModeHex(ds);
+}
+
+// WorkModeHex
+
 WorkModeHex::WorkModeHex(DataSource *ds) : WorkMode(ds) {
 	_lineBytes = 8;
 }

@@ -10,14 +10,14 @@ std::list<std::string> DataFormat::detect(DataSource *ds) {
 	dataFormats = ModuleManager::getInstance()->getDataFormats();
 
 	// Test all the available DataFormats
-	std::list<DataFormatModule *>::const_iterator df = dataFormats.begin();
-	while (df != dataFormats.end()) {
+	DataFormatModules::const_iterator dfm = dataFormats.begin();
+	while (dfm != dataFormats.end()) {
 		// Try this format
-		if ((*df)->detect(ds)) {
+		if ((*dfm)->detect(ds)) {
 			// Format detected, add it to the list
-			detectedFormats.push_back((*df)->id());
+			detectedFormats.push_back((*dfm)->id());
 		}
-		df++;
+		dfm++;
 	}
 
 	return detectedFormats;
@@ -31,14 +31,14 @@ DataFormat *DataFormat::create(std::string id, DataSource *ds) {
 	dataFormats = ModuleManager::getInstance()->getDataFormats();
 
 	// Find the DataFormat with the specified id
-	std::list<DataFormatModule *>::const_iterator dfl = dataFormats.begin();
-	while ((!df) && (dfl != dataFormats.end())) {
+	DataFormatModules::const_iterator dfm = dataFormats.begin();
+	while ((!df) && (dfm != dataFormats.end())) {
 		// Search the format id
-		if (id == (*dfl)->id()) {
+		if (id == (*dfm)->id()) {
 			// Create the DataFormat instance
-			df = (*dfl)->create(ds);
+			df = (*dfm)->create(ds);
 		}
-		df++;
+		dfm++;
 	}
 
 	if (df) {

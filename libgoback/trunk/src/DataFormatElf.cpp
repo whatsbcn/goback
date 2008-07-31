@@ -28,12 +28,12 @@ bool DataFormatElfModule::detect(DataSource *ds) const {
 	return true;
 }
 
-// DataFormatElf
-
 DataFormat *DataFormatElfModule::create(DataSource *ds) const {
 	// Return the DataFormat object
 	return new DataFormatElf(ds);
 }
+
+// DataFormatElf
 
 DataFormatElf::DataFormatElf(DataSource *ds) :
 	DataFormat(ds) {

@@ -3,6 +3,26 @@
 #include <dis-asm.h>
 #include <stdarg.h>
 
+// WorkModeDisasmModule
+
+std::string WorkModeDisasmModule::id() const {
+	return "disasm";
+}
+
+std::string WorkModeDisasmModule::name() const {
+	return "Code disassembling";
+}
+
+std::string WorkModeDisasmModule::getApplicableFormat() const {
+	return "code";
+}
+
+WorkMode *WorkModeDisasmModule::create(DataSource *ds) const {
+	return new WorkModeDisasm(ds);
+}
+
+// WorkModeDisasm
+
 struct ASM_INSN {
 	char mnemonic[16];
 	char src[32];
