@@ -1,6 +1,5 @@
 #include "DataFormatElf.h"
 #include "DataSource.h"
-#include "DataSourceRange.h"
 
 #include <elf.h>
 
@@ -19,13 +18,13 @@ std::string DataFormatElfModule::name() const {
 std::string DataFormatElf::getSectionType(int type) const {
 	switch(type) {
 	case SHT_PROGBITS:
-		return "disasm";
+		return "code";
 	break;
 	case SHT_NOTE:
-		return "disasm";
+		return "hex";
 	break;
 	case SHT_REL:
-		return "disasm";
+		return "code";
 	break;
 	default:
 		return "hex";
