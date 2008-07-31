@@ -13,6 +13,8 @@ libgoback_la_SOURCES = \
 	DataSourceFile.h \
 	DataSourceRange.cpp \
 	DataSourceRange.h \
+	ModuleManager.cpp \
+	ModuleManager.h \
 	WorkMode.cpp \
 	WorkModeDisasm.cpp \
 	WorkModeDisasm.h \

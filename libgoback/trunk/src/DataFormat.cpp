@@ -1,24 +1,17 @@
 #include "DataFormat.h"
-#include "DataFormatElf.h"
+#include "ModuleManager.h"
 
-DataFormatManager::DataFormatManager() {
-	_dataFormats.push_back((DataFormatModule *)new DataFormatElfModule());
-}
-
-DataFormatManager::~DataFormatManager() {
-	std::list<DataFormatModule *>::iterator df = _dataFormats.begin();
-	while (df != _dataFormats.end()) {
-		// Delete it
-		delete *df;
-	}
-}
-
-std::list<std::string> DataFormatManager::detect(DataSource *ds) const {
+std::list<std::string> DataFormat::detect(DataSource *ds) {
 	// List to return
 	std::list<std::string> detectedFormats;
 
-	std::list<DataFormatModule *>::const_iterator df = _dataFormats.begin();
-	while (df != _dataFormats.end()) {
+	// Get the list of available DataFormat modules
+	DataFormatModules dataFormats;
+	dataFormats = ModuleManager::getInstance()->getDataFormats();
+
+	// Test all the available DataFormats
+	std::list<DataFormatModule *>::const_iterator df = dataFormats.begin();
+	while (df != dataFormats.end()) {
 		// Try this format
 		if ((*df)->detect(ds)) {
 			// Format detected, add it to the list
@@ -30,11 +23,16 @@ std::list<std::string> DataFormatManager::detect(DataSource *ds) const {
 	return detectedFormats;
 }
 
-DataFormat *DataFormatManager::create(std::string id, DataSource *ds) const {
+DataFormat *DataFormat::create(std::string id, DataSource *ds) {
 	DataFormat *df = NULL;
 
-	std::list<DataFormatModule *>::const_iterator dfl = _dataFormats.begin();
-	while ((!df) && (dfl != _dataFormats.end())) {
+	// Get the list of available DataFormat modules
+	DataFormatModules dataFormats;
+	dataFormats = ModuleManager::getInstance()->getDataFormats();
+
+	// Find the DataFormat with the specified id
+	std::list<DataFormatModule *>::const_iterator dfl = dataFormats.begin();
+	while ((!df) && (dfl != dataFormats.end())) {
 		// Search the format id
 		if (id == (*dfl)->id()) {
 			// Create the DataFormat instance
