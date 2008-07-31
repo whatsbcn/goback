@@ -18,10 +18,10 @@ public:
 
 class DataFormatElf : public DataFormat {
 public:
-	std::string getSectionType(int type) const;
 	DataFormatElf(DataSource *ds);
 	~DataFormatElf();
 
+	std::string getSectionType(int type) const;
 	bool load();
 
 protected:

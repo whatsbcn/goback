@@ -5,7 +5,6 @@
 
 // DataFormatElfModule
 
-
 std::string DataFormatElfModule::id() const {
 	return "elf";
 }
@@ -13,24 +12,6 @@ std::string DataFormatElfModule::id() const {
 std::string DataFormatElfModule::name() const {
 	return "ELF file";
 }
-
-// Return the default format for a section
-std::string DataFormatElf::getSectionType(int type) const {
-	switch(type) {
-	case SHT_PROGBITS:
-		return "code";
-	break;
-	case SHT_NOTE:
-		return "hex";
-	break;
-	case SHT_REL:
-		return "code";
-	break;
-	default:
-		return "hex";
-	}
-}
-
 
 bool DataFormatElfModule::detect(DataSource *ds) const {
 	// Load elf headers.
@@ -56,6 +37,24 @@ DataFormat *DataFormatElfModule::create(DataSource *ds) const {
 
 DataFormatElf::DataFormatElf(DataSource *ds) :
 	DataFormat(ds) {
+}
+
+// Return the default format for a section
+std::string DataFormatElf::getSectionType(int type) const {
+	// TODO: Add the arch after "code"
+	switch(type) {
+	case SHT_PROGBITS:
+		return "code";
+		break;
+	case SHT_NOTE:
+		return "";
+		break;
+	case SHT_REL:
+		return "code";
+		break;
+	default:
+		return "";
+	}
 }
 
 bool DataFormatElf::load() {
@@ -101,9 +100,9 @@ bool DataFormatElf::load() {
 
 	// Create the section DataSources
 	std::list<ElfSection>::iterator section = _sections.begin();
-    while (section != _sections.end()) {
+	while (section != _sections.end()) {
 		DataSource *ds = _dataSource->createRange(section->offset, section->size, getSectionType(section->type));
 		_formatSections.push_back(ds);
 		section++;
-    }
+	}
 }
