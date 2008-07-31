@@ -22,8 +22,8 @@ class WorkModeDisasm : public WorkMode {
 public:
 	WorkModeDisasm(DataSource *ds);
 
-	int getNumberLines();
-	ViewLine getLine(int line);
+	unsigned int getNumberLines();
+	ViewLine getLine(unsigned int line);
 
 protected:
 	int disasmOp(int, struct ASM_INSN *);

@@ -25,7 +25,7 @@ WorkModeHex::WorkModeHex(DataSource *ds) : WorkMode(ds) {
 	_lineBytes = 8;
 }
 
-int WorkModeHex::getNumberLines() {
+unsigned int WorkModeHex::getNumberLines() {
 	int bytes = _dataSource->size();
 	int numLines = bytes / _lineBytes;
 	if (bytes % _lineBytes) {
@@ -34,7 +34,7 @@ int WorkModeHex::getNumberLines() {
 	return numLines;
 }
 
-ViewLine WorkModeHex::getLine(int line) {
+ViewLine WorkModeHex::getLine(unsigned int line) {
 	ViewLine viewline;
 	char c[_lineBytes];
 	char buff[11];

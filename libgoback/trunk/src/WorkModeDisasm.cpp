@@ -149,11 +149,11 @@ WorkModeDisasm::WorkModeDisasm(DataSource *ds) : WorkMode(ds) {
 	}
 }
 
-int WorkModeDisasm::getNumberLines() {
+unsigned int WorkModeDisasm::getNumberLines() {
 	return _linies.size();
 }
 
-ViewLine WorkModeDisasm::getLine(int line) {
+ViewLine WorkModeDisasm::getLine(unsigned int line) {
 	ViewLine viewline;
 	char shellcode[10];
 	char hexbyte[3];

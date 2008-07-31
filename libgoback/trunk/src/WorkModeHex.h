@@ -20,11 +20,11 @@ class WorkModeHex : public WorkMode {
 public:
 	WorkModeHex(DataSource *ds);
 
-	int getNumberLines();
-	ViewLine getLine(int line);
+	unsigned int getNumberLines();
+	ViewLine getLine(unsigned int line);
 
 protected:
-	int _lineBytes;
+	unsigned int _lineBytes;
 };
 
 #endif // WORKMODEHEX_H

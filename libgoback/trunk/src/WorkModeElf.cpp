@@ -173,11 +173,11 @@ WorkModeElf::WorkModeElf(DataSource *ds) : WorkMode(ds) {
 	free(stringTable);
 }
 
-int WorkModeElf::getNumberLines() {
+unsigned int WorkModeElf::getNumberLines() {
 	return _linies.size();
 }
 
-struct WorkModeElf::intString * WorkModeElf::findSection(int offset) {
+struct WorkModeElf::intString *WorkModeElf::findSection(int offset) {
 	int i;
 	WorkModeElf::intString *section;
 	for (i = _sections.size(); i >= 0; i--) {
@@ -188,7 +188,7 @@ struct WorkModeElf::intString * WorkModeElf::findSection(int offset) {
 	return &_sections.at(i - 1);
 }
 
-ViewLine WorkModeElf::getLine(int line) {
+ViewLine WorkModeElf::getLine(unsigned int line) {
 	ViewLine viewline;
 	char shellcode[10];
 	char hexbyte[3];

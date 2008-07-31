@@ -23,8 +23,8 @@ public:
 
 	WorkMode(DataSource *ds);
 
-	virtual int getNumberLines() = 0;
-	virtual ViewLine getLine(int line) = 0;
+	virtual unsigned int getNumberLines() = 0;
+	virtual ViewLine getLine(unsigned int line) = 0;
 
 protected:
 	DataSource *_dataSource;

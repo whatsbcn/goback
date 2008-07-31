@@ -20,7 +20,7 @@ DataSource *DataSource::create(std::string name, std::string format) {
 }
 
 // Return a DataSource with a limited range
-DataSource *DataSource::createRange(int offset, int size, std::string format) {
+DataSource *DataSource::createRange(unsigned int offset, unsigned int size, std::string format) {
 	DataSourceRange *dsr = new DataSourceRange();
 	dsr->setDataFormat(format);
 	dsr->setRange(this, offset, size);

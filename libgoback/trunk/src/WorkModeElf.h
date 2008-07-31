@@ -8,8 +8,8 @@ class WorkModeElf : public WorkMode {
 public:
 	WorkModeElf(DataSource *ds);
 
-	int getNumberLines();
-	ViewLine getLine(int line);
+	unsigned int getNumberLines();
+	ViewLine getLine(unsigned int line);
 
 protected:
 	struct intString {
