@@ -29,6 +29,7 @@ ModuleManager::~ModuleManager() {
 	while (df != _dataFormats.end()) {
 		// Delete it
 		delete *df;
+		df++;
 	}
 
 	// Delete the WorkModeModules
@@ -36,6 +37,7 @@ ModuleManager::~ModuleManager() {
 	while (wm != _workModes.end()) {
 		// Delete it
 		delete *wm;
+		wm++;
 	}
 }
 
