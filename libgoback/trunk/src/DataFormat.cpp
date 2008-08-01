@@ -62,8 +62,8 @@ unsigned int DataFormat::getNumberSections() {
 }
 
 DataSource *DataFormat::getSection(unsigned int section) {
-	// check if the section exists
-	if (_formatSections.size() > section && section >= 0) {
+	// Check if the section exists
+	if (_formatSections.size() > section) {
 		return _formatSections[section];
 	}
 	return NULL;
