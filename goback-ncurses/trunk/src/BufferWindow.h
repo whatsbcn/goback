@@ -1,12 +1,14 @@
 #ifndef BUFFERWINDOW_H
 #define BUFFERWINDOW_H
 
+#include <DataFormat.h>
+
 class WorkMode;
 
 class BufferWindow {
 public:
 	BufferWindow(unsigned int x, unsigned int y, unsigned int w, unsigned int h);
-	void setWorkMode(WorkMode *wm);
+	void setDataFormat(DataFormat *df);
 
 	unsigned int getViewPercentage();
 
@@ -31,17 +33,19 @@ private:
 	unsigned int _x, _y, _w, _h;
 
 	// View position
-	unsigned int _viewLine, _viewCol;
+	unsigned int _viewLine, _viewCol, _viewSection;
 
 	// Cursor position
 	unsigned int _cursorViewLine, _cursorViewCol;
 
 	// The WorkMode to show
-	WorkMode *_wm;
+	//WorkMode *_wm;
+	// The DataFormat to show
+	DataFormat *_df;
 	unsigned int _numLines;
 
 	// Helper functions
-	void updateWindowLine(unsigned int numline);
+	void updateWindowLine(unsigned int numline, WorkMode *wm);
 
 	/* TODO:
 	 * Possible events:

@@ -37,6 +37,7 @@ PROPOSTA: a la interficie grafica cal enviarli una estructura com aquesta i que 
 
 * DataFormat
 	- ELF
+	- PNG
 
 * Comandes pel workmode
 	- Definides pel propi WorkMode

@@ -5,6 +5,7 @@ DataSourceRange::DataSourceRange() {
 }
 
 void DataSourceRange::setRange(DataSource *ds, unsigned int offset, unsigned int size) {
+	printf("setRange ds=%p, size=%d, offset=%d\n", ds, size, offset);
 	_ds = ds;
 	_offset = offset;
 	_size = size;
@@ -24,7 +25,9 @@ int DataSourceRange::size() {
 
 int DataSourceRange::readBytes(char *buff, unsigned int size, unsigned int offset) {
 	// if offset is out the range of the datasorucerange, return 0
+	printf("readRange buff=%p, size=%d, offset=%d\n", buff, size, offset);
 	if (offset >= size) {
+		printf("intentant accedir fora del rang!\n");
 		return 0;
 	} else {
 		// we have to read the real offset

@@ -4,6 +4,7 @@
 #include <Module.h>
 
 #include <list>
+#include <vector>
 
 class DataSource;
 
@@ -26,7 +27,7 @@ protected:
 	DataSource *_dataSource;
 
 	// Output DataSources
-	std::list<DataSource *> _formatSections;
+	std::vector<DataSource *> _formatSections;
 };
 
 // DataFormat module

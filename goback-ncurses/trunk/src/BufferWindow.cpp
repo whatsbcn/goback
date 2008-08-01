@@ -1,19 +1,16 @@
 #include "BufferWindow.h"
 #include <WorkMode.h>
+#include <DataSource.h>
 
 #include <curses.h>
 
 BufferWindow::BufferWindow(unsigned int x, unsigned int y, unsigned int w, unsigned int h) :
-	_x(x), _y(y), _w(w), _h(h), _viewLine(0), _viewCol(0),
-	_cursorViewLine(0), _cursorViewCol(0), _wm(NULL) {
+	_x(x), _y(y), _w(w), _h(h), _viewLine(0), _viewCol(0), _viewSection(0),
+	_cursorViewLine(0), _cursorViewCol(0), _df(NULL) {
 }
 
-void BufferWindow::setWorkMode(WorkMode *wm) {
-	_wm = wm;
-	_numLines = _wm->getNumberLines();
-
-	// Update the window?
-	updateWindow();
+void BufferWindow::setDataFormat(DataFormat *df) {
+	_df = df;
 }
 
 unsigned int BufferWindow::getViewPercentage() {
@@ -23,7 +20,6 @@ unsigned int BufferWindow::getViewPercentage() {
 		return ((_viewLine + _h) * 100) / _numLines;
 	}
 }
-
 
 /*
  * Cursor
@@ -111,14 +107,37 @@ void BufferWindow::showCursor() {
 }
 
 void BufferWindow::updateWindow() {
-	for (int i = 0; i < _numLines && i < _h; i++) {
-		updateWindowLine(i);
+	// Get the first view section
+	DataSource *ds = _df->getSection(_viewSection);
+	if (ds) {
+		// Get the possible WorkModes
+		std::list<std::string> strWorkModes = ds->getWorkModes();
+		// Use the first WorkMode for this section
+		WorkMode *wm = WorkMode::create(strWorkModes.front(), ds);
+
+		for (int updatedLines = 0; updatedLines < _h; updatedLines += wm->getNumberLines()) {
+			for (int i = 0; i < wm->getNumberLines() && i < _h; i++) {
+				updateWindowLine(i, wm);
+			} 
+			// If there are more sections
+			if (_df->getNumberSections() > _viewSection + 1) {
+				_viewSection++;
+				ds = _df->getSection(_viewSection);
+				strWorkModes = ds->getWorkModes();
+				wm = WorkMode::create(strWorkModes.front(), ds);
+			} else {
+				break;
+			}
+		}
+	} else {
+		printw("ds == NULL");
 	}
 }
 
 // Update a line in the window.
-void BufferWindow::updateWindowLine(unsigned int numline) {
-	ViewLine line = _wm->getLine(_viewLine + numline);
+void BufferWindow::updateWindowLine(unsigned int numline, WorkMode *wm) {
+
+	ViewLine line = wm->getLine(_viewLine + numline);
 	move(_y + numline, _x);
 
 	// Print the blocks

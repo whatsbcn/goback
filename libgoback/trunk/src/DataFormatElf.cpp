@@ -71,11 +71,12 @@ bool DataFormatElf::load() {
 
 	// Load section headers
 	Elf32_Shdr *sectionHeaders = (Elf32_Shdr *) malloc(sizeof(Elf32_Shdr) * elfHeader.e_shnum);
-	_dataSource->readBytes((char *)sectionHeaders, sizeof(Elf32_Shdr) * elfHeader.e_shnum, elfHeader.e_shoff);
+	int ddd= _dataSource->readBytes((char *)sectionHeaders, sizeof(Elf32_Shdr) * elfHeader.e_shnum, elfHeader.e_shoff);
 
 	char *stringTable = (char *)malloc(sectionHeaders[elfHeader.e_shstrndx].sh_size);
-	_dataSource->readBytes(stringTable, sectionHeaders[elfHeader.e_shstrndx].sh_size, sectionHeaders[elfHeader.e_shstrndx].sh_offset);
+	int asd= _dataSource->readBytes(stringTable, sectionHeaders[elfHeader.e_shstrndx].sh_size, sectionHeaders[elfHeader.e_shstrndx].sh_offset);
 
+	printf("sections %d- %d - %d\n", elfHeader.e_shnum,asd, ddd);
 	// Index all sections
 	for (int i = 0; i < elfHeader.e_shnum; i++) {
 		// Collect the information about this section

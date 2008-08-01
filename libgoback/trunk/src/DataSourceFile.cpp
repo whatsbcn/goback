@@ -77,7 +77,8 @@ int DataSourceFile::readBytes(char *buff, unsigned int size, unsigned int offset
 
 	// Check file opened
 	if (_fd == -1) return 0;
-
+	
+	printf("read buff=%p, size=%d, offset=%d\n", buff, size, offset);
 	// Seek the offset
 	if (lseek(_fd, offset, SEEK_SET) == offset) {
 		result = read(_fd, buff, size);

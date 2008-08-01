@@ -65,7 +65,7 @@ void print_view(BufferWindow *win) {
 }
 
 int main(int argc, char *argv[]) {
-	int key;
+	int key, numsections;
 
 	if (argc != 2){
 		std::cout << "Usage: " << argv[0] << " file" << std::endl;
@@ -80,15 +80,23 @@ int main(int argc, char *argv[]) {
 	}
 
 	DataFormat *df = DataFormat::create("elf", ds);
+	if (!df) {
+		printf("Can't initialize dataformat\n");
+		exit(1);
+	}
+	numsections = df->getNumberSections();
+
 	//WorkMode *wm = WorkMode::create("elf", ds);
 	//WorkMode *wm = WorkMode::create("disasm", ds);
 	//WorkMode *wm = WorkMode::create("hex", ds);
 
+	printf("numsections %d\n", numsections);
+	exit(0);
 	init_ncurses();
 
 	// Initialize the buffer window
 	BufferWindow win(0, 0, COLS, LINES - 1);
-	//win.setWorkMode(wm);
+	win.setDataFormat(df);
 
 	print_view(&win);
 	for (;;) {
