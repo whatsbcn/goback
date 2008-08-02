@@ -90,8 +90,8 @@ int main(int argc, char *argv[]) {
 	//WorkMode *wm = WorkMode::create("disasm", ds);
 	//WorkMode *wm = WorkMode::create("hex", ds);
 
-	printf("numsections %d\n", numsections);
-	exit(0);
+	//printf("numsections %d\n", numsections);
+	//exit(0);
 	init_ncurses();
 
 	// Initialize the buffer window

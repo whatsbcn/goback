@@ -76,7 +76,6 @@ bool DataFormatElf::load() {
 	char *stringTable = (char *)malloc(sectionHeaders[elfHeader.e_shstrndx].sh_size);
 	int asd= _dataSource->readBytes(stringTable, sectionHeaders[elfHeader.e_shstrndx].sh_size, sectionHeaders[elfHeader.e_shstrndx].sh_offset);
 
-	printf("sections %d- %d - %d\n", elfHeader.e_shnum,asd, ddd);
 	// Index all sections
 	for (int i = 0; i < elfHeader.e_shnum; i++) {
 		// Collect the information about this section
@@ -102,6 +101,7 @@ bool DataFormatElf::load() {
 	// Create the section DataSources
 	std::list<ElfSection>::iterator section = _sections.begin();
 	while (section != _sections.end()) {
+		printf("Creant rang %s: offset:%d, size:%d\n", section->name.c_str(), section->offset, section->size);
 		DataSource *ds = _dataSource->createRange(section->offset, section->size, getSectionType(section->type));
 		_formatSections.push_back(ds);
 		section++;

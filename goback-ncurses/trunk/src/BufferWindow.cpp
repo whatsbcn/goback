@@ -5,12 +5,20 @@
 #include <curses.h>
 
 BufferWindow::BufferWindow(unsigned int x, unsigned int y, unsigned int w, unsigned int h) :
-	_x(x), _y(y), _w(w), _h(h), _viewLine(0), _viewCol(0), _viewSection(0),
+	_x(x), _y(y), _w(w), _h(h), _viewLine(0), _viewCol(0), _viewSection(0), _numLines(0),
 	_cursorViewLine(0), _cursorViewCol(0), _df(NULL) {
 }
 
 void BufferWindow::setDataFormat(DataFormat *df) {
-	_df = df;
+	DataSource *ds;
+	WorkMode *wm;
+	_df = df;	
+	for (int i = 0; i < _df->getNumberSections(); i++) {
+		ds = _df->getSection(i);
+		//TODO: this cannot be done only with the hex workmode!!
+		wm = WorkMode::create("hex", ds);
+		_numLines += wm->getNumberLines();
+	}
 }
 
 unsigned int BufferWindow::getViewPercentage() {
@@ -109,42 +117,56 @@ void BufferWindow::showCursor() {
 void BufferWindow::updateWindow() {
 	// Get the first view section
 	DataSource *ds = _df->getSection(_viewSection);
+	int startSection = _viewSection;
+	int startLine = _viewLine;
 	if (ds) {
 		// Get the possible WorkModes
 		std::list<std::string> strWorkModes = ds->getWorkModes();
 		// Use the first WorkMode for this section
-		WorkMode *wm = WorkMode::create(strWorkModes.front(), ds);
-
-		for (int updatedLines = 0; updatedLines < _h; updatedLines += wm->getNumberLines()) {
-			for (int i = 0; i < wm->getNumberLines() && i < _h; i++) {
-				updateWindowLine(i, wm);
-			} 
-			// If there are more sections
-			if (_df->getNumberSections() > _viewSection + 1) {
-				_viewSection++;
-				ds = _df->getSection(_viewSection);
-				strWorkModes = ds->getWorkModes();
-				wm = WorkMode::create(strWorkModes.front(), ds);
+		WorkMode *wm = WorkMode::create("hex", ds);
+		
+		int i = 0, j = 0;
+		while (i < _h) {
+			// It it is the last printable line from a section
+			if (j + startLine >= wm->getNumberLines()) {
+				// If there are more sections, jump to the next
+				if (_df->getNumberSections() > startSection + 1) {
+					startSection++;
+					ds = _df->getSection(startSection);
+					strWorkModes = ds->getWorkModes();
+					wm = WorkMode::create("hex", ds);
+					j = 0;
+					startLine = 0;
+				} else {
+					move(_y + i, _x);
+					printw("End of sections");
+					clrtoeol(); 
+					break;
+				}
 			} else {
-				break;
+				updateWindowLine(i, j, wm);
+				i++;
+				j++;
 			}
-		}
+		} 
+			// If there are more sections
 	} else {
 		printw("ds == NULL");
 	}
 }
 
 // Update a line in the window.
-void BufferWindow::updateWindowLine(unsigned int numline, WorkMode *wm) {
+void BufferWindow::updateWindowLine(unsigned int windowLine, unsigned int sectionLine, WorkMode *wm) {
 
-	ViewLine line = wm->getLine(_viewLine + numline);
-	move(_y + numline, _x);
+	ViewLine line = wm->getLine(_viewLine + sectionLine);
+	move(_y + windowLine, _x);
 
 	// Print the blocks
 	ViewLine::iterator j = line.begin();
 	while (j != line.end()) {
 		printw("%s", j->_str.c_str());
-		clrtoeol(); // TODO: just clear until the end of the window
 		j++;
 	}
+	printw("    pos_relative:%d num_lines:%d ", _viewLine + sectionLine, wm->getNumberLines());
+	clrtoeol(); // TODO: just clear until the end of the window
 }
