@@ -4,6 +4,7 @@
 #include <WorkMode.h>
 #include <DataFormat.h>
 
+#include <cstdlib>
 #include <curses.h>
 #include <iostream>
 
