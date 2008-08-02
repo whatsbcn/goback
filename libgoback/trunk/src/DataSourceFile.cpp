@@ -1,9 +1,10 @@
 #include "DataSourceFile.h"
 
+#include <cstring>
+#include <fcntl.h>
 #include <iostream>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
 
 // Constructor
 DataSourceFile::DataSourceFile() {
@@ -117,7 +118,7 @@ int DataSourceFile::insertBytes(const char *buff, unsigned int size, unsigned in
 	int fdtmp = ::open(_filename, O_RDONLY);
 
 	int buffsize = (size < 4096) ? 4096 : size;
-	void * bufftmp = malloc(buffsize);
+	unsigned char *bufftmp = new unsigned char[buffsize];
 
 	// Set the seek and the end of file
 	int filesize = lseek(_fd, 0, SEEK_END);
@@ -147,7 +148,7 @@ int DataSourceFile::insertBytes(const char *buff, unsigned int size, unsigned in
 	}
 
 	// Clean
-	free(bufftmp);
+	delete[] bufftmp;
 	::close(fdtmp);
 
 	// Insert the bytes
@@ -164,7 +165,7 @@ int DataSourceFile::removeBytes(unsigned int size, unsigned int offset) {
 	if (_fd == -1 || !_writable) return 0;
 
 	int buffsize = (size < 4096) ? 4096 : size;
-	void * bufftmp = malloc(buffsize);
+	unsigned char *bufftmp = new unsigned char[buffsize];
 	int fdtmp = ::open(_filename, O_RDONLY);
 	int filesize = lseek(_fd, 0, SEEK_END);
 	lseek(_fd, offset, SEEK_SET);
@@ -175,7 +176,7 @@ int DataSourceFile::removeBytes(unsigned int size, unsigned int offset) {
 		write(_fd, bufftmp, bytes);
 	}
 
-	free(bufftmp);
+	delete[] bufftmp;
 	::close(fdtmp);
 
 	ftruncate(_fd, filesize - size);

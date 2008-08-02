@@ -1,6 +1,7 @@
 #include "DataFormatElf.h"
 #include "DataSource.h"
 
+#include <cstring>
 #include <elf.h>
 
 // DataFormatElfModule
@@ -70,10 +71,10 @@ bool DataFormatElf::load() {
 	}
 
 	// Load section headers
-	Elf32_Shdr *sectionHeaders = (Elf32_Shdr *) malloc(sizeof(Elf32_Shdr) * elfHeader.e_shnum);
+	Elf32_Shdr *sectionHeaders = new Elf32_Shdr[elfHeader.e_shnum];
 	int ddd= _dataSource->readBytes((char *)sectionHeaders, sizeof(Elf32_Shdr) * elfHeader.e_shnum, elfHeader.e_shoff);
 
-	char *stringTable = (char *)malloc(sectionHeaders[elfHeader.e_shstrndx].sh_size);
+	char *stringTable = new char[sectionHeaders[elfHeader.e_shstrndx].sh_size];
 	int asd= _dataSource->readBytes(stringTable, sectionHeaders[elfHeader.e_shstrndx].sh_size, sectionHeaders[elfHeader.e_shstrndx].sh_offset);
 
 	// Index all sections
@@ -95,8 +96,8 @@ bool DataFormatElf::load() {
 	}
 
 	// Free the temporary arrays
-	free(sectionHeaders);
-	free(stringTable);
+	delete[] sectionHeaders;
+	delete[] stringTable;
 
 	// Create the section DataSources
 	std::list<ElfSection>::iterator section = _sections.begin();

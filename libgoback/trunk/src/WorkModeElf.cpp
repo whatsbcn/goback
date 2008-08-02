@@ -1,5 +1,8 @@
 #include "WorkModeElf.h"
 #include "DataSource.h"
+
+#include <cstdlib>
+#include <cstring>
 #include <elf.h>
 #include <bfd.h>
 #include <dis-asm.h>
@@ -148,10 +151,10 @@ WorkModeElf::WorkModeElf(DataSource *ds) : WorkMode(ds) {
 	}
 
 	// Load section headers
-	Elf32_Shdr *sectionHeaders = (Elf32_Shdr *) malloc(sizeof(Elf32_Shdr) * elfHeader.e_shnum);
+	Elf32_Shdr *sectionHeaders = new Elf32_Shdr[elfHeader.e_shnum];
 	_dataSource->readBytes((char *)sectionHeaders, sizeof(Elf32_Shdr) * elfHeader.e_shnum, elfHeader.e_shoff);
 
-	char *stringTable = (char *)malloc(sectionHeaders[elfHeader.e_shstrndx].sh_size);
+	char *stringTable = new char[sectionHeaders[elfHeader.e_shstrndx].sh_size];
 	_dataSource->readBytes(stringTable, sectionHeaders[elfHeader.e_shstrndx].sh_size, sectionHeaders[elfHeader.e_shstrndx].sh_offset);
 
 	struct intString section;
@@ -169,8 +172,8 @@ WorkModeElf::WorkModeElf(DataSource *ds) : WorkMode(ds) {
 	}
 
 	// Free the temporary arrays
-	free(sectionHeaders);
-	free(stringTable);
+	delete[] sectionHeaders;
+	delete[] stringTable;
 }
 
 unsigned int WorkModeElf::getNumberLines() {

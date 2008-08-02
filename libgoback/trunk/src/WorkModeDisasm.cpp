@@ -1,5 +1,7 @@
 #include "WorkModeDisasm.h"
 #include "DataSource.h"
+
+#include <cstring>
 #include <dis-asm.h>
 #include <stdarg.h>
 
