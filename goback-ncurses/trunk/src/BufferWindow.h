@@ -25,6 +25,7 @@ public:
 	void cursorPageDown();
 	//void cursorSetPosition();
 	void showCursor();
+	void gotoLine(int distance);
 
 	void updateWindow();
 
@@ -32,8 +33,14 @@ private:
 	// Window position and size
 	unsigned int _x, _y, _w, _h;
 
-	// View position
-	unsigned int _viewLine, _viewCol, _viewSection;
+	/**
+ 	* View position
+ 	* _viewLine: the global line numer. This is the first line in the view.
+ 	* _viewSectionLine: the relative line number in the section. This is the first line in the view.
+ 	* _viewCol: the first column in the view.
+ 	* _viewSection: the first section in the view.
+ 	*/
+	unsigned int _viewLine, _viewSectionLine, _viewCol, _viewSection;
 
 	// Cursor position
 	unsigned int _cursorViewLine, _cursorViewCol;
