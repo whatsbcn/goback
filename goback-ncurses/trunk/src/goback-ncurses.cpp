@@ -100,6 +100,7 @@ int main(int argc, char *argv[]) {
 	win.setDataFormat(df);
 
 	print_view(&win);
+	print_view(&win);
 	for (;;) {
 		key = getch();
 		switch (key) {

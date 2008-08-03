@@ -27,7 +27,7 @@ int DataSourceRange::readBytes(char *buff, unsigned int size, unsigned int offse
 	// if offset is out the range of the datasorucerange, return 0
 	//printf("readRange buff=%p, size=%d, offset=%d\n", buff, size, offset);
 	if (offset >= _size) {
-		printf("Accedint fora de rang! intent: size:%d, offset:%d, limit: 0-%d\n", size, offset, _size);
+		printf("Intent: size:%d, offset:%d, limit: 0-%d\n", size, offset, _size);
 		return 0;
 	} else {
 		// we have to read the real offset

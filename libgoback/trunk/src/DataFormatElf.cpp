@@ -112,7 +112,7 @@ bool DataFormatElf::load() {
 	// Create the section DataSources
 	std::list<ElfSection>::iterator section = _sections.begin();
 	while (section != _sections.end()) {
-		printf("Creant rang %s: offset:%d, size:%d\n", section->name.c_str(), section->offset, section->size);
+		//printf("Creant rang %s: offset:%d, size:%d\n", section->name.c_str(), section->offset, section->size);
 		DataSource *ds = _dataSource->createRange(section->offset, section->size, getSectionType(section->type));
 		_formatSections.push_back(ds);
 		section++;

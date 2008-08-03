@@ -15,7 +15,7 @@ void BufferWindow::setDataFormat(DataFormat *df) {
 	_df = df;	
 	for (int i = 0; i < _df->getNumberSections(); i++) {
 		ds = _df->getSection(i);
-		//TODO: this cannot be done only with the hex workmode!!
+		//TODO: this cannot be done only with the hex workmode!!, with this, the numlines are not exact
 		wm = WorkMode::create("hex", ds);
 		_numLines += wm->getNumberLines();
 	}
@@ -46,8 +46,16 @@ void BufferWindow::cursorMoveUp() {
 		_cursorViewLine--;
 	} else {
 		// Already on the top line, move the contents
-		if (_viewLine > 0) {
-			_viewLine--;
+		if (_viewLine > 0  || _viewSection > 0) {
+			if (_viewLine == 0 && _viewSection > 0) {
+            	_viewSection--;
+				//TODO: Fix it! how?
+            	DataSource *ds = _df->getSection(_viewSection);
+            	WorkMode *wm = WorkMode::create("hex", ds);
+           		_viewLine = wm->getNumberLines() - 1;
+			} else {
+				_viewLine--;
+			}
 		}
 	}
 }
@@ -58,7 +66,7 @@ void BufferWindow::cursorMoveDown() {
 		_cursorViewLine++;
 	} else {
 		// Already on the bottom line, move the contents
-		if (_viewLine + _h < _numLines) {
+		if ((_viewLine + _h < _numLines) || (_df->getNumberSections() > _viewSection)) {
 			_viewLine++;
 			// I don't understand why I have to invalidate this line when I go down...
 			wredrawln(stdscr, _h, 1);
@@ -90,24 +98,26 @@ void BufferWindow::cursorMoveBeginning() {
 	_cursorViewCol = 0;
 }
 
-
+//TODO: Fix, it doesn't work
 void BufferWindow::cursorPageUp() {
-	if (_viewLine < _h) {
+	if (_viewLine < _h && _viewSection == 0) {
 		_viewLine = 0;
 	} else {
 		_viewLine -= _h;
 	}
 }
 
+//TODO: Fix, it doesn't work
 void BufferWindow::cursorPageDown() {
 	if (_viewLine + _h * 2 > _numLines) {
-		_viewLine = _numLines - _h;
-		if (_viewLine < 0) {
-			_viewLine = 0;
+		//TODO: Fix it! how?
+        DataSource *ds = _df->getSection(_viewSection);
+        WorkMode *wm = WorkMode::create("hex", ds);
+		if (_viewLine < 0 && _viewSection >= _df->getNumberSections()) {
+			_viewLine = wm->getNumberLines() - 1;
 		}
-	} else {
-		_viewLine += _h;
 	}
+	_viewLine += _h;
 }
 
 void BufferWindow::showCursor() {
@@ -115,25 +125,35 @@ void BufferWindow::showCursor() {
 }
 
 void BufferWindow::updateWindow() {
-	// Get the first view section
+// Get the first view section
 	DataSource *ds = _df->getSection(_viewSection);
-	int startSection = _viewSection;
 	int startLine = _viewLine;
+	int startSection = _viewSection;
+	int i = 0, j = _viewLine;
 	if (ds) {
 		// Get the possible WorkModes
-		std::list<std::string> strWorkModes = ds->getWorkModes();
+		//std::list<std::string> strWorkModes = ds->getWorkModes();
 		// Use the first WorkMode for this section
+		//TODO: Fix it! how?
 		WorkMode *wm = WorkMode::create("hex", ds);
 		
-		int i = 0, j = 0;
+		if (_viewLine >= wm->getNumberLines()) {
+			_viewLine = 0;
+			_viewSection++;
+			ds = _df->getSection(_viewSection);
+			//TODO: Fix it! how?
+			wm = WorkMode::create("hex", ds);
+		}
+
 		while (i < _h) {
 			// It it is the last printable line from a section
-			if (j + startLine >= wm->getNumberLines()) {
+			if (j >= wm->getNumberLines() && j != 0) {
 				// If there are more sections, jump to the next
 				if (_df->getNumberSections() > startSection + 1) {
 					startSection++;
 					ds = _df->getSection(startSection);
-					strWorkModes = ds->getWorkModes();
+					//strWorkModes = ds->getWorkModes();
+					//TODO: Fix it! how?
 					wm = WorkMode::create("hex", ds);
 					j = 0;
 					startLine = 0;
@@ -141,7 +161,6 @@ void BufferWindow::updateWindow() {
 					move(_y + i, _x);
 					printw("End of sections");
 					clrtoeol(); 
-					break;
 				}
 			} else {
 				updateWindowLine(i, j, wm);
@@ -157,8 +176,8 @@ void BufferWindow::updateWindow() {
 
 // Update a line in the window.
 void BufferWindow::updateWindowLine(unsigned int windowLine, unsigned int sectionLine, WorkMode *wm) {
-
-	ViewLine line = wm->getLine(_viewLine + sectionLine);
+	if (sectionLine < wm->getNumberLines()) {
+	ViewLine line = wm->getLine(sectionLine);
 	move(_y + windowLine, _x);
 
 	// Print the blocks
@@ -167,6 +186,6 @@ void BufferWindow::updateWindowLine(unsigned int windowLine, unsigned int sectio
 		printw("%s", j->_str.c_str());
 		j++;
 	}
-	printw("    pos_relative:%d num_lines:%d ", _viewLine + sectionLine, wm->getNumberLines());
+	}
 	clrtoeol(); // TODO: just clear until the end of the window
 }
