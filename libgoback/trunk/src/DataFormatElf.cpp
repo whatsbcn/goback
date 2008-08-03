@@ -14,19 +14,16 @@ std::string DataFormatElfModule::name() const {
 	return "ELF file";
 }
 
-bool DataFormatElfModule::detect(DataSource *ds) const {
+bool DataFormatElf::isElfFile(DataSource *ds) { 
 	// Load elf headers.
 	Elf32_Ehdr elfHeader;
 	ds->readBytes((char *)&elfHeader, sizeof(Elf32_Ehdr), 0);
 
-	// Check if it is a elf file.
-	if (memcmp(elfHeader.e_ident, "\x7f\x45\x4c\x46", 4)) {
-		// Invalid signature
-		return false;
-	}
+	return (memcmp(elfHeader.e_ident, "\x7f\x45\x4c\x46", 4) == 0);
+}
 
-	// It's an ELF file
-	return true;
+bool DataFormatElfModule::detect(DataSource *ds) const {
+	return DataFormatElf::isElfFile(ds);
 }
 
 DataFormat *DataFormatElfModule::create(DataSource *ds) const {
@@ -66,7 +63,7 @@ bool DataFormatElf::load() {
 	_dataSource->readBytes((char *)&elfHeader, sizeof(Elf32_Ehdr), 0);
 
 	// Check if it is a elf file.
-	if (memcmp(elfHeader.e_ident, "\x7f\x45\x4c\x46", 4)) {
+	if (!isElfFile(_dataSource)) {
 		return false;
 	}
 
