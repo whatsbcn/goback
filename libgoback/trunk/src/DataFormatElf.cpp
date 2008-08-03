@@ -14,6 +14,11 @@ std::string DataFormatElfModule::name() const {
 	return "ELF file";
 }
 
+/**V
+ * Verifying if the file is an elf file.
+ * @param *ds is a DataSource
+ * @return true if the file is an elf file.
+*/
 bool DataFormatElf::isElfFile(DataSource *ds) { 
 	// Load elf headers.
 	Elf32_Ehdr elfHeader;
@@ -25,9 +30,13 @@ bool DataFormatElf::isElfFile(DataSource *ds) {
 bool DataFormatElfModule::detect(DataSource *ds) const {
 	return DataFormatElf::isElfFile(ds);
 }
+/**
+ * Return the DataFormat object
+ * @param *ds is a DataSource,
+ * @return the DataFormat object.
+*/
 
 DataFormat *DataFormatElfModule::create(DataSource *ds) const {
-	// Return the DataFormat object
 	return new DataFormatElf(ds);
 }
 
@@ -37,7 +46,11 @@ DataFormatElf::DataFormatElf(DataSource *ds) :
 	DataFormat(ds) {
 }
 
-// Return the default format for a section
+/**
+ * Return the default format for a section
+ * @param type the number of the section
+ * @return 
+*/
 std::string DataFormatElf::getSectionType(int type) const {
 	// TODO: Add the arch after "code"
 	switch(type) {
