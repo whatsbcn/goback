@@ -14,6 +14,7 @@ public:
 
 	// DataFormat instantiation
 	DataFormat *create(DataSource *ds) const;
+
 };
 
 class DataFormatElf : public DataFormat {
@@ -23,6 +24,7 @@ public:
 
 	std::string getSectionType(int type) const;
 	bool load();
+	static bool isElfFile(DataSource *ds); 
 
 protected:
 	struct ElfSection {
