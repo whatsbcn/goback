@@ -5,7 +5,7 @@
 #include <curses.h>
 
 BufferWindow::BufferWindow(unsigned int x, unsigned int y, unsigned int w, unsigned int h) :
-	_x(x), _y(y), _w(w), _h(h), _viewLine(0), _viewCol(0), _viewSection(0), _numLines(0),
+	_x(x), _y(y), _w(w), _h(h), _viewSectionLine(0), _viewCol(0), _viewSection(0), _numLines(0), _viewLine(0),
 	_cursorViewLine(0), _cursorViewCol(0), _df(NULL) {
 }
 
@@ -45,18 +45,7 @@ void BufferWindow::cursorMoveUp() {
 		// Move the cursor one line up on the screen
 		_cursorViewLine--;
 	} else {
-		// Already on the top line, move the contents
-		if (_viewLine > 0  || _viewSection > 0) {
-			if (_viewLine == 0 && _viewSection > 0) {
-            	_viewSection--;
-				//TODO: Fix it! how?
-            	DataSource *ds = _df->getSection(_viewSection);
-            	WorkMode *wm = WorkMode::create("hex", ds);
-           		_viewLine = wm->getNumberLines() - 1;
-			} else {
-				_viewLine--;
-			}
-		}
+		gotoLine(-1);
 	}
 }
 
@@ -65,12 +54,9 @@ void BufferWindow::cursorMoveDown() {
 		// Move the cursor one line down on the screen
 		_cursorViewLine++;
 	} else {
-		// Already on the bottom line, move the contents
-		if ((_viewLine + _h < _numLines) || (_df->getNumberSections() > _viewSection)) {
-			_viewLine++;
-			// I don't understand why I have to invalidate this line when I go down...
-			wredrawln(stdscr, _h, 1);
-		}
+		gotoLine(1);
+		// I don't understand why I have to invalidate this line when I go down...
+		wredrawln(stdscr, _h, 1);
 	}
 }
 
@@ -98,38 +84,77 @@ void BufferWindow::cursorMoveBeginning() {
 	_cursorViewCol = 0;
 }
 
-//TODO: Fix, it doesn't work
 void BufferWindow::cursorPageUp() {
-	if (_viewLine < _h && _viewSection == 0) {
-		_viewLine = 0;
-	} else {
-		_viewLine -= _h;
-	}
+	gotoLine(-_h);
 }
 
-//TODO: Fix, it doesn't work
 void BufferWindow::cursorPageDown() {
-	if (_viewLine + _h * 2 > _numLines) {
-		//TODO: Fix it! how?
-        DataSource *ds = _df->getSection(_viewSection);
-        WorkMode *wm = WorkMode::create("hex", ds);
-		if (_viewLine < 0 && _viewSection >= _df->getNumberSections()) {
-			_viewLine = wm->getNumberLines() - 1;
-		}
-	}
-	_viewLine += _h;
+	gotoLine(+_h);
 }
 
 void BufferWindow::showCursor() {
 	move(_cursorViewLine, _cursorViewCol);
 }
 
+void BufferWindow::gotoLine(int displacement) {
+	int newline = _viewLine + displacement;
+	if (newline >= 0 && newline < _numLines) {
+		DataSource *ds = _df->getSection(_viewSection);
+		WorkMode *wm = WorkMode::create("hex", ds);
+		if (displacement == 1) {
+			if ((_viewSectionLine + 1) > wm->getNumberLines()) {
+				_viewSectionLine = 1;
+				_viewSection++;		
+				_viewLine++;
+			} else {
+				_viewLine++;
+				_viewSectionLine++;
+			}
+		} else if (displacement == -1) {
+			if (_viewSectionLine == 0 && _viewSection != 0) {
+				_viewSection--;		
+				_viewLine--;
+				ds = _df->getSection(_viewSection);
+				wm = WorkMode::create("hex", ds);
+				_viewSectionLine = wm->getNumberLines() - 1;
+			} else {
+				_viewLine--;
+				_viewSectionLine--;
+			}	
+		} else if (displacement == _h) {
+			//printf("h: %d",_h);
+			if ((_viewSectionLine + _h) >= wm->getNumberLines()) {
+				_viewSectionLine = 0;
+				_viewSection++;		
+				_viewLine += wm->getNumberLines() - _viewSectionLine;
+			} else {
+				_viewLine += _h;
+				_viewSectionLine += _h;
+			}		
+		//TODO: fix it!
+		} else if (displacement == -_h) {
+			//printf("h: %d",_h);
+			if (_viewSectionLine - _h < 0 && _viewSection != 0) {
+				_viewSection--;		
+				ds = _df->getSection(_viewSection);
+				wm = WorkMode::create("hex", ds);
+				_viewSectionLine = wm->getNumberLines() - 1;
+				_viewLine -= _viewSectionLine;
+			} else {
+				_viewLine -= _h;
+				_viewSectionLine -= _h;
+			}		
+		} else {
+			printf("elase");
+		}
+
+
+	}
+}
+
 void BufferWindow::updateWindow() {
 // Get the first view section
 	DataSource *ds = _df->getSection(_viewSection);
-	int startLine = _viewLine;
-	int startSection = _viewSection;
-	int i = 0, j = _viewLine;
 	if (ds) {
 		// Get the possible WorkModes
 		//std::list<std::string> strWorkModes = ds->getWorkModes();
@@ -137,13 +162,9 @@ void BufferWindow::updateWindow() {
 		//TODO: Fix it! how?
 		WorkMode *wm = WorkMode::create("hex", ds);
 		
-		if (_viewLine >= wm->getNumberLines()) {
-			_viewLine = 0;
-			_viewSection++;
-			ds = _df->getSection(_viewSection);
-			//TODO: Fix it! how?
-			wm = WorkMode::create("hex", ds);
-		}
+		int startLine = _viewSectionLine;
+		int startSection = _viewSection;
+		int i = 0, j = _viewSectionLine;
 
 		while (i < _h) {
 			// It it is the last printable line from a section
@@ -179,6 +200,9 @@ void BufferWindow::updateWindowLine(unsigned int windowLine, unsigned int sectio
 	if (sectionLine < wm->getNumberLines()) {
 	ViewLine line = wm->getLine(sectionLine);
 	move(_y + windowLine, _x);
+
+	/** Print line number */
+	printw("%08x: ", _viewLine + windowLine);
 
 	// Print the blocks
 	ViewLine::iterator j = line.begin();
