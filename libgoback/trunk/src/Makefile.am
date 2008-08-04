@@ -10,6 +10,8 @@ libgoback_la_SOURCES = \
 	DataFormatElf.h \
 	DataFormatPng.cpp \
 	DataFormatPng.h \
+	DataFormatRaw.cpp \
+	DataFormatRaw.h \
 	DataSource.cpp \
 	DataSourceFile.cpp \
 	DataSourceFile.h \

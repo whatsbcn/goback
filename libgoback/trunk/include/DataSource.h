@@ -26,12 +26,18 @@ public:
 
 	virtual std::list<std::string> getWorkModes();
 
-	DataSource *createRange(unsigned int offset, unsigned int size, std::string format);
+	unsigned int getAddress();
+	std::string getName();
+	DataSource *createRange(std::string, unsigned int offset, unsigned int size, unsigned int address, std::string format);
 
 private:
 	// Data format
 	std::string _dataFormat;
 	void setDataFormat(std::string format);
+	void setAddress(unsigned int address);
+	void setName(std::string name);
+	std::string _name;
+	unsigned int _address;
 };
 
 #endif // DATASOURCE_H

@@ -23,7 +23,7 @@ public:
 	WorkModeDisasm(DataSource *ds);
 
 	unsigned int getNumberLines();
-	ViewLine getLine(unsigned int line);
+	ViewLine getLine(unsigned int line, std::string name, unsigned int address);
 
 protected:
 	int disasmOp(int, struct ASM_INSN *);

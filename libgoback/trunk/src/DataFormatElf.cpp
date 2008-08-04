@@ -115,7 +115,7 @@ bool DataFormatElf::load() {
 		//printf("Creant rang %s: offset:%d, size:%d\n", section->name.c_str(), section->offset, section->size);
 		/** Check if the section size is > 0 */
 		if (section->size > 0) {
-			DataSource *ds = _dataSource->createRange(section->offset, section->size, getSectionType(section->type));
+			DataSource *ds = _dataSource->createRange(section->name, section->offset, section->size, section->address, getSectionType(section->type));
 			_formatSections.push_back(ds);
 		}
 		section++;

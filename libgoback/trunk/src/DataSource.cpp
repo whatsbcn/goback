@@ -20,8 +20,10 @@ DataSource *DataSource::create(std::string name, std::string format) {
 }
 
 // Return a DataSource with a limited range
-DataSource *DataSource::createRange(unsigned int offset, unsigned int size, std::string format) {
+DataSource *DataSource::createRange(std::string name, unsigned int offset, unsigned int size, unsigned int address, std::string format) {
 	DataSourceRange *dsr = new DataSourceRange();
+	dsr->setName(name);
+	dsr->setAddress(address);
 	dsr->setDataFormat(format);
 	dsr->setRange(this, offset, size);
 	return dsr;
@@ -51,4 +53,20 @@ std::list<std::string> DataSource::getWorkModes() {
 
 void DataSource::setDataFormat(std::string format) {
 	_dataFormat = format;
+}
+
+std::string DataSource::getName() {
+	return _name;
+}
+
+unsigned int DataSource::getAddress() {
+	return _address;
+}
+
+void DataSource::setName(std::string name) {
+	_name = name;
+}
+
+void DataSource::setAddress(unsigned int address) {
+	_address = address;
 }

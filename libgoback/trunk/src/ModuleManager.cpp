@@ -3,6 +3,7 @@
 // TODO: Find a better way to link the modules without including them here
 #include "DataFormatElf.h"
 #include "DataFormatPng.h"
+#include "DataFormatRaw.h"
 #include "WorkModeDisasm.h"
 #include "WorkModeHex.h"
 
@@ -21,8 +22,9 @@ ModuleManager::ModuleManager() {
 	// TODO: This could be used to load plugins
 	_dataFormats.push_back((DataFormatModule *)new DataFormatElfModule());
 	_dataFormats.push_back((DataFormatModule *)new DataFormatPngModule());
-	_workModes.push_back((WorkModeModule *)new WorkModeDisasmModule());
+	_dataFormats.push_back((DataFormatModule *)new DataFormatRawModule());
 	_workModes.push_back((WorkModeModule *)new WorkModeHexModule());
+	_workModes.push_back((WorkModeModule *)new WorkModeDisasmModule());
 }
 
 ModuleManager::~ModuleManager() {
