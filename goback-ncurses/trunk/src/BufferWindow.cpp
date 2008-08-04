@@ -106,12 +106,12 @@ void BufferWindow::gotoLine(int displacement) {
 		/** If we are going to the nex line */
 		if (displacement == 1) {
 			/** If there are more lines in the section, jump to next line. */
-			if ((_viewLine + _h < _numLines) && (_viewSectionLine < wm->getNumberLines())) {
+			if ((_viewLine + _h < _numLines) && (_viewSectionLine < wm->getNumberLines() - 1)) {
 				_viewLine++;
                 _viewSectionLine++;
 			/** If there aren't more lines but sections, jump to the next. */
 			} else if (_viewSection < _df->getNumberSections() - 1) {
-				_viewSectionLine = 1;
+				_viewSectionLine = 0;
 				_viewSection++;		
 				_viewLine++;
 			} 
@@ -130,34 +130,36 @@ void BufferWindow::gotoLine(int displacement) {
 				wm = WorkMode::create(modes.front(), ds);
 				_viewSectionLine = wm->getNumberLines() - 1;
 			}
-		/** If there AvPag and there are at least _h lines or more sections */
-	//	}// else if (displacement == _h && ((_viewSectionLine + _h) < wm->getNumberLines()) || (_viewSection < _df->getNumberSections())) {
-			/** If we are at the end of the section */
-		/*	if ((_viewSectionLine + _h) >= wm->getNumberLines()) {
-	printf("if");
+		/** If we are going to the next page */
+		} else if (displacement == _h ) {
+			/** If there are more lines in the section, jump to next line. */
+			if ((_viewLine + (_h * 2) < _numLines) && (_viewSectionLine + _h < wm->getNumberLines() - 1)) {
+				_viewLine += _h;
+                _viewSectionLine += _h;
+			/** If there aren't more lines but sections, jump to the next section. */
+			} else if (_viewSection < _df->getNumberSections() - 1) {
+				_viewSection++;		
 				_viewLine += wm->getNumberLines() - _viewSectionLine;
 				_viewSectionLine = 0;
-				_viewSection++;		
-		*/	/** If we have sufficient lines in the same section */
-		/*	} else {
-	printf("else");
-				_viewLine += _h;
-				_viewSectionLine += _h;
-			}		
-		//TODO: fix it!
+			} 
 		} else if (displacement == -_h) {
-			if (_viewSectionLine - _h < 0 && _viewSection != 0) {
+			/** If there was more lines in the section, jump to the prev line */
+			if (_viewSectionLine > _h) {
+				_viewLine -= _h;
+				_viewSectionLine -= _h;
+			/** If there wasn't more lines but sections, jump to the prev. */
+			} else if (_viewSection > 0) {
 				_viewSection--;		
+				_viewLine -= _viewSectionLine;
 				ds = _df->getSection(_viewSection);
 				modes = ds->getWorkModes();
 				wm = WorkMode::create(modes.front(), ds);
-				_viewLine -= _viewSectionLine;
 				_viewSectionLine = wm->getNumberLines() - 1;
 			} else {
-				_viewLine -= _h;
-				_viewSectionLine -= _h;
-			}		*/
-	//	}
+				_viewLine = 0;
+				_viewSectionLine = 0;
+				_viewSection = 0;
+			}
 	} else {
 		printf("displacement unknown");
 	}
