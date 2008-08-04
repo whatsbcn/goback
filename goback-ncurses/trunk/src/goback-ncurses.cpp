@@ -80,26 +80,18 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	DataFormat *df = DataFormat::create("elf", ds);
+	std::list<std::string> formats = DataFormat::detect(ds);
+	DataFormat *df = DataFormat::create(formats.front(), ds);
 	if (!df) {
 		printf("Can't initialize dataformat\n");
 		exit(1);
 	}
-	numsections = df->getNumberSections();
-
-	//WorkMode *wm = WorkMode::create("elf", ds);
-	//WorkMode *wm = WorkMode::create("disasm", ds);
-	//WorkMode *wm = WorkMode::create("hex", ds);
-
-	//printf("numsections %d\n", numsections);
-	//exit(0);
 	init_ncurses();
 
 	// Initialize the buffer window
 	BufferWindow win(0, 0, COLS, LINES - 1);
 	win.setDataFormat(df);
 
-	print_view(&win);
 	print_view(&win);
 	for (;;) {
 		key = getch();

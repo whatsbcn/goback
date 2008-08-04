@@ -52,7 +52,7 @@ private:
 	unsigned int _numLines;
 
 	// Helper functions
-	void updateWindowLine(unsigned int windowLine, unsigned int sectionLine, WorkMode *wm);
+	void updateWindowLine(unsigned int windowLine, unsigned int sectionLine, WorkMode *wm, DataSource *ds);
 
 	/* TODO:
 	 * Possible events:

@@ -24,7 +24,7 @@ public:
 	WorkMode(DataSource *ds);
 
 	virtual unsigned int getNumberLines() = 0;
-	virtual ViewLine getLine(unsigned int line) = 0;
+	virtual ViewLine getLine(unsigned int line, std::string name, unsigned int address) = 0;
 
 protected:
 	DataSource *_dataSource;

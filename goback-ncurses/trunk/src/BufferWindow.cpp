@@ -12,11 +12,13 @@ BufferWindow::BufferWindow(unsigned int x, unsigned int y, unsigned int w, unsig
 void BufferWindow::setDataFormat(DataFormat *df) {
 	DataSource *ds;
 	WorkMode *wm;
+	std::list<std::string> modes;
 	_df = df;	
 	for (int i = 0; i < _df->getNumberSections(); i++) {
 		ds = _df->getSection(i);
-		//TODO: this cannot be done only with the hex workmode!!, with this, the numlines are not exact
-		wm = WorkMode::create("hex", ds);
+		modes = ds->getWorkModes();
+		//TODO: use the default workmode, not the first.
+		wm = WorkMode::create(modes.front(), ds);
 		_numLines += wm->getNumberLines();
 	}
 }
@@ -98,9 +100,10 @@ void BufferWindow::showCursor() {
 
 void BufferWindow::gotoLine(int displacement) {
 	int newline = _viewLine + displacement;
-	if (newline >= 0 && newline < _numLines) {
 		DataSource *ds = _df->getSection(_viewSection);
-		WorkMode *wm = WorkMode::create("hex", ds);
+		std::list<std::string> modes = ds->getWorkModes();
+		WorkMode *wm = WorkMode::create(modes.front(), ds);
+	if (newline >= 0 && newline < _numLines) {
 		if (displacement == 1) {
 			if ((_viewSectionLine + 1) > wm->getNumberLines()) {
 				_viewSectionLine = 1;
@@ -115,52 +118,56 @@ void BufferWindow::gotoLine(int displacement) {
 				_viewSection--;		
 				_viewLine--;
 				ds = _df->getSection(_viewSection);
-				wm = WorkMode::create("hex", ds);
+				modes = ds->getWorkModes();
+				wm = WorkMode::create(modes.front(), ds);
 				_viewSectionLine = wm->getNumberLines() - 1;
 			} else {
 				_viewLine--;
 				_viewSectionLine--;
 			}	
 		} else if (displacement == _h) {
-			//printf("h: %d",_h);
 			if ((_viewSectionLine + _h) >= wm->getNumberLines()) {
+				_viewLine += wm->getNumberLines() - _viewSectionLine;
 				_viewSectionLine = 0;
 				_viewSection++;		
-				_viewLine += wm->getNumberLines() - _viewSectionLine;
 			} else {
 				_viewLine += _h;
 				_viewSectionLine += _h;
 			}		
 		//TODO: fix it!
 		} else if (displacement == -_h) {
-			//printf("h: %d",_h);
 			if (_viewSectionLine - _h < 0 && _viewSection != 0) {
 				_viewSection--;		
 				ds = _df->getSection(_viewSection);
-				wm = WorkMode::create("hex", ds);
-				_viewSectionLine = wm->getNumberLines() - 1;
+				modes = ds->getWorkModes();
+				wm = WorkMode::create(modes.front(), ds);
 				_viewLine -= _viewSectionLine;
+				_viewSectionLine = wm->getNumberLines() - 1;
 			} else {
 				_viewLine -= _h;
 				_viewSectionLine -= _h;
 			}		
-		} else {
-			printf("elase");
 		}
-
-
+	} else {
+		if (displacement < 0) {
+			_viewSection = 0;
+			_viewLine = 0;
+			_viewSectionLine = 0;
+		} else {
+			_viewSection = wm->getNumberLines() - 1;
+			_viewLine = _numLines - _h;
+			//_viewSectionLine = 
+		}
 	}
 }
 
+//TODO: use the window scrolling to improve performance
 void BufferWindow::updateWindow() {
 // Get the first view section
 	DataSource *ds = _df->getSection(_viewSection);
 	if (ds) {
-		// Get the possible WorkModes
-		//std::list<std::string> strWorkModes = ds->getWorkModes();
-		// Use the first WorkMode for this section
-		//TODO: Fix it! how?
-		WorkMode *wm = WorkMode::create("hex", ds);
+		std::list<std::string> modes = ds->getWorkModes();
+		WorkMode *wm = WorkMode::create(modes.front(), ds);
 		
 		int startLine = _viewSectionLine;
 		int startSection = _viewSection;
@@ -173,9 +180,8 @@ void BufferWindow::updateWindow() {
 				if (_df->getNumberSections() > startSection + 1) {
 					startSection++;
 					ds = _df->getSection(startSection);
-					//strWorkModes = ds->getWorkModes();
-					//TODO: Fix it! how?
-					wm = WorkMode::create("hex", ds);
+					modes = ds->getWorkModes();
+					wm = WorkMode::create(modes.front(), ds);
 					j = 0;
 					startLine = 0;
 				} else {
@@ -184,25 +190,22 @@ void BufferWindow::updateWindow() {
 					clrtoeol(); 
 				}
 			} else {
-				updateWindowLine(i, j, wm);
+				updateWindowLine(i, j, wm, ds);
 				i++;
 				j++;
 			}
 		} 
 			// If there are more sections
 	} else {
-		printw("ds == NULL");
+		printw("There is no sections in the file :S");
 	}
 }
 
 // Update a line in the window.
-void BufferWindow::updateWindowLine(unsigned int windowLine, unsigned int sectionLine, WorkMode *wm) {
+void BufferWindow::updateWindowLine(unsigned int windowLine, unsigned int sectionLine, WorkMode *wm, DataSource *ds) {
 	if (sectionLine < wm->getNumberLines()) {
-	ViewLine line = wm->getLine(sectionLine);
+	ViewLine line = wm->getLine(sectionLine, ds->getName(), ds->getAddress());
 	move(_y + windowLine, _x);
-
-	/** Print line number */
-	printw("%08x: ", _viewLine + windowLine);
 
 	// Print the blocks
 	ViewLine::iterator j = line.begin();

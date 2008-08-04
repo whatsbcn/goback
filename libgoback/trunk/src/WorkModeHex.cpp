@@ -34,7 +34,7 @@ unsigned int WorkModeHex::getNumberLines() {
 	return numLines;
 }
 
-ViewLine WorkModeHex::getLine(unsigned int line) {
+ViewLine WorkModeHex::getLine(unsigned int line, std::string name, unsigned int address) {
 	ViewLine viewline;
 	char c[_lineBytes];
 	char buff[11];
@@ -45,8 +45,8 @@ ViewLine WorkModeHex::getLine(unsigned int line) {
 	// Show the line number
 	// TODO: Move it to the client? Maybe add a function to return the line
 	// number to be shown for a given internal line number?
-	//sprintf(buff, "%08x: ", line);
-	//viewline.push_back(ViewBlock(buff, false));
+	sprintf(buff, "%s:%08x: ", name.c_str(), line + address);
+	viewline.push_back(ViewBlock(buff, false));
 
 	// Show the hexadecimal values
 	for (int i = 0; i < bytes; i++) {
