@@ -24,9 +24,15 @@ void init_ncurses() {
 	//(void) nonl();      /* tell curses not to do NL->CR/NL on output */
 	cbreak();
 	noecho();
-	//nodelay(stdscr, TRUE);
+	/** To wait only some time in getch() calls */
+	nodelay(stdscr, TRUE);
 	//idlok(stdscr, TRUE);    /* allow use of insert/delete line */
 	//intrflush(stdscr, FALSE);
+	
+	/** Scroll */
+    scrollok(stdscr, TRUE);
+	setscrreg(0, LINES - 2);
+
 	start_color();
 	if (use_default_colors() == OK)
 		init_pair(1, COLOR_RED, -1);
@@ -49,13 +55,11 @@ bool exec_command(std::string cmd) {
 	return true;
 }
 
-/*
- * Print main view.
+/**
+ * Print static content
+ * @param win current window
  */
-void print_view(BufferWindow *win) {
-	// Update the current window
-	win->updateWindow();
-
+void print_static(BufferWindow *win) {
 	// Print file position percentage
 	statusBar.update(win);
 
@@ -63,6 +67,14 @@ void print_view(BufferWindow *win) {
 	win->showCursor();
 
 	refresh();
+}
+
+void print_view(BufferWindow *win) {
+	// Update the current window
+	win->updateWindow();
+	
+	/** Print static content */
+	print_static(win);
 }
 
 int main(int argc, char *argv[]) {
@@ -127,7 +139,8 @@ int main(int argc, char *argv[]) {
 			goto exit;
 			break;
 		}
-		print_view(&win);
+		//print_view(&win);
+		print_static(&win);
 	}
 
 	exit:
