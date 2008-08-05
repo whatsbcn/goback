@@ -4,6 +4,12 @@
 #include <list>
 #include <string>
 
+/**
+ * DataSource
+ *
+ * This is the interface to an abstract source of data. DataSource derivated
+ * classes can be used to access files, memory, network, etc.
+ */
 class DataSource {
 public:
 	static DataSource *create(std::string name, std::string format = "");
@@ -11,16 +17,16 @@ public:
 	virtual bool open(const char *filename) = 0;
 	virtual bool close() = 0;
 
-	virtual int size() = 0;
-	virtual int readBytes(char *buff, unsigned int size, unsigned int offset = -1) = 0;
+	virtual unsigned int size() = 0;
+	virtual unsigned int readBytes(char *buff, unsigned int size, unsigned int offset = -1) = 0;
 
 	virtual bool requestWrite() = 0;
 	virtual bool requestInsert() = 0;
 	virtual bool requestRemove() = 0;
 
-	virtual int replaceBytes(const char *buff, unsigned int size, unsigned int offset) = 0;
-	virtual int insertBytes(const char *buff, unsigned int size, unsigned int offset) = 0;
-	virtual int removeBytes(unsigned int size, unsigned int offset) = 0;
+	virtual unsigned int replaceBytes(const char *buff, unsigned int size, unsigned int offset) = 0;
+	virtual unsigned int insertBytes(const char *buff, unsigned int size, unsigned int offset) = 0;
+	virtual unsigned int removeBytes(unsigned int size, unsigned int offset) = 0;
 
 	virtual bool flushWrites() = 0;
 

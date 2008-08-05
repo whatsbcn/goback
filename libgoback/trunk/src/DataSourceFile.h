@@ -10,16 +10,16 @@ public:
 	bool open(const char *filename);
 	bool close();
 
-	int size();
-	int readBytes(char *buff, unsigned int size, unsigned int offset = -1);
+	unsigned int size();
+	unsigned int readBytes(char *buff, unsigned int size, unsigned int offset = -1);
 
 	bool requestWrite();
 	bool requestInsert();
 	bool requestRemove();
 
-	int replaceBytes(const char *buff, unsigned int size, unsigned int offset = -1);
-	int insertBytes(const char *buff, unsigned int size, unsigned int offset);
-	int removeBytes(unsigned int size, unsigned int offset);
+	unsigned int replaceBytes(const char *buff, unsigned int size, unsigned int offset = -1);
+	unsigned int insertBytes(const char *buff, unsigned int size, unsigned int offset);
+	unsigned int removeBytes(unsigned int size, unsigned int offset);
 
 	bool flushWrites();
 

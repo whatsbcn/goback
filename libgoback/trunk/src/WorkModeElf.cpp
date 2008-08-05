@@ -56,7 +56,6 @@ int disPrintfWrapper2(FILE *stream, const char *format, ...) {
 	// per accedir a tots els parametres
 	va_list args;
 	char *str;
-	char *s;
 	va_start(args, format);
 	str = va_arg(args, char*);
 	if (!curr_insn2.mnemonic[0]) {
@@ -130,7 +129,6 @@ void WorkModeElf::indexSection(int offset, int size) {
 	appData.wm = this;
 	info.application_data = &appData;
 
-	struct ASM_INSN none;
 	while (bytes < size) {
 		_linies.push_back(bytes + offset);
 		bytes += (*disassemble_fn) (bytes + offset, &info);
@@ -182,7 +180,6 @@ unsigned int WorkModeElf::getNumberLines() {
 
 struct WorkModeElf::intString *WorkModeElf::findSection(int offset) {
 	int i;
-	WorkModeElf::intString *section;
 	for (i = _sections.size(); i >= 0; i--) {
 		if (_sections.at(i - 1).offset <= offset) {
 			return &_sections.at(i - 1);
@@ -193,7 +190,6 @@ struct WorkModeElf::intString *WorkModeElf::findSection(int offset) {
 
 ViewLine WorkModeElf::getLine(unsigned int line) {
 	ViewLine viewline;
-	char shellcode[10];
 	char hexbyte[3];
 	struct ASM_INSN op;
 	char pos[32];

@@ -19,11 +19,11 @@ bool DataSourceRange::close() {
 	return true;
 }
 
-int DataSourceRange::size() {
+unsigned int DataSourceRange::size() {
 	return _size;
 }
 
-int DataSourceRange::readBytes(char *buff, unsigned int size, unsigned int offset) {
+unsigned int DataSourceRange::readBytes(char *buff, unsigned int size, unsigned int offset) {
 	// if offset is out the range of the datasorucerange, return 0
 	//printf("readRange buff=%p, size=%d, offset=%d\n", buff, size, offset);
 	if (offset >= _size) {
@@ -49,16 +49,16 @@ bool DataSourceRange::requestRemove() {
 	return _ds->requestRemove();
 }
 
-int DataSourceRange::replaceBytes(const char *buff, unsigned int size, unsigned int offset) {
+unsigned int DataSourceRange::replaceBytes(const char *buff, unsigned int size, unsigned int offset) {
 	// TODO: like readBytes
 	return 0;
 }
 
-int DataSourceRange::insertBytes(const char *buff, unsigned int size, unsigned int offset) {
+unsigned int DataSourceRange::insertBytes(const char *buff, unsigned int size, unsigned int offset) {
 	return 0;
 }
 
-int DataSourceRange::removeBytes(unsigned int size, unsigned int offset) {
+unsigned int DataSourceRange::removeBytes(unsigned int size, unsigned int offset) {
 	return 0;
 }
 

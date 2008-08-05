@@ -82,10 +82,10 @@ bool DataFormatElf::load() {
 
 	// Load section headers
 	Elf32_Shdr *sectionHeaders = new Elf32_Shdr[elfHeader.e_shnum];
-	int ddd= _dataSource->readBytes((char *)sectionHeaders, sizeof(Elf32_Shdr) * elfHeader.e_shnum, elfHeader.e_shoff);
+	//int ddd= _dataSource->readBytes((char *)sectionHeaders, sizeof(Elf32_Shdr) * elfHeader.e_shnum, elfHeader.e_shoff);
 
 	char *stringTable = new char[sectionHeaders[elfHeader.e_shstrndx].sh_size];
-	int asd= _dataSource->readBytes(stringTable, sectionHeaders[elfHeader.e_shstrndx].sh_size, sectionHeaders[elfHeader.e_shstrndx].sh_offset);
+	//int asd= _dataSource->readBytes(stringTable, sectionHeaders[elfHeader.e_shstrndx].sh_size, sectionHeaders[elfHeader.e_shstrndx].sh_offset);
 
 	// Index all sections
 	for (int i = 0; i < elfHeader.e_shnum; i++) {
@@ -120,4 +120,6 @@ bool DataFormatElf::load() {
 		}
 		section++;
 	}
+
+	return true;
 }
