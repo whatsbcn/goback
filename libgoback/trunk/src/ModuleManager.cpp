@@ -25,8 +25,8 @@ ModuleManager::ModuleManager() {
 	_dataFormats.push_back((DataFormatModule *)new DataFormatExeModule());
 	_dataFormats.push_back((DataFormatModule *)new DataFormatPngModule());
 	_dataFormats.push_back((DataFormatModule *)new DataFormatRawModule());
-	_workModes.push_back((WorkModeModule *)new WorkModeDisasmModule());
 	_workModes.push_back((WorkModeModule *)new WorkModeHexModule());
+	_workModes.push_back((WorkModeModule *)new WorkModeDisasmModule());
 }
 
 ModuleManager::~ModuleManager() {
