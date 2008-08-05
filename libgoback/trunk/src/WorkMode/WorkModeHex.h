@@ -21,7 +21,7 @@ public:
 	WorkModeHex(DataSource *ds);
 
 	unsigned int getNumberLines();
-	ViewLine getLine(unsigned int line, std::string name, unsigned int address);
+	ViewLine getLine(unsigned int line);
 
 protected:
 	unsigned int _lineBytes;

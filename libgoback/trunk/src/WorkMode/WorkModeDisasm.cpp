@@ -154,12 +154,12 @@ unsigned int WorkModeDisasm::getNumberLines() {
 	return _linies.size();
 }
 
-ViewLine WorkModeDisasm::getLine(unsigned int line, std::string name, unsigned int address) {
+ViewLine WorkModeDisasm::getLine(unsigned int line) {
 	ViewLine viewline;
 	char hexbyte[3];
 	struct ASM_INSN op;
 	char pos[32];
-	snprintf(pos, 32, "%s:%08x", name.c_str(), _linies.at(line) + address);
+	snprintf(pos, 32, "%s:%08x", _dataSource->getName().c_str(), _linies.at(line) + _dataSource->getAddress());
 
 	// Put the file position of this opcode
 	viewline.push_back(ViewBlock(pos, false));
