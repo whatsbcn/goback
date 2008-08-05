@@ -1,6 +1,4 @@
 - Configuració ~/.gobackrc
-- Debugger
-- Permetre escriure
 - Millorar mode ELF
 	* Mostrar cada seccó depenent del tipus de secció q és
 		- .interp: string amb el path cap al dynamic loader
@@ -25,9 +23,3 @@
 	* Symbols
 	* Xrefs
 	* Poder obrir un elf, tot i no tenir totes les capçaleres correctament
-
-- Arreglar cache de size, canviar el readByte pq no faci lseek cada cop.
-=======
-- Identificar el tipus del DataSource (ELF, EXE, ...)
-  - Utilitzar libmagic
-  - Heurístiques pròpies de cada DataFormat
