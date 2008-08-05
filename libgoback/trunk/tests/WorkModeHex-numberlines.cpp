@@ -1,5 +1,5 @@
 #include "DataSource.h"
-#include "../src/WorkModeHex.h"
+#include "WorkMode.h"
 
 int main(int argc, char **argv) {
 	DataSource *fds = DataSource::create("file");
@@ -11,9 +11,10 @@ int main(int argc, char **argv) {
 	}
 
 	// Create the Hex WorkMode and get the number of lines
-	WorkModeHex wm(fds);
-	int lines = wm.getNumberLines();
+	WorkMode *wm = WorkMode::create("hex", fds);
+	int lines = wm->getNumberLines();
 
+	delete wm;
 	delete fds;
 	return lines;
 }
