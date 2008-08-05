@@ -24,5 +24,8 @@ AC_SUBST(OPCODES_LIBS)
 AC_OUTPUT([Makefile
     include/Makefile
     src/Makefile
+    src/DataFormat/Makefile
+    src/DataSource/Makefile
+    src/WorkMode/Makefile
     tests/Makefile
     libgoback.pc])

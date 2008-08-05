@@ -1,11 +1,12 @@
 #include "ModuleManager.h"
 
 // TODO: Find a better way to link the modules without including them here
-#include "DataFormatElf.h"
-#include "DataFormatExe.h"
-#include "DataFormatPng.h"
-#include "WorkModeDisasm.h"
-#include "WorkModeHex.h"
+#include "DataFormat/DataFormatElf.h"
+#include "DataFormat/DataFormatExe.h"
+#include "DataFormat/DataFormatPng.h"
+#include "DataFormat/DataFormatRaw.h"
+#include "WorkMode/WorkModeDisasm.h"
+#include "WorkMode/WorkModeHex.h"
 
 ModuleManager *ModuleManager::_instance = NULL;
 
@@ -23,6 +24,7 @@ ModuleManager::ModuleManager() {
 	_dataFormats.push_back((DataFormatModule *)new DataFormatElfModule());
 	_dataFormats.push_back((DataFormatModule *)new DataFormatExeModule());
 	_dataFormats.push_back((DataFormatModule *)new DataFormatPngModule());
+	_dataFormats.push_back((DataFormatModule *)new DataFormatRawModule());
 	_workModes.push_back((WorkModeModule *)new WorkModeDisasmModule());
 	_workModes.push_back((WorkModeModule *)new WorkModeHexModule());
 }
