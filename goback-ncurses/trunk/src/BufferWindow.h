@@ -35,12 +35,12 @@ private:
 
 	/**
  	* View position
- 	* _viewLine: the global line numer. This is the first line in the view.
- 	* _viewSectionLine: the relative line number in the section. This is the first line in the view.
+ 	* _viewFirstLine: the global line numer. This is the first line in the view.
+ 	* _viewFirstSectionLine: the relative line number in the section. This is the first line in the view.
  	* _viewCol: the first column in the view.
- 	* _viewSection: the first section in the view.
+ 	* _viewFirstSection: the first section in the view.
  	*/
-	unsigned int _viewLine, _viewSectionLine, _viewCol, _viewSection;
+	unsigned int _viewFirstLine, _viewFirstSectionLine, _viewCol, _viewFirstSection;
 
 	// Cursor position
 	unsigned int _cursorViewLine, _cursorViewCol;
@@ -52,7 +52,8 @@ private:
 	unsigned int _numLines;
 
 	// Helper functions
-	void updateWindowLine(unsigned int windowLine, unsigned int sectionLine, WorkMode *wm, DataSource *ds);
+	void updateWindowLine(unsigned int windowLine, unsigned int sectionLine, WorkMode *wm);
+	void scrollLines(unsigned int windowLine, unsigned int sectionLine, WorkMode *wm, unsigned int count, int direction);
 
 	/* TODO:
 	 * Possible events:
