@@ -203,7 +203,7 @@ void BufferWindow::updateWindow() {
 // Update a line in the window.
 void BufferWindow::updateWindowLine(unsigned int windowLine, unsigned int sectionLine, WorkMode *wm, DataSource *ds) {
 	if (sectionLine < wm->getNumberLines()) {
-	ViewLine line = wm->getLine(sectionLine, ds->getName(), ds->getAddress());
+	ViewLine line = wm->getLine(sectionLine);
 	move(_y + windowLine, _x);
 
 	// Print the blocks

@@ -24,6 +24,7 @@ std::list<std::string> DataFormat::detect(DataSource *ds) {
 }
 
 DataFormat *DataFormat::create(std::string id, DataSource *ds) {
+
 	DataFormat *df = NULL;
 
 	// Get the list of available DataFormat modules

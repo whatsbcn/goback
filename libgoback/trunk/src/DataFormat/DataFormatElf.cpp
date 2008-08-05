@@ -82,10 +82,10 @@ bool DataFormatElf::load() {
 
 	// Load section headers
 	Elf32_Shdr *sectionHeaders = new Elf32_Shdr[elfHeader.e_shnum];
-	//int ddd= _dataSource->readBytes((char *)sectionHeaders, sizeof(Elf32_Shdr) * elfHeader.e_shnum, elfHeader.e_shoff);
+	_dataSource->readBytes((char *)sectionHeaders, sizeof(Elf32_Shdr) * elfHeader.e_shnum, elfHeader.e_shoff);
 
 	char *stringTable = new char[sectionHeaders[elfHeader.e_shstrndx].sh_size];
-	//int asd= _dataSource->readBytes(stringTable, sectionHeaders[elfHeader.e_shstrndx].sh_size, sectionHeaders[elfHeader.e_shstrndx].sh_offset);
+	_dataSource->readBytes(stringTable, sectionHeaders[elfHeader.e_shstrndx].sh_size, sectionHeaders[elfHeader.e_shstrndx].sh_offset);
 
 	// Index all sections
 	for (int i = 0; i < elfHeader.e_shnum; i++) {
@@ -100,7 +100,6 @@ bool DataFormatElf::load() {
 		// Save this section
 		_sections.push_back(section);
 
-		// printf("name %s offset %d addr %x, type: %d flags: %d\n",section.name.c_str(),section.offset,section.addr, sectionHeaders[i].sh_type, sectionHeaders[i].sh_flags);
 		// Index section
 		//TODO: indexSection(sectionHeaders[i].sh_offset, sectionHeaders[i].sh_size);
 	}
