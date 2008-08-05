@@ -47,4 +47,5 @@ bool DataFormatRaw::load() {
 		return false;
 	}
 	_formatSections.push_back(_dataSource);
+	return true;
 }
