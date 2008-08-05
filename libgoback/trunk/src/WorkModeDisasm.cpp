@@ -70,7 +70,6 @@ int disPrintfWrapper(FILE *stream, const char *format, ...) {
 	// per accedir a tots els parametres
 	va_list args;
 	char *str;
-	char *s;
 	va_start(args, format);
 	str = va_arg(args, char*);
 	if (!curr_insn.mnemonic[0]) {
@@ -157,7 +156,6 @@ unsigned int WorkModeDisasm::getNumberLines() {
 
 ViewLine WorkModeDisasm::getLine(unsigned int line, std::string name, unsigned int address) {
 	ViewLine viewline;
-	char shellcode[10];
 	char hexbyte[3];
 	struct ASM_INSN op;
 	char pos[32];

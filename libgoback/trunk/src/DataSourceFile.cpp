@@ -73,7 +73,7 @@ bool DataSourceFile::close() {
 /*
  * Put at buff, size bytes, from offset.
  */
-int DataSourceFile::readBytes(char *buff, unsigned int size, unsigned int offset) {
+unsigned int DataSourceFile::readBytes(char *buff, unsigned int size, unsigned int offset) {
 	int result = 0;
 
 	// Check file opened
@@ -81,7 +81,7 @@ int DataSourceFile::readBytes(char *buff, unsigned int size, unsigned int offset
 	
 	//printf("read buff=%p, size=%d, offset=%d\n", buff, size, offset);
 	// Seek the offset
-	if (lseek(_fd, offset, SEEK_SET) == offset) {
+	if (lseek(_fd, offset, SEEK_SET) == (int)offset) {
 		result = read(_fd, buff, size);
 	} else {
 		result = read(_fd, buff, size);
@@ -92,14 +92,14 @@ int DataSourceFile::readBytes(char *buff, unsigned int size, unsigned int offset
 /*
  * Replace at offset, size bytes, with buff.
  */
-int DataSourceFile::replaceBytes(const char *buff, unsigned int size, unsigned int offset) {
+unsigned int DataSourceFile::replaceBytes(const char *buff, unsigned int size, unsigned int offset) {
 	int result = 0;
 
 	// Check file opened and writable
 	if (_fd == -1 || !_writable) return 0;
 
 	// Seek the offset
-	if (lseek(_fd, offset, SEEK_SET) == offset) {
+	if (lseek(_fd, offset, SEEK_SET) == (int)offset) {
 		result = write(_fd, buff, size);
 	} else {
 		result = write(_fd, buff, size);
@@ -111,13 +111,13 @@ int DataSourceFile::replaceBytes(const char *buff, unsigned int size, unsigned i
  * Insert size bytes from buff to the offset.
  * This is for small sizes. ~mbytes.
  */
-int DataSourceFile::insertBytes(const char *buff, unsigned int size, unsigned int offset) {
+unsigned int DataSourceFile::insertBytes(const char *buff, unsigned int size, unsigned int offset) {
 	// Check file opened and writable
 	if (_fd == -1 || !_writable) return 0;
 
 	int fdtmp = ::open(_filename, O_RDONLY);
 
-	int buffsize = (size < 4096) ? 4096 : size;
+	unsigned int buffsize = (size < 4096) ? 4096 : size;
 	unsigned char *bufftmp = new unsigned char[buffsize];
 
 	// Set the seek and the end of file
@@ -160,7 +160,7 @@ int DataSourceFile::insertBytes(const char *buff, unsigned int size, unsigned in
  * Remove size bytes at offset.
  * This is for small sizes. ~mbytes.
  */
-int DataSourceFile::removeBytes(unsigned int size, unsigned int offset) {
+unsigned int DataSourceFile::removeBytes(unsigned int size, unsigned int offset) {
 	// Check file opened and writable
 	if (_fd == -1 || !_writable) return 0;
 
@@ -187,7 +187,7 @@ int DataSourceFile::removeBytes(unsigned int size, unsigned int offset) {
 /*
  * Get size in bytes.
  */
-int DataSourceFile::size() {
+unsigned int DataSourceFile::size() {
 	int result;
 	// Check file opened
 	if (_fd == -1) return 0;

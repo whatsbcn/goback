@@ -36,7 +36,7 @@ unsigned int WorkModeHex::getNumberLines() {
 
 ViewLine WorkModeHex::getLine(unsigned int line, std::string name, unsigned int address) {
 	ViewLine viewline;
-	char c[_lineBytes];
+	char *c = new char[_lineBytes];
 	char buff[11];
 
 	// Read the line
@@ -70,6 +70,9 @@ ViewLine WorkModeHex::getLine(unsigned int line, std::string name, unsigned int 
 		buff[0] = isprint(c[i]) ? c[i] : '.';
 		viewline.push_back(ViewBlock(buff, true));
 	}
+
+	// Free the temporary buffer
+	delete[] c;
 
 	return viewline;
 }
