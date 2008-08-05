@@ -21,6 +21,10 @@ AC_CHECK_HEADERS([dis-asm.h],,AC_MSG_ERROR(Couldn't find the required dis-asm.h)
 OPCODES_LIBS="-lopcodes -lbfd"
 AC_SUBST(OPCODES_LIBS)
 
+# Check for doxygen, to be able to generate the documentation
+AC_PATH_PROG(DOXYGEN_PATH, doxygen)
+AM_CONDITIONAL(HAVE_DOXYGEN, test x$DOXYGEN_PATH != x)
+
 AC_OUTPUT([Makefile
     include/Makefile
     src/Makefile
