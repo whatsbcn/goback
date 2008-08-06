@@ -24,6 +24,8 @@ public:
 
 	std::string getSectionType(int type) const;
 	bool load();
+	bool load32();
+	bool load64();
 	static bool isElfFile(DataSource *ds); 
 
 protected:
