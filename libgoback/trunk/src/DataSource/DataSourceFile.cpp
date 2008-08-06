@@ -10,6 +10,8 @@
 DataSourceFile::DataSourceFile() {
 	_fd = -1;
 	_writable = false;
+	_seek = 0;
+	_size = 0;
 }
 
 /*
@@ -81,11 +83,13 @@ unsigned int DataSourceFile::readBytes(char *buff, unsigned int size, unsigned i
 	
 	//printf("read buff=%p, size=%d, offset=%d\n", buff, size, offset);
 	// Seek the offset
-	if (lseek(_fd, offset, SEEK_SET) == (int)offset) {
+	if (_seek == offset) {
 		result = read(_fd, buff, size);
 	} else {
+		_seek = lseek(_fd, offset, SEEK_SET);
 		result = read(_fd, buff, size);
 	}
+	_seek += result;
 	return result;
 }
 
@@ -192,9 +196,8 @@ unsigned int DataSourceFile::size() {
 	// Check file opened
 	if (_fd == -1) return 0;
 
-	int seek = lseek(_fd, 0, SEEK_CUR);
-	result = lseek(_fd, 0, SEEK_END);
-	lseek(_fd, seek, SEEK_SET);
+	if (_size != 0) return _size;
+	_size = lseek(_fd, 0, SEEK_END);
 
-	return result;
+	return _size;
 }

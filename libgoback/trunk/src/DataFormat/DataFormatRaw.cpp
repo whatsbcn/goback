@@ -13,7 +13,7 @@ std::string DataFormatRawModule::name() const {
 	return "RAW file";
 }
 
-/**V
+/**
  * Verifying if the file is a raw file.
  * @param *ds is a DataSource
  * @return true if the file is an elf file.

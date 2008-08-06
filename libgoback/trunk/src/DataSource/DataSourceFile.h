@@ -25,6 +25,8 @@ public:
 
 private:
 	int _fd;
+	unsigned int _seek;
+	unsigned int _size;
 	bool _writable;
 	char *_filename;
 };
