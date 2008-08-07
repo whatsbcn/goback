@@ -51,22 +51,59 @@ DataFormatElf::DataFormatElf(DataSource *ds) :
  * @param type the number of the section
  * @return 
 */
-std::string DataFormatElf::getSectionType(int type) const {
-	// TODO: Add the arch after "code"
-	switch(type) {
-	case SHT_PROGBITS:
-		return "code";
-		break;
-	case SHT_NOTE:
-		return "";
-		break;
-	case SHT_REL:
-		return "code";
-		break;
-	default:
-		return "";
+std::string DataFormatElf::getSectionType(int type, bool program) const {
+	if (!program) {
+		// TODO: Add the arch after "code"
+		switch(type) {
+		case SHT_PROGBITS:
+			return "code";
+		case SHT_NOTE:
+			return "";
+		case SHT_REL:
+			return "code";
+		default:
+			return "";
+		}
+	} else {
+		// TODO: Add the arch after "code"
+		switch(type) {
+		case PT_NOTE:
+			return "";
+		case PT_LOAD:
+			return "code";
+		default:
+			return "";
+		}
 	}
 }
+
+/**
+ * Return the name for the program header, based on type
+ * @param type the number of the section
+ * @return name for program header
+*/
+std::string DataFormatElf::getProgramHeaderName(int type) const {
+	// TODO: Add the arch after "code"
+	switch(type) {
+	case PT_NULL:
+		return "NULL";
+	case PT_LOAD:
+		return "LOAD";
+	case PT_DYNAMIC:
+		return "DYNAMIC";
+	case PT_INTERP:
+		return "INTERP";
+	case PT_NOTE:
+		return "NOTE";
+	case PT_SHLIB:
+		return "SHLIB";
+	case PT_PHDR:
+		return "PHDR";
+	case PT_LOPROC:
+		return "LOPROC";
+	}
+}
+
 
 bool DataFormatElf::load() {
 	// Check if it is a elf file.
@@ -127,7 +164,7 @@ bool DataFormatElf::load32() {
 		// Collect the information about this section
 		ElfSection section;
 		//section.name = std::string(&stringTable[sectionHeaders[i].sh_name]);
-		section.name = std::string("PROGRAM SECTION");
+		section.name = getProgramHeaderName(section.type);
 		section.offset = programHeaders[i].p_offset;
 		section.address = programHeaders[i].p_vaddr;
 		section.size = programHeaders[i].p_filesz;
@@ -144,17 +181,7 @@ bool DataFormatElf::load32() {
 	delete[] programHeaders;
 	delete[] stringTable;
 
-	// Create the section DataSources
-	std::list<ElfSection>::iterator section = _sections.begin();
-	while (section != _sections.end()) {
-		printf("Creant rang %s: offset:%d, size:%d\n", section->name.c_str(), section->offset, section->size);
-		/** Check if the section size is > 0 */
-		if (section->size > 0) {
-			DataSource *ds = _dataSource->createRange(section->name, section->offset, section->size, section->address, getSectionType(section->type));
-			_formatSections.push_back(ds);
-		}
-		section++;
-	}
+	createSections();
 
 	return true;
 }
@@ -185,6 +212,7 @@ bool DataFormatElf::load64() {
 		section.address = sectionHeaders[i].sh_addr;
 		section.size = sectionHeaders[i].sh_size;
 		section.type = sectionHeaders[i].sh_type;
+		section.program = false;
 
 		// Save this section
 		_sections.push_back(section);
@@ -198,11 +226,12 @@ bool DataFormatElf::load64() {
 		// Collect the information about this section
 		ElfSection section;
 		//section.name = std::string(&stringTable[sectionHeaders[i].sh_name]);
-		section.name = std::string("PROGRAM SECTION");
+		section.name = getProgramHeaderName(section.type);
 		section.offset = programHeaders[i].p_offset;
 		section.address = programHeaders[i].p_vaddr;
 		section.size = programHeaders[i].p_filesz;
 		section.type = programHeaders[i].p_type;
+		section.program = true;
 
 		// Save this section
 		_sections.push_back(section);
@@ -215,17 +244,23 @@ bool DataFormatElf::load64() {
 	delete[] programHeaders;
 	delete[] stringTable;
 
+	createSections();
+
+	return true;
+}
+
+void DataFormatElf::createSections() {
 	// Create the section DataSources
 	std::list<ElfSection>::iterator section = _sections.begin();
+
 	while (section != _sections.end()) {
-		printf("Creant rang %s: offset:%d, size:%d\n", section->name.c_str(), section->offset, section->size);
+		
+		//printf("Creant rang %s: offset:%d, size:%d\n", section->name.c_str(), section->offset, section->size);
 		/** Check if the section size is > 0 */
 		if (section->size > 0) {
-			DataSource *ds = _dataSource->createRange(section->name, section->offset, section->size, section->address, getSectionType(section->type));
+			DataSource *ds = _dataSource->createRange(section->name, section->offset, section->size, section->address, getSectionType(section->type, section->program));
 			_formatSections.push_back(ds);
 		}
 		section++;
 	}
-
-	return true;
 }
