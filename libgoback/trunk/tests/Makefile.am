@@ -11,7 +11,7 @@ check_PROGRAMS = \
 	DataSourceFile-open \
 	WorkModeHex-numberlines
 
-LDADD = $(top_srcdir)/src/libgoback.la
+LDADD = ../src/libgoback.la
 AM_CPPFLAGS = -I$(top_srcdir)/include/
 
 DataSourceFile_open_SOURCES = DataSourceFile-open.cpp
