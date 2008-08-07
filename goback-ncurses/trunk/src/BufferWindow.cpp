@@ -109,7 +109,7 @@ void BufferWindow::gotoLine(int displacement) {
 			if ((_viewFirstLine + _h < _numLines) && (_viewFirstSectionLine < wm->getNumberLines() - 1)) {
 				_viewFirstLine++;
                 _viewFirstSectionLine++;
-				//updateWindowLines(_h - 1, _viewFirstSectionLine, wm, 1, 1);
+				//scrollLines(_h - 1, _viewFirstSectionLine, wm, 1, 1);
 				//TODO: eleminate this, and use scrolling
 				updateWindow();
 			/** If there aren't more lines but sections, jump to the next. */
@@ -117,7 +117,7 @@ void BufferWindow::gotoLine(int displacement) {
 				_viewFirstSectionLine = 0;
 				_viewFirstSection++;		
 				_viewFirstLine++;
-				//updateWindowLines(_h - 1, _viewFirstSectionLine, wm, 1, 1);
+				//scrollLines(_h - 1, _viewFirstSectionLine, wm, 1, 1);
 				//TODO: eleminate this, and use scrolling
 				updateWindow();
 			} 
@@ -159,28 +159,22 @@ void BufferWindow::gotoLine(int displacement) {
 			if (_viewFirstSectionLine > _h) {
 				_viewFirstLine -= _h;
 				_viewFirstSectionLine -= _h;
-				//scrollLines(0, _viewFirstSectionLine, wm, _h, -1);
-				//TODO: eleminate this, and use scrolling
-				updateWindow();
+				scrollLines(0, _viewFirstSectionLine, wm, _h, -1);
 			/** If there wasn't more lines but sections, jump to the prev. */
 			} else if (_viewFirstSection > 0) {
 				_viewFirstSection--;		
 				_viewFirstLine -= _viewFirstSectionLine;
-				//int n = _viewFirstSectionLine;
+				scrollLines(0, 0, wm, _viewFirstSectionLine, -1);
 				ds = _df->getSection(_viewFirstSection);
 				modes = ds->getWorkModes();
 				wm = WorkMode::create(modes.front(), ds);
 				_viewFirstSectionLine = wm->getNumberLines() - 1;
-				//scrollLines(0, _viewFirstSectionLine, wm, n, -1);
-				//TODO: eleminate this, and use scrolling
-				updateWindow();
+				scrollLines(0, _viewFirstSectionLine, wm, 1, -1);
 			} else {
-				//scrollLines(0, _viewFirstSectionLine, wm, _viewFirstLine, -1);
+				scrollLines(0, 0, wm, _viewFirstSectionLine, -1);
 				_viewFirstLine = 0;
 				_viewFirstSectionLine = 0;
 				_viewFirstSection = 0;
-				//TODO: eleminate this, and use scrolling
-				updateWindow();
 			}
 	} else {
 		printf("displacement unknown");
@@ -232,6 +226,9 @@ void BufferWindow::updateWindowLine(unsigned int windowLine, unsigned int sectio
 			printw("%s", j->_str.c_str());
 			j++;
 		}
+	} else {
+		move(_y + windowLine, _x);
+		printw("Trying to acces out of range: sectionLine:%d numberLines:%d", sectionLine, wm->getNumberLines());
 	}
 	clrtoeol(); // TODO: just clear until the end of the window
 }
