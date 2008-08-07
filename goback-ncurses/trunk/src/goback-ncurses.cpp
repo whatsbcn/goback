@@ -25,7 +25,7 @@ void init_ncurses() {
 	cbreak();
 	noecho();
 	/** To wait only some time in getch() calls */
-	nodelay(stdscr, TRUE);
+	//nodelay(stdscr, TRUE);
 	//idlok(stdscr, TRUE);    /* allow use of insert/delete line */
 	//intrflush(stdscr, FALSE);
 	
