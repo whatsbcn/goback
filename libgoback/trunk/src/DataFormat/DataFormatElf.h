@@ -22,10 +22,12 @@ public:
 	DataFormatElf(DataSource *ds);
 	~DataFormatElf();
 
-	std::string getSectionType(int type) const;
+	std::string getSectionType(int type, bool program) const;
+	std::string getProgramHeaderName(int type) const;
 	bool load();
 	bool load32();
 	bool load64();
+	void createSections();
 	static bool isElfFile(DataSource *ds); 
 
 protected:
@@ -35,6 +37,7 @@ protected:
 		unsigned int size;
 		unsigned int address;
 		unsigned int type;
+		bool program;
 	};
 
 	std::list<ElfSection> _sections;
