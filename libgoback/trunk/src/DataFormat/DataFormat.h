@@ -11,23 +11,13 @@ class DataSource;
 // DataFormat
 class DataFormat {
 public:
-	// Detection and instantiation
-	static std::list<std::string> detect(DataSource *ds);
-	static DataFormat *create(std::string id, DataSource *ds);
+	DataFormat(DataSource *ds) : _dataSource(ds) {}
 
-	DataFormat(DataSource *ds);
-
-	virtual bool load() = 0;
-
-	unsigned int getNumberSections();
-	DataSource *getSection(unsigned int section);
+	virtual bool load(std::vector<DataSource *> &sections) = 0;
 
 protected:
 	// Input DataSource
 	DataSource *_dataSource;
-
-	// Output DataSources
-	std::vector<DataSource *> _formatSections;
 };
 
 // DataFormat module

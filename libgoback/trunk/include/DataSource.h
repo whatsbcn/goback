@@ -1,7 +1,7 @@
 #ifndef DATASOURCE_H
 #define DATASOURCE_H
 
-#include <list>
+#include <vector>
 #include <string>
 
 /**
@@ -12,7 +12,9 @@
  */
 class DataSource {
 public:
-	static DataSource *create(std::string name, std::string format = "");
+	static DataSource *create(std::string name);
+
+	~DataSource();
 
 	virtual bool open(const char *filename) = 0;
 	virtual bool close() = 0;
@@ -20,6 +22,7 @@ public:
 	virtual unsigned int size() = 0;
 	virtual unsigned int readBytes(char *buff, unsigned int size, unsigned int offset = -1) = 0;
 
+	// Write
 	virtual bool requestWrite() = 0;
 	virtual bool requestInsert() = 0;
 	virtual bool requestRemove() = 0;
@@ -30,16 +33,25 @@ public:
 
 	virtual bool flushWrites() = 0;
 
-	virtual std::list<std::string> getWorkModes();
+	// Data format
+	std::vector<std::string> detectFormat();
+	bool setDataFormat(std::string format);
+	unsigned int getNumberSections();
+	DataSource *getSection(unsigned int section);
+
+	// Work modes
+	virtual std::vector<std::string> getWorkModes();
 
 	unsigned int getAddress();
 	std::string getName();
-	DataSource *createRange(std::string, unsigned int offset, unsigned int size, unsigned int address, std::string format);
+	DataSource *createRange(std::string name, unsigned int offset, unsigned int size, unsigned int address);
 
 private:
 	// Data format
 	std::string _dataFormat;
-	void setDataFormat(std::string format);
+	std::vector<DataSource *> _formatSections;
+	void clearFormat();
+
 	void setAddress(unsigned int address);
 	void setName(std::string name);
 	std::string _name;

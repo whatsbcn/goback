@@ -39,6 +39,6 @@ DataFormatExe::DataFormatExe(DataSource *ds) :
 	DataFormat(ds) {
 }
 
-bool DataFormatExe::load() {
+bool DataFormatExe::load(std::vector<DataSource *> &sections) {
 	return true;
 }

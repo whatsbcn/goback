@@ -2,7 +2,7 @@
 #define MODULEMANAGER_H
 
 // TODO: Use Module instead
-#include <DataFormat.h>
+#include <DataFormat/DataFormat.h>
 #include <WorkMode.h>
 
 #include <list>
