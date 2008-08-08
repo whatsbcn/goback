@@ -1,14 +1,14 @@
 #ifndef BUFFERWINDOW_H
 #define BUFFERWINDOW_H
 
-#include <DataFormat.h>
+#include <DataSource.h>
 
 class WorkMode;
 
 class BufferWindow {
 public:
 	BufferWindow(unsigned int x, unsigned int y, unsigned int w, unsigned int h);
-	void setDataFormat(DataFormat *df);
+	void setDataSource(DataSource *ds);
 
 	unsigned int getViewPercentage();
 
@@ -25,7 +25,6 @@ public:
 	void cursorPageDown();
 	//void cursorSetPosition();
 	void showCursor();
-	void gotoLine(int distance);
 
 	void updateWindow();
 
@@ -35,25 +34,23 @@ private:
 
 	/**
  	* View position
- 	* _viewFirstLine: the global line numer. This is the first line in the view.
- 	* _viewFirstSectionLine: the relative line number in the section. This is the first line in the view.
+ 	* _viewLine: the global line numer. This is the first line in the view.
+ 	* _viewSectionLine: the relative line number in the section. This is the first line in the view.
  	* _viewCol: the first column in the view.
- 	* _viewFirstSection: the first section in the view.
+ 	* _viewSection: the first section in the view.
  	*/
-	unsigned int _viewFirstLine, _viewFirstSectionLine, _viewCol, _viewFirstSection;
+	unsigned int _viewLine, _viewSectionLine, _viewCol, _viewSection;
 
 	// Cursor position
 	unsigned int _cursorViewLine, _cursorViewCol;
 
-	// The WorkMode to show
-	//WorkMode *_wm;
-	// The DataFormat to show
-	DataFormat *_df;
+	DataSource *_ds;
+	WorkMode *_wm;
 	unsigned int _numLines;
 
 	// Helper functions
-	void updateWindowLine(unsigned int windowLine, unsigned int sectionLine, WorkMode *wm);
-	void scrollLines(unsigned int windowLine, unsigned int sectionLine, WorkMode *wm, unsigned int count, int direction);
+	void updateWindowLine(unsigned int line);
+	void scrollLines(unsigned int count, int direction);
 
 	/* TODO:
 	 * Possible events:

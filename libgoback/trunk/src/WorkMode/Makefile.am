@@ -9,5 +9,7 @@ libWorkMode_la_SOURCES = \
 	WorkModeDisasm.h \
 	WorkModeElf.cpp \
 	WorkModeElf.h \
+	WorkModeGroup.cpp \
+	WorkModeGroup.h \
 	WorkModeHex.cpp \
 	WorkModeHex.h
