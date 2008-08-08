@@ -2,7 +2,6 @@
 
 #include <DataSource.h>
 #include <WorkMode.h>
-#include <DataFormat.h>
 
 #include <cstdlib>
 #include <curses.h>
@@ -59,7 +58,7 @@ bool exec_command(std::string cmd) {
  * Print static content
  * @param win current window
  */
-void print_static(BufferWindow *win) {
+void printStaticView(BufferWindow *win) {
 	// Print file position percentage
 	statusBar.update(win);
 
@@ -69,12 +68,12 @@ void print_static(BufferWindow *win) {
 	refresh();
 }
 
-void print_view(BufferWindow *win) {
+void printContentView(BufferWindow *win) {
 	// Update the current window
 	win->updateWindow();
 	
 	/** Print static content */
-	print_static(win);
+	printStaticView(win);
 }
 
 int main(int argc, char *argv[]) {
@@ -84,27 +83,35 @@ int main(int argc, char *argv[]) {
 		std::cout << "Usage: " << argv[0] << " file" << std::endl;
 		exit(-1);
 	}
-
+	
+	/** Create datasource with a file */
 	DataSource *ds = DataSource::create("file");
 	if (!ds->open(argv[1])) {
 		perror("open");
 		delete ds;
 		return 1;
 	}
+	
+	/** Detect file formats */
+    std::vector<std::string> formats = ds->detectFormat();
+    if (formats.size() == 0) {
+        printf("Can't detect fileformat, open as hex!\n");
+        formats.push_back("");
+    }
+	
+	/** Select file format */
+    if (!ds->setDataFormat(formats.front())) {
+        printf("Can't initialize dataformat!\n");
+        exit(1);
+    }
 
-	std::list<std::string> formats = DataFormat::detect(ds);
-	DataFormat *df = DataFormat::create(formats.front(), ds);
-	if (!df) {
-		printf("Can't initialize dataformat\n");
-		exit(1);
-	}
 	init_ncurses();
 
 	// Initialize the buffer window
 	BufferWindow win(0, 0, COLS, LINES - 1);
-	win.setDataFormat(df);
+	win.setDataSource(ds);
 
-	print_view(&win);
+	printContentView(&win);
 	for (;;) {
 		key = getch();
 		switch (key) {
@@ -139,8 +146,8 @@ int main(int argc, char *argv[]) {
 			goto exit;
 			break;
 		}
-		//print_view(&win);
-		print_static(&win);
+	//	printContentView(&win);
+		printStaticView(&win);
 	}
 
 	exit:

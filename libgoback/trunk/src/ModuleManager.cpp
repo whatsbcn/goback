@@ -5,6 +5,7 @@
 #include "DataFormat/DataFormatExe.h"
 #include "DataFormat/DataFormatPng.h"
 #include "WorkMode/WorkModeDisasm.h"
+#include "WorkMode/WorkModeGroup.h"
 #include "WorkMode/WorkModeHex.h"
 
 ModuleManager *ModuleManager::_instance = NULL;
@@ -23,8 +24,9 @@ ModuleManager::ModuleManager() {
 	_dataFormats.push_back((DataFormatModule *)new DataFormatElfModule());
 	_dataFormats.push_back((DataFormatModule *)new DataFormatExeModule());
 	_dataFormats.push_back((DataFormatModule *)new DataFormatPngModule());
-	_workModes.push_back((WorkModeModule *)new WorkModeHexModule());
 	_workModes.push_back((WorkModeModule *)new WorkModeDisasmModule());
+	_workModes.push_back((WorkModeModule *)new WorkModeGroupModule());
+	_workModes.push_back((WorkModeModule *)new WorkModeHexModule());
 }
 
 ModuleManager::~ModuleManager() {

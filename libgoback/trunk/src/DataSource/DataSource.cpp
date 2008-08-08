@@ -82,7 +82,7 @@ bool DataSource::setDataFormat(std::string format) {
 		std::vector<DataSource *> newsections;
 
 		// Found the format, try to load it
-		if (df->load(_formatSections)) {
+		if (df->load(newsections)) {
 			// Loaded correctly, save the format name
 			valid = true;
 			_dataFormat = format;
@@ -129,9 +129,11 @@ std::vector<std::string> DataSource::getWorkModes() {
 	while (wmm != workModes.end()) {
 		// Test whether it's a valid format for this module
 		// TODO: Test with complete words
-		if (_dataFormat == (*wmm)->getApplicableFormat().substr(0, _dataFormat.length())) {
+		//printf("DataSource(%s)->getWorkModes: %s, trying: %s\n", _name.c_str(), _dataFormat.c_str(), (*wmm)->getApplicableFormat().substr(0, _dataFormat.length()).c_str());
+		if (_dataFormat.substr(0, (*wmm)->getApplicableFormat().length()) == (*wmm)->getApplicableFormat()) {
 			// Add the WorkMode id to the list
 			modeslist.push_back((*wmm)->id());
+			//printf("Adding :%s\n",(*wmm)->id().c_str());
 		}
 		wmm++;
 	}
