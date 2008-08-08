@@ -101,11 +101,12 @@ std::string DataFormatElf::getProgramHeaderName(int type) const {
 		return "PHDR";
 	case PT_LOPROC:
 		return "LOPROC";
+	default:
+		return "";
 	}
 }
 
-
-bool DataFormatElf::load() {
+bool DataFormatElf::load(std::vector<DataSource *> &sections) {
 	// Check if it is a elf file.
 	if (!isElfFile(_dataSource)) {
 		return false;
@@ -116,16 +117,16 @@ bool DataFormatElf::load() {
 	_dataSource->readBytes(&bits, 1, 4);
 
 	if (bits == 0x01) {
-		return load32();
+		return load32(sections);
 	} else if (bits == 0x02) {
-		return load64();
+		return load64(sections);
 	} else {
 		return false;
 	}
 }
 
 //TODO: compact the load32 and load64 to eliminate duplicate code
-bool DataFormatElf::load32() {
+bool DataFormatElf::load32(std::vector<DataSource *> &sections) {
 	// Load elf headers.
 	Elf32_Ehdr elfHeader;
 	_dataSource->readBytes((char *)&elfHeader, sizeof(Elf32_Ehdr), 0);
@@ -181,12 +182,12 @@ bool DataFormatElf::load32() {
 	delete[] programHeaders;
 	delete[] stringTable;
 
-	createSections();
+	createSections(sections);
 
 	return true;
 }
 
-bool DataFormatElf::load64() {
+bool DataFormatElf::load64(std::vector<DataSource *> &sections) {
 
 	// Load elf headers.
 	Elf64_Ehdr elfHeader;
@@ -244,22 +245,24 @@ bool DataFormatElf::load64() {
 	delete[] programHeaders;
 	delete[] stringTable;
 
-	createSections();
+	createSections(sections);
 
 	return true;
 }
 
-void DataFormatElf::createSections() {
+void DataFormatElf::createSections(std::vector<DataSource *> &sections) {
 	// Create the section DataSources
 	std::list<ElfSection>::iterator section = _sections.begin();
 
 	while (section != _sections.end()) {
-		
+
 		//printf("Creant rang %s: offset:%d, size:%d\n", section->name.c_str(), section->offset, section->size);
 		/** Check if the section size is > 0 */
 		if (section->size > 0) {
-			DataSource *ds = _dataSource->createRange(section->name, section->offset, section->size, section->address, getSectionType(section->type, section->program));
-			_formatSections.push_back(ds);
+			DataSource *ds = _dataSource->createRange(section->name, section->offset, section->size, section->address);
+			// TODO: Verify the format is applied correctly
+			ds->setDataFormat(getSectionType(section->type, section->program));
+			sections.push_back(ds);
 		}
 		section++;
 	}

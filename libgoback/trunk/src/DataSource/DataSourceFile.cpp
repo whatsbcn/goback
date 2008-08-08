@@ -192,7 +192,6 @@ unsigned int DataSourceFile::removeBytes(unsigned int size, unsigned int offset)
  * Get size in bytes.
  */
 unsigned int DataSourceFile::size() {
-	int result;
 	// Check file opened
 	if (_fd == -1) return 0;
 

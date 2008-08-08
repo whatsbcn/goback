@@ -22,7 +22,7 @@ public:
 	DataFormatPng(DataSource *ds);
 	~DataFormatPng();
 
-	bool load();
+	bool load(std::vector<DataSource *> &sections);
 	static bool isPngFile(DataSource *ds); 
 
 protected:

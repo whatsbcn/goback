@@ -20,7 +20,7 @@ class DataFormatExe : public DataFormat {
 public:
 	DataFormatExe(DataSource *ds);
 
-	bool load();
+	bool load(std::vector<DataSource *> &sections);
 };
 
 #endif // DATAFORMATEXE_H

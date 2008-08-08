@@ -45,7 +45,7 @@ DataFormatPng::DataFormatPng(DataSource *ds) :
 	DataFormat(ds) {
 }
 
-bool DataFormatPng::load() {
+bool DataFormatPng::load(std::vector<DataSource *> &sections) {
 	FILE *fd;
 
 	fd = fopen ((char *)_dataSource->getName().c_str(), "r");

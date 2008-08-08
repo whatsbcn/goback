@@ -22,15 +22,17 @@ public:
 	DataFormatElf(DataSource *ds);
 	~DataFormatElf();
 
-	std::string getSectionType(int type, bool program) const;
-	std::string getProgramHeaderName(int type) const;
-	bool load();
-	bool load32();
-	bool load64();
-	void createSections();
-	static bool isElfFile(DataSource *ds); 
+	bool load(std::vector<DataSource *> &sections);
+
+	static bool isElfFile(DataSource *ds);
 
 protected:
+	std::string getSectionType(int type, bool program) const;
+	std::string getProgramHeaderName(int type) const;
+	void createSections(std::vector<DataSource *> &sections);
+	bool load32(std::vector<DataSource *> &sections);
+	bool load64(std::vector<DataSource *> &sections);
+
 	struct ElfSection {
 		std::string name;
 		unsigned int offset;

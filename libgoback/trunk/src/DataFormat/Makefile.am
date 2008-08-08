@@ -5,12 +5,11 @@ AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/include/
 libDataFormat_la_LIBADD =
 libDataFormat_la_SOURCES = \
 	DataFormat.cpp \
+	DataFormat.h \
 	DataFormatElf.cpp \
 	DataFormatElf.h \
 	DataFormatExe.cpp \
-	DataFormatExe.h \
-	DataFormatRaw.cpp \
-	DataFormatRaw.h
+	DataFormatExe.h
 
 # DataFormatPng
 if HAVE_LIBPNG
