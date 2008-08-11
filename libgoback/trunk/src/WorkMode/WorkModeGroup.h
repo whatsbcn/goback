@@ -20,6 +20,7 @@ public:
 class WorkModeGroup : public WorkMode {
 public:
 	WorkModeGroup(DataSource *ds);
+	~WorkModeGroup();
 
 	unsigned int getNumberLines();
 	ViewLine getLine(unsigned int line);
@@ -28,6 +29,7 @@ protected:
 	DataSource *_ds;
 	unsigned int _numLines;
 	std::vector<int> _sectionLastLine;
+	std::vector<WorkMode *> _sectionWorkMode;
 
 	unsigned int section;
 	unsigned int getSection(unsigned int line);
