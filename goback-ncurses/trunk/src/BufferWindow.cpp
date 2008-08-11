@@ -43,8 +43,7 @@ void BufferWindow::cursorMoveUp() {
 	if (_cursorViewLine > 0) {
 		// Move the cursor one line up on the screen
 		_cursorViewLine--;
-	} else {
-	//	_viewLine--;
+	} else if  (_viewLine > 0) {
 		scrollUp(1);		
 	}
 }
@@ -53,8 +52,7 @@ void BufferWindow::cursorMoveDown() {
 	if (_cursorViewLine + 1 < _h) {
 		// Move the cursor one line down on the screen
 		_cursorViewLine++;
-	} else {
-	//	_viewLine++;
+	} else if (_viewLine + _h < _numLines) {
 		scrollDown(1);		
 		// I don't understand why I have to invalidate this line when I go down...
 		wredrawln(stdscr, _h, 1);
@@ -86,26 +84,42 @@ void BufferWindow::cursorMoveBeginning() {
 }
 
 void BufferWindow::cursorPageUp() {
-	_viewLine -= _h;
-	scrollUp(_h);		
+	if  (_viewLine > 0) {
+		if (_viewLine + _h >= _h * 2) {
+			scrollUp(_h);		
+		} else {
+			scrollUp(_viewLine);
+		}
+	}
 }
 
 void BufferWindow::cursorPageDown() {
-	_viewLine += _h;
-	scrollDown(_h);		
+	if (_viewLine < _numLines) {
+		if (_viewLine + (_h * 2) < _numLines) {
+			scrollDown(_h);		
+		} else {
+			scrollDown(_numLines - _viewLine - _h);
+		}
+	}
 }
 
 void BufferWindow::showCursor() {
 	move(_cursorViewLine, _cursorViewCol);
 }
 
+/**
+ * Update all the window lines
+ */
 void BufferWindow::updateWindow() {
     for (int i = 0; i < _numLines && i < _h; i++) {
         updateWindowLine(i);
     }
 }
 
-// Update a line in the window.
+/**
+ *  Update a line in the window.
+ *  @param numline the line number to update
+ */
 void BufferWindow::updateWindowLine(unsigned int numline) {
         ViewLine line = _wm->getLine(_viewLine + numline);
         move(_y + numline, _x);
@@ -120,7 +134,8 @@ void BufferWindow::updateWindowLine(unsigned int numline) {
 }
 
 /**
- * Update count lines
+ * Scroll down count lines
+ * @param count lines to scroll down
  */
 void BufferWindow::scrollDown(unsigned int count) {
 	for (unsigned int i = 0; i < count; i++) {
@@ -130,8 +145,10 @@ void BufferWindow::scrollDown(unsigned int count) {
 	}
 }
 
-
-
+/**
+ * Scroll up count lines
+ * @param count lines to scroll up
+ */
 void BufferWindow::scrollUp(unsigned int count) {
 	for (unsigned int i = 0; i < count; i++) {
 		scrl(-1);
@@ -139,15 +156,3 @@ void BufferWindow::scrollUp(unsigned int count) {
 		updateWindowLine(0);
 	}
 }
-/*	if (down > 0) {
-		for (int i = 0; i < count; i++) {
-			scrl(down);
-			updateWindowLine(_h - 1);
-		}
-	} else {
-		for (int i = 0; i < count; i++) {
-			scrl(down);
-			updateWindowLine(0);
-		}
-	}
-}*/

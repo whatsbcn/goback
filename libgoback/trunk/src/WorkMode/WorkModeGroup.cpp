@@ -32,12 +32,23 @@ WorkModeGroup::WorkModeGroup(DataSource *ds) : WorkMode(ds) {
     for (int i = 0; i < ds->getNumberSections(); i++) {
         dss = ds->getSection(i);
         modes = dss->getWorkModes();
-        //TODO: use the default workmode, not the first.
         wm = WorkMode::create(modes.front(), dss);
         _numLines += wm->getNumberLines();
 		_sectionLastLine.push_back(_numLines);
+		_sectionWorkMode.push_back(wm);
     }
 	_ds = ds;
+}
+
+WorkModeGroup::~WorkModeGroup() {
+	// Delete the WorkModes
+	//TODO: delete workmodes (_sectionWorkMode)
+	/*WorkMode::iterator wm = _sectionWorkMode.begin();
+	while (wm != _sectionWorkMode.end()) {
+		// Delete it
+		delete *wm;
+		df++;
+	}*/
 }
 
 unsigned int WorkModeGroup::getNumberLines() {
@@ -50,9 +61,7 @@ unsigned int WorkModeGroup::getNumberLines() {
  */
 unsigned int WorkModeGroup::getSection(unsigned int line) {
 	int i = 0;
-	while (line > _sectionLastLine[i] - 1 && i < _sectionLastLine.size() - 1) {
-		i++;
-	}
+	while (line > _sectionLastLine[i] - 1 && i < _sectionLastLine.size() - 1) i++;
 	return i;
 }
 
@@ -71,15 +80,8 @@ unsigned int WorkModeGroup::getSectionLastLine(unsigned int line, unsigned int s
  * @return the line object string representation
  */
 //TODO: don't ask every time for workmodes.
-//TODO: cache created workmode to reuse.
 ViewLine WorkModeGroup::getLine(unsigned int line) {
-	DataSource *dss;
-	WorkMode *wm;
-	std::vector<std::string> modes;
 	unsigned int section = getSection(line);
-	dss = _ds->getSection(section);
-	modes = dss->getWorkModes();
-	wm = WorkMode::create(modes.front(), dss);
-
+	WorkMode *wm = _sectionWorkMode[section];
 	return wm->getLine(getSectionLastLine(line, section));
 }
