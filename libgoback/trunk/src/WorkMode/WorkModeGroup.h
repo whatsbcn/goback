@@ -2,6 +2,7 @@
 #define WORKMODEGROUP_H
 
 #include "WorkMode.h"
+#include <vector>
 
 class WorkModeGroupModule : public WorkModeModule {
 public:
@@ -26,9 +27,11 @@ public:
 protected:
 	DataSource *_ds;
 	unsigned int _numLines;
-	unsigned int _currLine;
-	unsigned int _currSectionLine;
-	unsigned int _currSection;
+	std::vector<int> _sectionLastLine;
+
+	unsigned int section;
+	unsigned int getSection(unsigned int line);
+	unsigned int getSectionLastLine(unsigned int line, unsigned int section);
 };
 
 #endif // WORKMODEGROUP_H

@@ -50,7 +50,8 @@ private:
 
 	// Helper functions
 	void updateWindowLine(unsigned int line);
-	void scrollLines(unsigned int count, int direction);
+	void scrollUp(unsigned int count);
+	void scrollDown(unsigned int count);
 
 	/* TODO:
 	 * Possible events:
