@@ -125,6 +125,10 @@ void DataSource::setProperty(std::string key, std::string value) {
 	_properties[key] = value;
 }
 
+void DataSource::removeProperty(std::string key) {
+	_properties.erase(key);
+}
+
 std::vector<std::string> DataSource::getWorkModes() {
 	std::vector<std::string> modeslist;
 
