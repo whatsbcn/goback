@@ -43,6 +43,7 @@ public:
 	// Properties
 	std::string getProperty(std::string key);
 	void setProperty(std::string key, std::string value);
+	void removeProperty(std::string key);
 
 	// Work modes
 	virtual std::vector<std::string> getWorkModes();
