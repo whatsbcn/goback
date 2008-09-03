@@ -39,14 +39,28 @@ ViewLine WorkModeHex::getLine(unsigned int line) {
 	char *c = new char[_lineBytes];
 	char buff[11];
 
-	// Read the line
-	int bytes = _dataSource->readBytes(c, _lineBytes, line * _lineBytes);
+	// Get the name of the section
+	Value *val = _dataSource->getProperty("SectionName");
+	std::string sectionName = "";
+	if (val) {
+		sectionName = val->getString();
+	}
+
+	// Get the address of the section
+	val = _dataSource->getProperty("SectionAddress");
+	long int sectionAddress = 0;
+	if (val) {
+		sectionAddress = val->getInt();
+	}
 
 	// Show the line number
 	// TODO: Move it to the client? Maybe add a function to return the line
 	// number to be shown for a given internal line number?
-	sprintf(buff, "%s:%08x: ", _dataSource->getProperty("SectionName").c_str(), line + _dataSource->getAddress());
+	sprintf(buff, "%s:%08x: ", sectionName.c_str(), line + sectionAddress);
 	viewline.push_back(ViewBlock(buff, false));
+
+	// Read the line
+	int bytes = _dataSource->readBytes(c, _lineBytes, line * _lineBytes);
 
 	// Show the hexadecimal values
 	for (int i = 0; i < bytes; i++) {

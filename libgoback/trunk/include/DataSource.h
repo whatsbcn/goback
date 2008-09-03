@@ -1,8 +1,9 @@
 #ifndef DATASOURCE_H
 #define DATASOURCE_H
 
+#include "Value.h"
+
 #include <map>
-#include <string>
 #include <vector>
 
 /**
@@ -41,15 +42,14 @@ public:
 	DataSource *getSection(unsigned int section);
 
 	// Properties
-	std::string getProperty(std::string key);
-	void setProperty(std::string key, std::string value);
+	Value* getProperty(std::string key);
+	void setProperty(std::string key, Value* value);
 	void removeProperty(std::string key);
 
 	// Work modes
 	virtual std::vector<std::string> getWorkModes();
 
-	unsigned int getAddress();
-	DataSource *createRange(unsigned int offset, unsigned int size, unsigned int address);
+	DataSource *createRange(unsigned int offset, unsigned int size);
 
 private:
 	// Data format
@@ -58,10 +58,7 @@ private:
 	void clearFormat();
 
 	// Properties
-	std::map<std::string, std::string> _properties;
-
-	void setAddress(unsigned int address);
-	unsigned int _address;
+	std::map<std::string, Value*> _properties;
 };
 
 #endif // DATASOURCE_H

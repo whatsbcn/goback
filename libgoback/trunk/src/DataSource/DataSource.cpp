@@ -16,6 +16,7 @@ DataSource *DataSource::create(std::string name) {
 
 DataSource::~DataSource() {
 	clearFormat();
+	// TODO: delete the property values?
 }
 
 void DataSource::clearFormat() {
@@ -117,15 +118,16 @@ DataSource *DataSource::getSection(unsigned int section) {
 	return NULL;
 }
 
-std::string DataSource::getProperty(std::string key) {
+Value *DataSource::getProperty(std::string key) {
 	return _properties[key];
 }
 
-void DataSource::setProperty(std::string key, std::string value) {
+void DataSource::setProperty(std::string key, Value *value) {
 	_properties[key] = value;
 }
 
 void DataSource::removeProperty(std::string key) {
+	// TODO: Delete the value?
 	_properties.erase(key);
 }
 
@@ -154,17 +156,8 @@ std::vector<std::string> DataSource::getWorkModes() {
 }
 
 // Return a DataSource with a limited range
-DataSource *DataSource::createRange(unsigned int offset, unsigned int size, unsigned int address) {
+DataSource *DataSource::createRange(unsigned int offset, unsigned int size) {
 	DataSourceRange *dsr = new DataSourceRange();
-	dsr->setAddress(address);
 	dsr->setRange(this, offset, size);
 	return dsr;
-}
-
-unsigned int DataSource::getAddress() {
-	return _address;
-}
-
-void DataSource::setAddress(unsigned int address) {
-	_address = address;
 }

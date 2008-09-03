@@ -159,7 +159,22 @@ ViewLine WorkModeDisasm::getLine(unsigned int line) {
 	char hexbyte[3];
 	struct ASM_INSN op;
 	char pos[32];
-	snprintf(pos, 32, "%s:%08x", _dataSource->getProperty("SectionName").c_str(), _linies.at(line) + _dataSource->getAddress());
+
+	// Get the name of the section
+	Value *val = _dataSource->getProperty("SectionName");
+	std::string sectionName = "";
+	if (val) {
+		sectionName = val->getString();
+	}
+
+	// Get the address of the section
+	val = _dataSource->getProperty("SectionAddress");
+	long int sectionAddress = 0;
+	if (val) {
+		sectionAddress = val->getInt();
+	}
+
+	snprintf(pos, 32, "%s:%08x", sectionName.c_str(), _linies.at(line) + sectionAddress);
 
 	// Put the file position of this opcode
 	viewline.push_back(ViewBlock(pos, false));
