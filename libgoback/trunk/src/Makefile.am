@@ -11,4 +11,5 @@ libgoback_la_LIBADD = \
 	WorkMode/libWorkMode.la
 libgoback_la_SOURCES = \
 	ModuleManager.cpp \
-	ModuleManager.h
+	ModuleManager.h \
+	Value.cpp

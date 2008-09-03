@@ -260,11 +260,12 @@ void DataFormatElf::createSections(std::vector<DataSource *> &sections) {
 		/** Check if the section size is > 0 */
 		if (section->size > 0) {
 			// Create a new range DataSource for each section
-			DataSource *ds = _dataSource->createRange(section->offset, section->size, section->address);
+			DataSource *ds = _dataSource->createRange(section->offset, section->size);
 
 			// Initialize the extra information we know about the
 			// new data source
-			ds->setProperty("SectionName", section->name);
+			ds->setProperty("SectionName", new ValueString(section->name));
+			ds->setProperty("SectionAddress", new ValueInt(section->address));
 
 			// TODO: Verify the format is applied correctly
 			if (ds->setDataFormat(getSectionType(section->type, section->program))) {
