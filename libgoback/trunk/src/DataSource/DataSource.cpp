@@ -117,6 +117,14 @@ DataSource *DataSource::getSection(unsigned int section) {
 	return NULL;
 }
 
+std::string DataSource::getProperty(std::string key) {
+	return _properties[key];
+}
+
+void DataSource::setProperty(std::string key, std::string value) {
+	_properties[key] = value;
+}
+
 std::vector<std::string> DataSource::getWorkModes() {
 	std::vector<std::string> modeslist;
 
@@ -142,24 +150,15 @@ std::vector<std::string> DataSource::getWorkModes() {
 }
 
 // Return a DataSource with a limited range
-DataSource *DataSource::createRange(std::string name, unsigned int offset, unsigned int size, unsigned int address) {
+DataSource *DataSource::createRange(unsigned int offset, unsigned int size, unsigned int address) {
 	DataSourceRange *dsr = new DataSourceRange();
-	dsr->setName(name);
 	dsr->setAddress(address);
 	dsr->setRange(this, offset, size);
 	return dsr;
 }
 
-std::string DataSource::getName() {
-	return _name;
-}
-
 unsigned int DataSource::getAddress() {
 	return _address;
-}
-
-void DataSource::setName(std::string name) {
-	_name = name;
 }
 
 void DataSource::setAddress(unsigned int address) {

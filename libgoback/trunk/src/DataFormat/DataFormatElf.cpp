@@ -259,12 +259,18 @@ void DataFormatElf::createSections(std::vector<DataSource *> &sections) {
 		//printf("Creant rang %s: offset:%d, size:%d\n", section->name.c_str(), section->offset, section->size);
 		/** Check if the section size is > 0 */
 		if (section->size > 0) {
-			DataSource *ds = _dataSource->createRange(section->name, section->offset, section->size, section->address);
+			// Create a new range DataSource for each section
+			DataSource *ds = _dataSource->createRange(section->offset, section->size, section->address);
+
+			// Initialize the extra information we know about the
+			// new data source
+			ds->setProperty("SectionName", section->name);
+
 			// TODO: Verify the format is applied correctly
 			if (ds->setDataFormat(getSectionType(section->type, section->program))) {
 				sections.push_back(ds);
 			} else {
-				printf("Can't initialize dataSoruceRangeFormat");
+				printf("Can't initialize dataSourceRangeFormat");
 			}
 		}
 		section++;

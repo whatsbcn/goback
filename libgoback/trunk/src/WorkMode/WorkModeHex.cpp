@@ -45,7 +45,7 @@ ViewLine WorkModeHex::getLine(unsigned int line) {
 	// Show the line number
 	// TODO: Move it to the client? Maybe add a function to return the line
 	// number to be shown for a given internal line number?
-	sprintf(buff, "%s:%08x: ", _dataSource->getName().c_str(), line + _dataSource->getAddress());
+	sprintf(buff, "%s:%08x: ", _dataSource->getProperty("SectionName").c_str(), line + _dataSource->getAddress());
 	viewline.push_back(ViewBlock(buff, false));
 
 	// Show the hexadecimal values
