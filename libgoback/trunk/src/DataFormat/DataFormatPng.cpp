@@ -48,7 +48,9 @@ DataFormatPng::DataFormatPng(DataSource *ds) :
 bool DataFormatPng::load(std::vector<DataSource *> &sections) {
 	FILE *fd;
 
-	fd = fopen ((char *)_dataSource->getName().c_str(), "r");
+	// TODO: Find a better way to get the file name
+	// TODO: Even better, don't use fopen
+	fd = fopen ((char *)_dataSource->getProperty("SectionName").c_str(), "r");
 
 	png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 	if (!png_ptr) {
