@@ -20,7 +20,6 @@ public:
 class DataFormatPng : public DataFormat {
 public:
 	DataFormatPng(DataSource *ds);
-	~DataFormatPng();
 
 	bool load(std::vector<DataSource *> &sections);
 	static bool isPngFile(DataSource *ds); 

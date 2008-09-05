@@ -8,6 +8,7 @@ class WorkMode;
 class BufferWindow {
 public:
 	BufferWindow(unsigned int x, unsigned int y, unsigned int w, unsigned int h);
+	~BufferWindow();
 	void setDataSource(DataSource *ds);
 
 	unsigned int getViewPercentage();

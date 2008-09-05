@@ -5,6 +5,8 @@
 
 class Value {
 public:
+	virtual ~Value() {}
+
 	//virtual bool set(DataSource *ds, unsigned int offset) = 0;
 	//virtual bool set(unsigned char *buf, unsigned int size) = 0;
 

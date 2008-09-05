@@ -20,7 +20,6 @@ public:
 class DataFormatElf : public DataFormat {
 public:
 	DataFormatElf(DataSource *ds);
-	~DataFormatElf();
 
 	bool load(std::vector<DataSource *> &sections);
 

@@ -20,7 +20,7 @@ DataSourceFile::DataSourceFile() {
 bool DataSourceFile::requestWrite() {
 	if (_writable) return true;
 
-	int fdw = ::open(_filename, O_RDWR);
+	int fdw = ::open(_filename.c_str(), O_RDWR);
 
 	if (fdw == -1) return false;
 	_writable = true;
@@ -58,7 +58,8 @@ bool DataSourceFile::open(const char *filename) {
 	// Check errors
 	if (_fd == -1) return false;
 
-	_filename = strdup(filename);
+	// Save the filename for future usage
+	_filename = filename;
 
 	return true;
 }
@@ -119,7 +120,7 @@ unsigned int DataSourceFile::insertBytes(const char *buff, unsigned int size, un
 	// Check file opened and writable
 	if (_fd == -1 || !_writable) return 0;
 
-	int fdtmp = ::open(_filename, O_RDONLY);
+	int fdtmp = ::open(_filename.c_str(), O_RDONLY);
 
 	unsigned int buffsize = (size < 4096) ? 4096 : size;
 	unsigned char *bufftmp = new unsigned char[buffsize];
@@ -170,7 +171,7 @@ unsigned int DataSourceFile::removeBytes(unsigned int size, unsigned int offset)
 
 	int buffsize = (size < 4096) ? 4096 : size;
 	unsigned char *bufftmp = new unsigned char[buffsize];
-	int fdtmp = ::open(_filename, O_RDONLY);
+	int fdtmp = ::open(_filename.c_str(), O_RDONLY);
 	int filesize = lseek(_fd, 0, SEEK_END);
 	lseek(_fd, offset, SEEK_SET);
 	lseek(fdtmp, offset + size, SEEK_SET);

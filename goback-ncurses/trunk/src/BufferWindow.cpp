@@ -9,6 +9,10 @@ BufferWindow::BufferWindow(unsigned int x, unsigned int y, unsigned int w, unsig
 	_cursorViewLine(0), _cursorViewCol(0), _wm(NULL), _ds(NULL) {
 }
 
+BufferWindow::~BufferWindow() {
+	delete _wm;
+}
+
 void BufferWindow::setDataSource(DataSource *ds) {
 	std::vector<std::string> modes = ds->getWorkModes();
 	if (modes.size() != 0) {

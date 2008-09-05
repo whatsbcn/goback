@@ -12,6 +12,7 @@ class DataSource;
 class DataFormat {
 public:
 	DataFormat(DataSource *ds) : _dataSource(ds) {}
+	virtual ~DataFormat() {}
 
 	virtual bool load(std::vector<DataSource *> &sections) = 0;
 
@@ -23,6 +24,8 @@ protected:
 // DataFormat module
 class DataFormatModule : public Module {
 public:
+	virtual ~DataFormatModule() {}
+
 	// Format detection
 	virtual bool detect(DataSource *ds) const = 0;
 

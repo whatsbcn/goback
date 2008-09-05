@@ -22,6 +22,7 @@ public:
 	static WorkMode *create(std::string id, DataSource *ds);
 
 	WorkMode(DataSource *ds);
+	virtual ~WorkMode() {}
 
 	virtual unsigned int getNumberLines() = 0;
 	virtual ViewLine getLine(unsigned int line) = 0;

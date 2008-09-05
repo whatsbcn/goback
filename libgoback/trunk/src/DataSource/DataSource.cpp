@@ -16,7 +16,13 @@ DataSource *DataSource::create(std::string name) {
 
 DataSource::~DataSource() {
 	clearFormat();
-	// TODO: delete the property values?
+
+	// Delete the property values
+	std::map<std::string, Value*>::iterator prop = _properties.begin();
+	while (prop != _properties.end()) {
+		delete prop->second;
+		prop++;
+	}
 }
 
 void DataSource::clearFormat() {
@@ -123,6 +129,7 @@ Value *DataSource::getProperty(std::string key) {
 }
 
 void DataSource::setProperty(std::string key, Value *value) {
+	// TODO: Delete the old value when replacing?
 	_properties[key] = value;
 }
 

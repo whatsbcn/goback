@@ -151,6 +151,7 @@ bool DataFormatElf::load32(std::vector<DataSource *> &sections) {
 		section.address = sectionHeaders[i].sh_addr;
 		section.size = sectionHeaders[i].sh_size;
 		section.type = sectionHeaders[i].sh_type;
+		section.program = false;
 
 		// Save this section
 		_sections.push_back(section);
@@ -163,12 +164,13 @@ bool DataFormatElf::load32(std::vector<DataSource *> &sections) {
 	for (int i = 0; i < elfHeader.e_phnum; i++) {
 		// Collect the information about this section
 		ElfSection section;
+		section.type = programHeaders[i].p_type;
 		//section.name = std::string(&stringTable[sectionHeaders[i].sh_name]);
 		section.name = getProgramHeaderName(section.type);
 		section.offset = programHeaders[i].p_offset;
 		section.address = programHeaders[i].p_vaddr;
 		section.size = programHeaders[i].p_filesz;
-		section.type = programHeaders[i].p_type;
+		section.program = true;
 
 		// Save this section
 		_sections.push_back(section);
@@ -225,12 +227,12 @@ bool DataFormatElf::load64(std::vector<DataSource *> &sections) {
 	for (int i = 0; i < elfHeader.e_phnum; i++) {
 		// Collect the information about this section
 		ElfSection section;
+		section.type = programHeaders[i].p_type;
 		//section.name = std::string(&stringTable[sectionHeaders[i].sh_name]);
 		section.name = getProgramHeaderName(section.type);
 		section.offset = programHeaders[i].p_offset;
 		section.address = programHeaders[i].p_vaddr;
 		section.size = programHeaders[i].p_filesz;
-		section.type = programHeaders[i].p_type;
 		section.program = true;
 
 		// Save this section
