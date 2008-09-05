@@ -29,7 +29,7 @@ void init_ncurses() {
 	//intrflush(stdscr, FALSE);
 	
 	/** Scroll */
-    scrollok(stdscr, TRUE);
+	scrollok(stdscr, TRUE);
 	setscrreg(0, LINES - 2);
 
 	start_color();
@@ -93,17 +93,17 @@ int main(int argc, char *argv[]) {
 	}
 	
 	/** Detect file formats */
-    std::vector<std::string> formats = ds->detectFormat();
-    if (formats.size() == 0) {
-        printf("Can't detect fileformat, open as hex!\n");
-        formats.push_back("");
-    }
+	std::vector<std::string> formats = ds->detectFormat();
+	if (formats.size() == 0) {
+		printf("Can't detect fileformat, open as hex!\n");
+		formats.push_back("");
+	}
 	
 	/** Select file format */
-    if (!ds->setDataFormat(formats.front())) {
-        printf("Can't initialize dataformat!\n");
-        exit(1);
-    }
+	if (!ds->setDataFormat(formats.front())) {
+		printf("Can't initialize dataformat!\n");
+		exit(1);
+	}
 
 	init_ncurses();
 

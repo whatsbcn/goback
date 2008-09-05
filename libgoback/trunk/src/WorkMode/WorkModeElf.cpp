@@ -60,7 +60,7 @@ int disPrintfWrapper2(FILE *stream, const char *format, ...) {
 	str = va_arg(args, char*);
 	if (!curr_insn2.mnemonic[0]) {
 		snprintf(curr_insn2.mnemonic, 16, format, str);
-	}  else if (!curr_insn2.src[0]) {
+	} else if (!curr_insn2.src[0]) {
 		// remove '^0*'
 		for (; *str == '0'; str++);
 		snprintf(curr_insn2.src, 31, format, str);
