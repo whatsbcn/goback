@@ -47,7 +47,7 @@ void BufferWindow::cursorMoveUp() {
 	if (_cursorViewLine > 0) {
 		// Move the cursor one line up on the screen
 		_cursorViewLine--;
-	} else if  (_viewLine > 0) {
+	} else if (_viewLine > 0) {
 		scrollUp(1);		
 	}
 }
@@ -88,7 +88,7 @@ void BufferWindow::cursorMoveBeginning() {
 }
 
 void BufferWindow::cursorPageUp() {
-	if  (_viewLine > 0) {
+	if (_viewLine > 0) {
 		if (_viewLine + _h >= _h * 2) {
 			scrollUp(_h);		
 		} else {
@@ -115,26 +115,26 @@ void BufferWindow::showCursor() {
  * Update all the window lines
  */
 void BufferWindow::updateWindow() {
-    for (int i = 0; i < _numLines && i < _h; i++) {
-        updateWindowLine(i);
-    }
+	for (int i = 0; i < _numLines && i < _h; i++) {
+		updateWindowLine(i);
+	}
 }
 
 /**
- *  Update a line in the window.
- *  @param numline the line number to update
+ * Update a line in the window.
+ * @param numline the line number to update
  */
 void BufferWindow::updateWindowLine(unsigned int numline) {
-        ViewLine line = _wm->getLine(_viewLine + numline);
-        move(_y + numline, _x);
+	ViewLine line = _wm->getLine(_viewLine + numline);
+	move(_y + numline, _x);
 
-        // Print the blocks
-        ViewLine::iterator j = line.begin();
-        while (j != line.end()) {
-                printw("%s", j->_str.c_str());
-                j++;
-        }
-        clrtoeol(); // TODO: just clear until the end of the window
+	// Print the blocks
+	ViewLine::iterator j = line.begin();
+	while (j != line.end()) {
+		printw("%s", j->_str.c_str());
+		j++;
+	}
+	clrtoeol(); // TODO: just clear until the end of the window
 }
 
 /**

@@ -29,14 +29,14 @@ WorkModeGroup::WorkModeGroup(DataSource *ds) : WorkMode(ds) {
 	std::vector<std::string> modes;
 	
 	_numLines = 0;
-    for (int i = 0; i < ds->getNumberSections(); i++) {
-        dss = ds->getSection(i);
-        modes = dss->getWorkModes();
-        wm = WorkMode::create(modes.front(), dss);
-        _numLines += wm->getNumberLines();
+	for (int i = 0; i < ds->getNumberSections(); i++) {
+		dss = ds->getSection(i);
+		modes = dss->getWorkModes();
+		wm = WorkMode::create(modes.front(), dss);
+		_numLines += wm->getNumberLines();
 		_sectionLastLine.push_back(_numLines);
 		_sectionWorkMode.push_back(wm);
-    }
+	}
 	_ds = ds;
 }
 
