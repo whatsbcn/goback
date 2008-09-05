@@ -38,6 +38,8 @@ struct ASM_INSN {
 struct DisasmAppData {
 	DataSource *ds;
 	WorkModeDisasm *wm;
+    int secvma;
+    int secoff;
 	//TODO: move curr_insn here?
 };
 
@@ -93,6 +95,16 @@ int disPrintfWrapper(FILE *stream, const char *format, ...) {
 	return 0;
 }
 
+/*
+ *  * Address calculator callback
+ *   */
+void print_address_func(bfd_vma addr, struct disassemble_info *info) {
+	//unsigned int res = ((DisasmAppData *)info->application_data)->secvma - ((DisasmAppData *)info->application_data)->secoff + addr;
+    sprintf(curr_insn.src, "%x", ((DisasmAppData *)info->application_data)->secvma - ((DisasmAppData *)info->application_data)->secoff + ((DisasmAppData *)info->application_data)->secoff + addr);
+    //sprintf(curr_insn.src, "%x", res);
+}
+
+
 int WorkModeDisasm::disasmOp(int offset, struct ASM_INSN *op) {
 	// TODO: do the info initalization, for multi arch
 	disassembler_ftype disassemble_fn;
@@ -108,8 +120,21 @@ int WorkModeDisasm::disasmOp(int offset, struct ASM_INSN *op) {
 	// Prepare the application data for the disasm
 	DisasmAppData appData;
 	appData.ds = _dataSource;
+    Value *val = _dataSource->getProperty("SectionAddress");
+    long int sectionAddress = 0;
+    if (val) {
+        sectionAddress = val->getInt();
+    }
+    appData.secvma = sectionAddress;
+	val = _dataSource->getProperty("SectionOffset");
+    long int sectionOffset = 0;
+    if (val) {
+        sectionOffset = val->getInt();
+    }
+    appData.secoff = sectionOffset;
 	appData.wm = this;
 	info.application_data = &appData;
+	info.print_address_func = print_address_func;
 
 	int size = 0;
 	if (op != NULL) {
