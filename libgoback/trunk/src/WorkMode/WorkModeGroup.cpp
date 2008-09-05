@@ -41,14 +41,13 @@ WorkModeGroup::WorkModeGroup(DataSource *ds) : WorkMode(ds) {
 }
 
 WorkModeGroup::~WorkModeGroup() {
-	// Delete the WorkModes
-	//TODO: delete workmodes (_sectionWorkMode)
-	/*WorkMode::iterator wm = _sectionWorkMode.begin();
+	// Delete the sections WorkModes
+	std::vector<WorkMode *>::iterator wm = _sectionWorkMode.begin();
 	while (wm != _sectionWorkMode.end()) {
 		// Delete it
 		delete *wm;
-		df++;
-	}*/
+		wm++;
+	}
 }
 
 unsigned int WorkModeGroup::getNumberLines() {

@@ -6,6 +6,8 @@
 // Generic module
 class Module {
 public:
+	virtual ~Module() {}
+
 	// Identification
 	virtual std::string id() const = 0;
 	virtual std::string name() const = 0;

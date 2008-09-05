@@ -153,5 +153,6 @@ int main(int argc, char *argv[]) {
 	exit:
 	close_ncurses();
 	ds->close();
+	delete ds;
 	return 0;
 }

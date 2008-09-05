@@ -28,7 +28,7 @@ private:
 	unsigned int _seek;
 	unsigned int _size;
 	bool _writable;
-	char *_filename;
+	std::string _filename;
 };
 
 #endif // FILEDATASOURCE_H
