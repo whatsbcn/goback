@@ -46,7 +46,7 @@ static int disReadMemory(bfd_vma memaddr, bfd_byte *myaddr, unsigned int len,
 /*
  * Address calculator callback
  */
-void print_address_func(bfd_vma addr, struct disassemble_info *info) {
+void print_address_func2(bfd_vma addr, struct disassemble_info *info) {
 	int res = ((DisasmAppData2 *)info->application_data)->secvma - ((DisasmAppData2 *)info->application_data)->secoff + addr;
 	sprintf(curr_insn2.src, "%x", res);
 }
@@ -97,7 +97,7 @@ int WorkModeElf::disasmOp(int inst_offset, struct ASM_INSN *op, int sect_vma, in
 	appData.secoff = sect_offset;
 	appData.wm = this;
 	info.application_data = &appData;
-	info.print_address_func = print_address_func;
+	info.print_address_func = print_address_func2;
 
 	int size = 0;
 	if (op != NULL) {

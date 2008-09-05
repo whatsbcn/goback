@@ -131,7 +131,6 @@ bool DataFormatElf::load32(std::vector<DataSource *> &sections) {
 	Elf32_Ehdr elfHeader;
 	_dataSource->readBytes((char *)&elfHeader, sizeof(Elf32_Ehdr), 0);
 
-
 	// Load section headers
 	Elf32_Shdr *sectionHeaders = new Elf32_Shdr[elfHeader.e_shnum];
 	_dataSource->readBytes((char *)sectionHeaders, sizeof(Elf32_Shdr) * elfHeader.e_shnum, elfHeader.e_shoff);
@@ -266,6 +265,7 @@ void DataFormatElf::createSections(std::vector<DataSource *> &sections) {
 			// new data source
 			ds->setProperty("SectionName", new ValueString(section->name));
 			ds->setProperty("SectionAddress", new ValueInt(section->address));
+			ds->setProperty("SectionOffset", new ValueInt(section->offset));
 
 			// TODO: Verify the format is applied correctly
 			if (ds->setDataFormat(getSectionType(section->type, section->program))) {
