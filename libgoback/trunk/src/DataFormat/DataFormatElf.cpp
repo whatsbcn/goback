@@ -116,6 +116,7 @@ bool DataFormatElf::load(std::vector<DataSource *> &sections) {
 	char bits;
 	_dataSource->readBytes(&bits, 1, 4);
 
+	_dataSource->setProperty("elfArch", new ValueInt(bits));
 	if (bits == 0x01) {
 		return load32(sections);
 	} else if (bits == 0x02) {
@@ -279,3 +280,4 @@ void DataFormatElf::createSections(std::vector<DataSource *> &sections) {
 		section++;
 	}
 }
+
