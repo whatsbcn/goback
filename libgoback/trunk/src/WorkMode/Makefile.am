@@ -12,4 +12,6 @@ libWorkMode_la_SOURCES = \
 	WorkModeGroup.cpp \
 	WorkModeGroup.h \
 	WorkModeHex.cpp \
-	WorkModeHex.h
+	WorkModeHex.h \
+	WorkModeElfSymb.cpp \
+	WorkModeElfSymb.h
