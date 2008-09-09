@@ -29,6 +29,7 @@ protected:
 	std::string getSectionType(int type, bool program) const;
 	std::string getProgramHeaderName(int type) const;
 	void createSections(std::vector<DataSource *> &sections);
+	void setArch(int arch);
 	bool load32(std::vector<DataSource *> &sections);
 	bool load64(std::vector<DataSource *> &sections);
 

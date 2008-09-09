@@ -25,11 +25,19 @@ public:
 
 	bool flushWrites();
 
+	/** Properties */
+	Value* getProperty(std::string key);
+	void setProperty(std::string key, Value* value);
+	void removeProperty(std::string key);
+	void setDSProperties(std::map<std::string, Value*> *properties);
+
 private:
 	DataSource *_ds;
 	unsigned int _size;
 	unsigned int _offset;
 	unsigned int _range;	
+
+	std::map<std::string, Value*> *_DSProperties;
 };
 
 #endif // DATASOURCERANGE_H

@@ -105,21 +105,53 @@ std::string DataFormatElf::getProgramHeaderName(int type) const {
 		return "";
 	}
 }
+/**
+ * Setup the arch property to de datasource
+ */
+void DataFormatElf::setArch(int arch) {
+    switch (arch) {
+        case EM_386:
+		_dataSource->setProperty("ElfArch", new ValueInt(1));
+        break;
+
+        case EM_860:
+		_dataSource->setProperty("ElfArch", new ValueInt(2));
+        break;
+
+		case EM_ARM:
+		_dataSource->setProperty("ElfArch", new ValueInt(3));
+		break;
+	
+        case EM_MIPS:
+		_dataSource->setProperty("ElfArch", new ValueInt(4));
+        break;
+
+        case EM_PPC:
+		_dataSource->setProperty("ElfArch", new ValueInt(5));
+        break;
+
+		default:
+		_dataSource->setProperty("ElfArch", new ValueInt(-1));
+    }
+}
 
 bool DataFormatElf::load(std::vector<DataSource *> &sections) {
 	// Check if it is a elf file.
 	if (!isElfFile(_dataSource)) {
 		return false;
-	}
+/**
+ * Setup the arch property to de datasource
+ */	}
 
 	// Check if is 32 or 64 bits
 	char bits;
 	_dataSource->readBytes(&bits, 1, 4);
 
-	_dataSource->setProperty("elfArch", new ValueInt(bits));
 	if (bits == 0x01) {
+		_dataSource->setProperty("ElfBits", new ValueString("32"));
 		return load32(sections);
 	} else if (bits == 0x02) {
+		_dataSource->setProperty("ElfBits", new ValueString("64"));
 		return load64(sections);
 	} else {
 		return false;
@@ -142,6 +174,9 @@ bool DataFormatElf::load32(std::vector<DataSource *> &sections) {
 
 	char *stringTable = new char[sectionHeaders[elfHeader.e_shstrndx].sh_size];
 	_dataSource->readBytes(stringTable, sectionHeaders[elfHeader.e_shstrndx].sh_size, sectionHeaders[elfHeader.e_shstrndx].sh_offset);
+
+	// Detect arch
+	setArch(elfHeader.e_machine);	
 
 	// Index all sections
 	for (int i = 0; i < elfHeader.e_shnum; i++) {
@@ -205,6 +240,9 @@ bool DataFormatElf::load64(std::vector<DataSource *> &sections) {
 
 	char *stringTable = new char[sectionHeaders[elfHeader.e_shstrndx].sh_size];
 	_dataSource->readBytes(stringTable, sectionHeaders[elfHeader.e_shstrndx].sh_size, sectionHeaders[elfHeader.e_shstrndx].sh_offset);
+
+	// Detect arch
+	setArch(elfHeader.e_machine);	
 
 	// Index all sections
 	for (int i = 0; i < elfHeader.e_shnum; i++) {
