@@ -27,6 +27,7 @@ public:
 
 protected:
 	int disasmOp(int, struct ASM_INSN *);
+	void *getBfdFunction();
 	std::vector<int> _linies;
 };
 

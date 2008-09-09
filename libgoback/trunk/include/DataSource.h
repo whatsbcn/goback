@@ -42,9 +42,9 @@ public:
 	DataSource *getSection(unsigned int section);
 
 	// Properties
-	Value* getProperty(std::string key);
-	void setProperty(std::string key, Value* value);
-	void removeProperty(std::string key);
+	virtual Value* getProperty(std::string key);
+	virtual void setProperty(std::string key, Value* value);
+	virtual void removeProperty(std::string key);
 
 	// Work modes
 	virtual std::vector<std::string> getWorkModes();
@@ -57,6 +57,7 @@ private:
 	std::vector<DataSource *> _formatSections;
 	void clearFormat();
 
+protected:
 	// Properties
 	std::map<std::string, Value*> _properties;
 };

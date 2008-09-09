@@ -104,6 +104,41 @@ void print_address_func(bfd_vma addr, struct disassemble_info *info) {
 	//sprintf(curr_insn.src, "%x", res);
 }
 
+/**
+ * + * This function returns a pointer to the BFD function that has to be used to disasm the code.
+ * + */
+ 
+void * WorkModeDisasm::getBfdFunction() {
+	Value *val = _dataSource->getProperty("ElfArch");
+	
+	// TODO: now the selected functio is for i386, but it would launch an error
+	if (!val) return (void *)print_insn_i386_att;
+
+	switch (val->getInt()) {
+		case 1:
+		return (void *)print_insn_i386_att;
+
+		case 2:
+		return (void *)print_insn_i860;
+
+		case 3:
+		// TODO: setup little or big correctly
+		return (void *)print_insn_big_arm;
+
+		case 4:
+		// TODO: setup little or big correctly
+		return (void *)print_insn_big_mips;
+
+		case 5:
+		// TODO: setup little or big correctly
+		return (void *)print_insn_big_powerpc;
+
+		default:
+		// TODO: now the selected functio is for i386, but it would launch an error
+		return (void *)print_insn_i386_att;
+	}
+}
+
 
 int WorkModeDisasm::disasmOp(int offset, struct ASM_INSN *op) {
 	// TODO: do the info initalization, for multi arch
@@ -112,9 +147,12 @@ int WorkModeDisasm::disasmOp(int offset, struct ASM_INSN *op) {
 	INIT_DISASSEMBLE_INFO(info, stdout, disPrintfWrapper);
 	info.flavour = bfd_target_unknown_flavour;
 	info.arch = bfd_arch_i386;
+	//info.arch = bfd_arch_arm;
 	info.mach = bfd_mach_i386_i386;
+	//info.mach = bfd_mach_arm_4;
 	info.endian = BFD_ENDIAN_LITTLE;
-	disassemble_fn = print_insn_i386_att;
+	//info.endian = BFD_ENDIAN_BIG;
+	disassemble_fn = (int (*)(bfd_vma, disassemble_info*))getBfdFunction();
 	info.read_memory_func = disReadMemory;
 
 	// Prepare the application data for the disasm
@@ -155,9 +193,12 @@ WorkModeDisasm::WorkModeDisasm(DataSource *ds) : WorkMode(ds) {
 
 	info.flavour = bfd_target_unknown_flavour;
 	info.arch = bfd_arch_i386;
+	//info.arch = bfd_arch_arm;
 	info.mach = bfd_mach_i386_i386;
+	//info.mach = bfd_mach_arm_4;
 	info.endian = BFD_ENDIAN_LITTLE;
-	disassemble_fn = print_insn_i386;
+	//info.endian = BFD_ENDIAN_BIG;
+	disassemble_fn = (int (*)(bfd_vma, disassemble_info*))getBfdFunction();
 	info.read_memory_func = disReadMemory;
 
 	// Prepare the application data for the disasm

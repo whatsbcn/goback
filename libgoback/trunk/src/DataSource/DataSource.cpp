@@ -166,5 +166,6 @@ std::vector<std::string> DataSource::getWorkModes() {
 DataSource *DataSource::createRange(unsigned int offset, unsigned int size) {
 	DataSourceRange *dsr = new DataSourceRange();
 	dsr->setRange(this, offset, size);
+	dsr->setDSProperties(&_properties);
 	return dsr;
 }

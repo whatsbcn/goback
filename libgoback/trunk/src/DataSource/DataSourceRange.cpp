@@ -38,6 +38,26 @@ unsigned int DataSourceRange::readBytes(char *buff, unsigned int size, unsigned 
 	}
 }
 
+void DataSourceRange::setDSProperties(std::map<std::string, Value*> *properties) {
+	_DSProperties = properties;
+}
+ 
+Value *DataSourceRange::getProperty(std::string key) {
+	if (_properties[key] != NULL) return _properties[key];
+    return (*_DSProperties)[key];
+}
+
+void DataSourceRange::setProperty(std::string key, Value *value) {
+    // TODO: Delete the old value when replacing?
+    _properties[key] = value;
+}
+
+void DataSourceRange::removeProperty(std::string key) {
+    // TODO: Delete the value?
+    _properties.erase(key);
+}
+
+
 bool DataSourceRange::requestWrite() {
 	return _ds->requestWrite();
 }
