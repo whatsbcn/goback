@@ -109,30 +109,30 @@ std::string DataFormatElf::getProgramHeaderName(int type) const {
  * Setup the arch property to de datasource
  */
 void DataFormatElf::setArch(int arch) {
-    switch (arch) {
-        case EM_386:
+	switch (arch) {
+	case EM_386:
 		_dataSource->setProperty("ElfArch", new ValueInt(1));
-        break;
+		break;
 
-        case EM_860:
+	case EM_860:
 		_dataSource->setProperty("ElfArch", new ValueInt(2));
-        break;
+		break;
 
-		case EM_ARM:
+	case EM_ARM:
 		_dataSource->setProperty("ElfArch", new ValueInt(3));
 		break;
 	
-        case EM_MIPS:
+	case EM_MIPS:
 		_dataSource->setProperty("ElfArch", new ValueInt(4));
-        break;
+		break;
 
-        case EM_PPC:
+	case EM_PPC:
 		_dataSource->setProperty("ElfArch", new ValueInt(5));
-        break;
+		break;
 
-		default:
+	default:
 		_dataSource->setProperty("ElfArch", new ValueInt(-1));
-    }
+	}
 }
 
 bool DataFormatElf::load(std::vector<DataSource *> &sections) {

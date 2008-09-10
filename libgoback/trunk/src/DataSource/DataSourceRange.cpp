@@ -44,17 +44,17 @@ void DataSourceRange::setDSProperties(std::map<std::string, Value*> *properties)
  
 Value *DataSourceRange::getProperty(std::string key) {
 	if (_properties[key] != NULL) return _properties[key];
-    return (*_DSProperties)[key];
+	return (*_DSProperties)[key];
 }
 
 void DataSourceRange::setProperty(std::string key, Value *value) {
-    // TODO: Delete the old value when replacing?
-    _properties[key] = value;
+	// TODO: Delete the old value when replacing?
+	_properties[key] = value;
 }
 
 void DataSourceRange::removeProperty(std::string key) {
-    // TODO: Delete the value?
-    _properties.erase(key);
+	// TODO: Delete the value?
+	_properties.erase(key);
 }
 
 
